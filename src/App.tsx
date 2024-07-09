@@ -1,11 +1,9 @@
-import React from "react";
-import "./App.css";
-import { ToastContainer } from "react-toastify";
+import React, { Fragment } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import { privateRoutes, publicRoutes } from "~/libs/constants/router/routes";
-import { Fragment } from "react";
-import DefaultLayoutPrivate from "~/pages/default/DefaultLayoutPrivate";
-import DefaultLayoutPublic from "~/pages/default/DefaultLayoutPublic";
+import { ToastContainer } from "react-toastify";
+import "./App.css";
+import AuthProtect from "./components/AuthProtect";
+import { privateRoutes, publicRoutes } from "./routes";
 
 const App = () => {
   return (
@@ -16,8 +14,8 @@ const App = () => {
             const Page = route.component;
             let Layout = null;
 
-            if (route.privateLayout) {
-              Layout = DefaultLayoutPrivate;
+            if (route.layout) {
+              Layout = route.layout;
             } else {
               Layout = Fragment;
             }
@@ -26,11 +24,11 @@ const App = () => {
                 key={index}
                 path={route.path}
                 element={
-                  // <AuthProtect>
-                  <Layout>
-                    <Page />
-                  </Layout>
-                  // </AuthProtect>
+                  <AuthProtect>
+                    <Layout>
+                      <Page />
+                    </Layout>
+                  </AuthProtect>
                 }
               />
             );
@@ -39,8 +37,8 @@ const App = () => {
             const Page = route.component;
             let Layout = null;
 
-            if (route.publicLayout) {
-              Layout = DefaultLayoutPublic;
+            if (route.layout) {
+              Layout = route.layout;
             } else {
               Layout = Fragment;
             }
