@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import { ToastContainer } from "react-toastify";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { privateRoutes, publicRoutes } from "~/libs/constants/router/routes";
 import { Fragment } from "react";
@@ -57,6 +58,7 @@ const App = () => {
           })}
         </Routes>
       </Router>
+      <ToastContainer />
     </div>
   );
 };
