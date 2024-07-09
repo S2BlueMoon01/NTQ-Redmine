@@ -25,6 +25,7 @@ export default {
     "tailwindcss/no-custom-classname": "off", //Tuỳ chỉnh các quy tắc của Tailwind CSS
     "arrow-body-style": "off",
     "prefer-arrow-callback": "off",
+    "react/react-in-jsx-scope": "off",
     semi: ["error", "always"],
     quotes: ["error", "double"],
     indent: [
