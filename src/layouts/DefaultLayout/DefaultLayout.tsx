@@ -4,13 +4,13 @@ type FormItemProps = {
   children: React.ReactNode;
 };
 
-const DefaultLayoutPublic = ({ children }: FormItemProps) => {
+const DefaultLayout = ({ children }: FormItemProps) => {
   return (
     <>
-      <div>DefaultLayoutPublic</div>
+      <div>DefaultLayout</div>
       <div>{children}</div>
     </>
   );
 };
 
-export default DefaultLayoutPublic;
+export default DefaultLayout;
