@@ -3,17 +3,17 @@ import React from "react";
 const Header = () => {
   return (
     <div>
-      <div className="flex justify-between font-medium	 bg-[#3E5B76] text-white h-7 text-sm pt-1">
-        <ul className="flex gap-3 cursor-pointer pl-2 ">
+      <div className="flex justify-between items-center font-bold	 bg-[#3E5B76] text-white h-5 text-[0.6rem] ">
+        <ul className="flex gap-3 cursor-pointer pl-1 ">
           <li className="hover:underline ">Home</li>
           <li className="hover:underline">My page</li>
           <li className="hover:underline">Projects</li>
           <li className="hover:underline">Help</li>
         </ul>
         <ul className="flex cursor-pointer gap-3 pr-2">
-          <li>
+          <li className="font-normal">
             Logged in as{" "}
-            <a href="" className="hover:underline">
+            <a href="" className="hover:underline font-bold">
               quyet.nguyen1@ntq-solution.com.vn
             </a>
           </li>
@@ -22,17 +22,17 @@ const Header = () => {
           <li className="hover:underline">Sign out</li>
         </ul>
       </div>
-      <div className=" flex justify-between min-h-20  bg-[#628DB6] pt-1 pr-2 pb-5 pl-[6px]">
+      <div className=" flex justify-between h-[90px]  bg-[#628DB6] pt-1 pr-2 pb-5 pl-[6px]">
         <h1 className="text-2xl font-bold text-white font-sans">NTQ Redmine</h1>
         <div className="flex gap-2">
           <div>
-            <label className="text-white pr-2" htmlFor="search">
+            <label className="text-white pr-2 text-sm" htmlFor="search">
               Search:
             </label>
-            <input className=" px-1 outline-none" spellCheck={false} type="text" name="search" id="search" />
+            <input className=" px-1 outline-none w-full max-w-44" spellCheck={false} type="text" name="search" id="search" />
           </div>
           <div>
-            <select className="outline-none" defaultValue="">
+            <select className="outline-none w-full max-w-44" defaultValue="">
               <option value="" disabled>
                 Jump to a project...
               </option>
