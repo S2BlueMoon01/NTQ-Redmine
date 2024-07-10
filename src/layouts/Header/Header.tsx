@@ -29,15 +29,19 @@ const Header = () => {
             <label className="text-white pr-2 text-sm" htmlFor="search">
               Search:
             </label>
-            <input className=" px-1 outline-none w-full max-w-44" spellCheck={false} type="text" name="search" id="search" />
+            <input className=" px-1 outline-none w-full text-[13px] max-w-44 leading-6	" spellCheck={false} type="text" name="search" id="search" />
           </div>
           <div>
-            <select className="outline-none h-6 font-light text-[14px]  w-full max-w-44" defaultValue="">
-              <option value="" disabled>
+            <select className="outline-none h-6 font-light text-[13px] leading-6 w-full max-w-44" defaultValue="">
+              <option className="p-1" value="" disabled>
                 Jump to a project...
               </option>
-              <option value="redmine">Redmine</option>
-              <option value="fresher">[Fresher]_ ReactJS Fresher</option>
+              <option className="p-1" value="redmine">
+                Redmine
+              </option>
+              <option className="p-1" value="fresher">
+                [Fresher]_ ReactJS Fresher
+              </option>
             </select>
           </div>
         </div>
