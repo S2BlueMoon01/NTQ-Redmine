@@ -29,11 +29,11 @@ const Header = () => {
             <label className="text-white pr-2" htmlFor="search">
               Search:
             </label>
-            <input className=" outline-none" type="text" name="search" id="search" />
+            <input className=" px-1 outline-none" spellCheck={false} type="text" name="search" id="search" />
           </div>
           <div>
-            <select className="outline-none">
-              <option value="" disabled selected>
+            <select className="outline-none" defaultValue="">
+              <option value="" disabled>
                 Jump to a project...
               </option>
               <option value="redmine">Redmine</option>
