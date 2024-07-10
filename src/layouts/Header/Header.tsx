@@ -24,7 +24,7 @@ const Header = () => {
       </div>
       <div className=" flex justify-between h-[90px]  bg-[#628DB6] pt-1 pr-2 pb-5 pl-[6px]">
         <h1 className="text-2xl font-bold text-white font-sans">NTQ Redmine</h1>
-        <div className="flex gap-2">
+        <div className="flex gap-2 ">
           <div>
             <label className="text-white pr-2 text-sm" htmlFor="search">
               Search:
@@ -32,7 +32,7 @@ const Header = () => {
             <input className=" px-1 outline-none w-full max-w-44" spellCheck={false} type="text" name="search" id="search" />
           </div>
           <div>
-            <select className="outline-none w-full max-w-44" defaultValue="">
+            <select className="outline-none h-6 font-light text-[14px]  w-full max-w-44" defaultValue="">
               <option value="" disabled>
                 Jump to a project...
               </option>
