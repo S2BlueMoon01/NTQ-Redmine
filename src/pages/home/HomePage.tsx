@@ -11,7 +11,7 @@ const HomePage = () => {
         <div className="content-left w-3/6"></div>
         <div className="content-right w-3/6 border-solid border-inherit	border-2 p-2	">
           <div className="flex items-center mb-3">
-            <img className="mr-1" src={LatestProject} alt="" />
+            <img className="mr-1" src={LatestProject} alt="logo" />
             <p className="text-mouse-gray text-sm font-medium">Latest projects</p>
           </div>
           <div className="pl-10 my-3">
