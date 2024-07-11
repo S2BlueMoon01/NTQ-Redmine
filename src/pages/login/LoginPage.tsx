@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useScrollToTop from "~/hooks/useScrollToTop";
 import { UserLoginInput } from "~/types/user.type";
+import { Button } from "~/components/button";
 
 const LoginPage = () => {
   useScrollToTop();
@@ -59,12 +60,10 @@ const LoginPage = () => {
               <input type="checkbox" checked={isStayLogin} onChange={handleCheckStayLogin} />
               <span className="font-bold text-xs text-gray-rain">Stay logged in</span>
             </div>
-            <div className="text-right ">
-              <input
-                type="submit"
-                className="text-xs px-1.5 p-[2px] leading-5 h-5 line border bg-[#f2f2f2] text-black hover:bg-[#ccccbb]"
-                value={"Login »"}
-              ></input>
+            <div className="text-right">
+              <Button type="submit" className="text-xs px-1.5 mr-1 leading-5 h-5 line border bg-[#f2f2f2] text-black">
+                Login »
+              </Button>
             </div>
           </div>
         </form>

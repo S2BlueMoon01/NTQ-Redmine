@@ -1,6 +1,13 @@
 import axios, { AxiosError } from "axios";
 import HttpStatusCode from "~/constants/httpStatusCode.enum";
 import { ErrorResponse } from "~/types/utils.type";
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   return axios.isAxiosError(error);
