@@ -34,7 +34,7 @@ const LoginPage = () => {
             <label htmlFor="password" className="text-xs text-gray-rain font-bold p-[0.375rem] mt-[2px]">
               Password:
             </label>
-            <a href="#!" className="text-[#169] text-xs p-[0.375rem] mt-[28px] hover:text-[#c61a1a] hover:underline">
+            <a href="#!" rel="noopener noreferrer" className="text-[#169] text-xs p-[0.375rem] mt-[28px] hover:text-[#c61a1a] hover:underline">
               Lost password
             </a>
           </div>
