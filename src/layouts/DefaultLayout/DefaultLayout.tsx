@@ -8,9 +8,9 @@ type FormItemProps = {
 
 const DefaultLayout = ({ children }: FormItemProps) => {
   return (
-    <div className="min-w-[800px] bg-[#eeeeee]  px-3">
+    <div className="min-w-[800px] bg-gray  px-3">
       <Header />
-      <div className="px-2 mt-3 bg-white min-h-[84vh] shadow-md">{children}</div>
+      <div className="px-2 mt-3 bg-white min-h-84 shadow-md">{children}</div>
       <Footer />
     </div>
   );

@@ -6,7 +6,7 @@ const listMenuRight = ["WorkTime", "My account", "Sign out"];
 const Header = () => {
   return (
     <header>
-      <div className="flex justify-between items-center font-bold	 bg-[#3E5B76] text-white h-5 text-[0.6rem] ">
+      <div className="flex justify-between items-center font-bold	 bg-charcoal-blue text-white h-5 text-10 ">
         <ul className="flex gap-3 cursor-pointer pl-1 ">
           {listMenuLeft.length > 0 &&
             listMenuLeft.map((item) => (
@@ -30,16 +30,16 @@ const Header = () => {
             ))}
         </ul>
       </div>
-      <div className=" flex justify-between h-[90px]  bg-[#628DB6] pt-1 pr-2 pb-5 pl-[6px]">
+      <div className=" flex justify-between min-h-21  bg-blue-gray pt-1 pr-2 pb-5 pl-6">
         <h1 className="text-2xl font-bold text-white font-sans">NTQ Redmine</h1>
         <div className="flex gap-2 ">
           <div>
             <label className="text-white pr-2 text-sm" htmlFor="search">
               Search:
             </label>
-            <input className=" px-1 outline-none w-full max-w-44 leading-6 text-[13px]" spellCheck={false} type="text" name="search" id="search" />
+            <input className=" px-1 outline-none w-full max-w-44 leading-6 text-sm" spellCheck={false} type="text" name="search" id="search" />
           </div>
-          <select className="outline-none h-6 font-light text-[13px] leading-6  w-full max-w-44" defaultValue="">
+          <select className="outline-none h-6 font-light text-sm leading-6  w-full max-w-44" defaultValue="">
             <option value="" disabled>
               Jump to a project...
             </option>
