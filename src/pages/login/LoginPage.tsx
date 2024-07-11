@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import useScrollToTop from "~/hooks/useScrollToTop";
 import { UserLoginInput } from "~/types/user.type";
 
 const LoginPage = () => {
+  useScrollToTop();
   const initialUserData = {
     username: "",
     password: "",
