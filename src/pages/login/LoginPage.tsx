@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import useScrollToTop from "~/hooks/useScrollToTop";
 import { UserLoginInput } from "~/types/user.type";
-import { Button } from "~/components/button";
+import { Button } from "~/components/Button/Button";
 
 const LoginPage = () => {
   useScrollToTop();

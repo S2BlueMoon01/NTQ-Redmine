@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ErrorImg from "~/assets/images/error-img.png";
-import { Button } from "~/components/button";
+import { Button } from "~/components/Button/Button";
 
 const LostPasswordPage = () => {
   const [email, setEmail] = useState<string>("");
