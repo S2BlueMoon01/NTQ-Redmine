@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ErrorImg from "~/assets/images/error-img.png";
+import { Button } from "~/components/Button/Button";
 
 const LostPasswordPage = () => {
   const [email, setEmail] = useState<string>("");
@@ -65,12 +66,9 @@ const LostPasswordPage = () => {
             onChange={(e) => handleInputChange(e.target.value)}
             className="border w-[345px] h-[23px] text-xs pl-1"
           />
-          <input
-            type="submit"
-            onClick={handleClickValidate}
-            className="border border-b-[#a1a1aa] border-r-[#a1a1aa] ml-1 text-[13px] px-2 bg-[#f2f2f2] hover:bg-[#ccccbb] h-[19px] leading-4"
-            value="Submit"
-          />
+          <Button type="submit" onClick={handleClickValidate}>
+            Submit
+          </Button>
         </form>
       </div>
     </>
