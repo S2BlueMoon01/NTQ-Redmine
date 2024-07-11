@@ -1,7 +1,9 @@
 import React from "react";
 import LatestProject from "~/assets/images/latest-projects.png";
+import useScrollToTop from "~/hooks/useScrollToTop";
 
 const HomePage = () => {
+  useScrollToTop();
   return (
     <div className="p-[10px] pt-[6px]">
       <h2 className="text-xl font-semibold pt-[2px] pr-3 mb-3 text-[#555]">Home</h2>

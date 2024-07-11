@@ -4,8 +4,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        "gray-rain": "#484848"
-      }
+        "gray-rain": "#484848",
+      },
     },
   },
   plugins: [],
