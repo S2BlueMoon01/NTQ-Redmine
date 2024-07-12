@@ -1,13 +1,13 @@
-import http from "src/utils/http";
-import { Project } from "~/types/project.type";
+import { Project, ProjectResponse } from "~/types/project.type";
 import { SuccessResponse } from "~/types/utils.type";
+import http from "~/utils/http";
 
 export const URL_PROJECTS = "projects";
 
 const projectsApi = {
   getAllProjects(include?: string) {
     const params = include ? { include } : {};
-    return http.get<SuccessResponse<Project[]>>(`${URL_PROJECTS}.json`, { params });
+    return http.get<ProjectResponse>(`${URL_PROJECTS}.json`, { params });
   },
 
   getProjectById(id: number, include?: string) {

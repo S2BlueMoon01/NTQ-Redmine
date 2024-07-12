@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import http from "src/utils/http";
 import { Issue } from "~/types/issue.type";
 import { SuccessResponse } from "~/types/utils.type";
+import http from "~/utils/http";
 
 export const URL_ISSUES = "issues";
 
