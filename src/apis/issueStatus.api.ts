@@ -1,11 +1,11 @@
-import http from "src/utils/http";
 import { IssueStatus } from "~/types/issue.type";
-import { SuccessResponse } from "~/types/utils.type";
+import { ListDataResponse } from "~/types/utils.type";
+import http from "~/utils/http";
 
 const issueStatusesApi = {
   // Get all issue statuses
   getIssueStatuses() {
-    return http.get<SuccessResponse<IssueStatus[]>>("/issue_statuses.json");
+    return http.get<ListDataResponse<IssueStatus[]>>("/issue_statuses.json");
   },
 };
 

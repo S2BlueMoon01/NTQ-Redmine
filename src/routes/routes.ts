@@ -7,7 +7,7 @@ import LostPasswordPage from "~/pages/lostPassword/LostPasswordPage";
 
 const publicRoutes = [
   { path: "/login", component: LoginPage, layout: DefaultLayout },
-  { path: "/lost_password", component: LostPasswordPage, layout: DefaultLayout },
+  { path: "/lost-password", component: LostPasswordPage, layout: DefaultLayout },
 ];
 const privateRoutes = [
   { path: "/my-page", component: MyPage, layout: DefaultLayout },

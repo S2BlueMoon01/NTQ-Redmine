@@ -1,74 +1,69 @@
 import React, { useState } from "react";
 import ErrorImg from "~/assets/images/error-img.png";
 import { Button } from "~/components/Button/Button";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 const LostPasswordPage = () => {
-  const [email, setEmail] = useState<string>("");
-  const [isValid, setIsValid] = useState(false);
-  const [unknownUser, setUnknownUser] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<{ email: string }>();
 
-  const handleInputChange = (value: string) => {
-    setEmail(value);
-  };
+  const [errorMessage] = useState("");
 
-  const handleClickValidate = () => {
-    if (email.trim() === "") {
-      setIsValid(true);
-    } else {
-      setIsValid(false);
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!isValid) {
-      // Call api
-
-      // If Unknown user.
-      setUnknownUser(false);
-    }
+  const onSubmit: SubmitHandler<{ email: string }> = (data) => {
+    console.log(data);
+    // Call API
+    // If don't find email
   };
 
   return (
     <>
-      {unknownUser && (
+      {errorMessage && (
         <div className="pt-2">
           <div className="flex border-[#dd0000] items-center text-[13.2px] border-2 bg-[#ffe3e3] gap-3 p-[2px] mt-2 mb-3">
             <figure className="ml-2">
               <img src={ErrorImg} alt="error" />
             </figure>
-            <span className="text-[#880000]">Unknown user.</span>
+            <span className="text-[#880000]">{errorMessage}</span>
           </div>
         </div>
       )}
-      {isValid && (
+      {errors.email && (
         <div className="pt-2">
           <div className="flex border-[#dd0000] items-center text-[13.2px] border-2 bg-[#ffe3e3] gap-3 p-[2px] mt-2 mb-3">
             <figure className="ml-2">
               <img src={ErrorImg} alt="error" />
             </figure>
-            <span className="text-[#880000]">Your account is locked.</span>
+            <span className="text-[#880000]">{errors.email.message}</span>
           </div>
         </div>
       )}
       <h2 className="text-[#555] text-xl font-bold">Lost Password</h2>
       <div className="border pl-[144px] bg-[#fcfcfc] p-3 mt-2">
-        <form action="" className="flex items-center" onSubmit={handleSubmit}>
+        <form action="" className="flex items-center" onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="email" className="font-bold text-xs text-[#505050]">
             Email
             <span className="text-[#bb0000] mx-1">*</span>
           </label>
           <input
-            name="email"
             id="email"
             type="text"
-            value={email}
-            onChange={(e) => handleInputChange(e.target.value)}
             className="border w-[345px] h-[23px] text-xs pl-1"
+            {...register("email", {
+              required: "Email is required.",
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                message: "Invalid email address",
+              },
+              maxLength: {
+                value: 50,
+                message: "Email must be at least 50 characters long.",
+              },
+            })}
           />
-          <Button type="submit" onClick={handleClickValidate}>
-            Submit
-          </Button>
+          <Button type="submit">Submit</Button>
         </form>
       </div>
     </>

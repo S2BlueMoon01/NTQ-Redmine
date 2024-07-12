@@ -30,7 +30,7 @@ export default [
       "jsx-quotes": ["error", "prefer-double"],
       "no-use-before-define": "off",
       "no-control-regex": 0,
-      "no-unused-vars": ["error"],
+      "no-unused-vars": ["warn"],
       "no-param-reassign": "off",
       "linebreak-style": 0,
       "object-curly-newline": "off",

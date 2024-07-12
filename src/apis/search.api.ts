@@ -1,5 +1,5 @@
-import http from "src/utils/http";
-import { SuccessResponse } from "~/types/utils.type";
+import { ListDataResponse } from "~/types/utils.type";
+import http from "~/utils/http";
 
 export interface SearchResult {
   id: number;
@@ -49,7 +49,7 @@ const searchApi = {
       if (options.attachments) params += `&attachments=${options.attachments}`;
     }
 
-    return http.get<SuccessResponse<SearchResult[]>>(`/search.json?${params}`);
+    return http.get<ListDataResponse<SearchResult[]>>(`/search.json?${params}`);
   },
 };
 
