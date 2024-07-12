@@ -1,63 +1,80 @@
-import React, { useState } from "react";
+import React from "react";
 import useScrollToTop from "~/hooks/useScrollToTop";
 import { UserLoginInput } from "~/types/user.type";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "~/components/Button/Button";
 
 const LoginPage = () => {
   useScrollToTop();
-  const initialUserData = {
-    username: "",
-    password: "",
-  };
-  const [loginData, setLoginData] = useState<UserLoginInput>(initialUserData);
-  const [isStayLogin, setIsStayLogin] = useState<boolean>(false);
 
-  const handleInputChange = (name: string, value: string) => {
-    setLoginData((t) => ({ ...t, [name]: value }));
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<UserLoginInput>();
 
-  const handleCheckStayLogin = () => {
-    setIsStayLogin((t) => !t);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit: SubmitHandler<UserLoginInput> = (data) => {
+    // Call API
   };
 
   return (
     <div className="flex justify-center align-cent align-center ">
       <div className=" min-w-400 min-h-42 mt-15 border-2 border-solid border-[#fdbf3b] p-3 bg-light-yellow">
-        <form action="" className="flex gap-x-2 mt-1.5" onSubmit={handleSubmit}>
-          <div className="flex flex-col gap-y-2 width text-right">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex gap-x-2 mt-1.5">
+          <div className="flex flex-col gap-y-1 width text-right">
             <label htmlFor="login" className="text-xs text-gray-rain font-bold p-1.5">
               Login:
             </label>
+            {errors.email && <p className="h-4"></p>}
             <label htmlFor="password" className="text-xs text-gray-rain font-bold p-1.5 mt-[2px]">
               Password:
             </label>
-            <a href="#!" rel="noopener noreferrer" className="text-[#169] text-xs p-[0.375rem] mt-[28px] hover:text-[#c61a1a] hover:underline">
+            <a
+              href="#!"
+              rel="noopener noreferrer"
+              className="text-[#169] text-xs p-[0.375rem] mt-[28px] hover:text-[#c61a1a] hover:underline whitespace-nowrap"
+            >
               Lost password
             </a>
           </div>
 
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col">
             <input
               type="text"
               className="h-6 border m-1 min-w-[300px] text-sm pl-1"
-              name="username"
               id="login"
-              value={loginData.username}
-              onChange={(e) => handleInputChange("username", e.target.value)}
+              {...register("email", {
+                required: "Email is required.",
+                pattern: {
+                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                  message: "Invalid email address",
+                },
+                maxLength: {
+                  value: 50,
+                  message: "Email must be at least 50 characters long.",
+                },
+              })}
             />
+            {errors.email && <p className="text-xs text-[red] pl-2">{errors.email.message}</p>}
             <input
               type="password"
               className="h-6 border m-1 text-sm pl-1"
               id="password"
-              value={loginData.password}
-              onChange={(e) => handleInputChange("password", e.target.value)}
+              {...register("password", {
+                required: "Password is required.",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters long.",
+                },
+                maxLength: {
+                  value: 50,
+                  message: "Password cannot exceed 50 characters in length.",
+                },
+              })}
             />
+            {errors.password && <p className="text-xs text-[red] pl-2">{errors.password.message}</p>}
             <div className="flex items-center gap-x-[6px] ml-2 mt-1.5">
-              <input type="checkbox" checked={isStayLogin} onChange={handleCheckStayLogin} />
+              <input type="checkbox" {...register("isStayLogin")} />
               <span className="font-bold text-xs text-gray-rain">Stay logged in</span>
             </div>
             <div className="text-right">
