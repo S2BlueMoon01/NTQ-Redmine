@@ -1,16 +1,16 @@
+export interface CustomField {
+  id: number;
+  name: string;
+  value: string;
+}
+
 export interface Project {
+  id: number;
   name: string;
   identifier: string;
-  description?: string;
-  homepage?: string;
-  is_public?: boolean;
-  parent_id?: number;
-  inherit_members?: boolean;
-  default_assigned_to_id?: number;
-  default_version_id?: number;
-  tracker_ids?: number[];
-  enabled_module_names?: string[];
-  issue_custom_field_ids?: number[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  custom_field_values?: Record<number, any>;
+  description: string;
+  status: number;
+  custom_fields: CustomField[];
+  created_on: string;
+  updated_on: string;
 }

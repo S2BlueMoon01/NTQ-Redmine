@@ -1,44 +1,55 @@
+interface Project {
+  id: number;
+  name: string;
+}
+
+interface Tracker {
+  id: number;
+  name: string;
+}
+
+interface Status {
+  id: number;
+  name: string;
+}
+
+interface Priority {
+  id: number;
+  name: string;
+}
+
+interface User {
+  id: number;
+  name: string;
+}
+
+interface CustomField {
+  id: number;
+  name: string;
+  value: string | string[];
+  multiple?: boolean;
+}
+
 export interface Issue {
   id: number;
-  project: { name: string; id: number };
-  tracker: { name: string; id: number };
-  status: { name: string; id: number };
-  priority: { name: string; id: number };
-  author: { name: string; id: number };
-  category: { name: string; id: number };
+  project: Project;
+  tracker: Tracker;
+  status: Status;
+  priority: Priority;
+  author: User;
+  assigned_to: User;
   subject: string;
-  description?: string;
-  start_date?: string;
-  due_date?: string;
+  description: string;
+  start_date: string;
   done_ratio: number;
+  due_date?: string;
   estimated_hours?: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  custom_fields: { name: string; id: number; value: any }[];
+  spent_hours?: number;
+  custom_fields: CustomField[];
   created_on: string;
   updated_on: string;
 }
 
-// Interface for the issue category
-export interface IssueCategory {
-  id: number;
-  project: {
-    name: string;
-    id: number;
-  };
-  name: string;
-  assigned_to?: {
-    name: string;
-    id: number;
-  };
-}
-
-// Interface for creating or updating an issue category
-export interface IssueCategoryPayload {
-  name: string;
-  assigned_to_id?: number;
-}
-
-// Interface for the issue status
 export interface IssueStatus {
   id: number;
   name: string;

@@ -1,6 +1,6 @@
-import http from "src/utils/http";
 import { IssueCategory, IssueCategoryPayload } from "~/types/issue.type";
 import { SuccessResponse } from "~/types/utils.type";
+import http from "~/utils/http";
 
 const projectIssueCategoriesApi = {
   // Get issue categories for a project

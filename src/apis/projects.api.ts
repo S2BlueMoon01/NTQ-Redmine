@@ -1,38 +1,38 @@
-import http from "src/utils/http";
 import { Project } from "~/types/project.type";
-import { SuccessResponse } from "~/types/utils.type";
+import { ListDataResponse } from "~/types/utils.type";
+import http from "~/utils/http";
 
 export const URL_PROJECTS = "projects";
 
 const projectsApi = {
-  getAllProjects(include?: string) {
-    const params = include ? { include } : {};
-    return http.get<SuccessResponse<Project[]>>(`${URL_PROJECTS}.json`, { params });
+  getAllProjects(data?: { include?: string; limit?: number; page?: number }) {
+    const params = data;
+    return http.get<ListDataResponse<Project, "project">>(`${URL_PROJECTS}.json`, { params });
   },
 
-  getProjectById(id: number, include?: string) {
-    const params = include ? { include } : {};
-    return http.get<SuccessResponse<Project>>(`${URL_PROJECTS}/${id}.json`, { params });
+  getProjectById(data: { id: number; include?: string }) {
+    const params = data.include ? { include: data.include } : {};
+    return http.get<Project>(`${URL_PROJECTS}/${data.id}.json`, { params });
   },
 
-  createProject(project: Project) {
-    return http.post(`${URL_PROJECTS}.json`, { project });
+  createProject(data: { project: Project }) {
+    return http.post(`${URL_PROJECTS}.json`, { project: data.project });
   },
 
-  updateProject(id: number, project: Project) {
-    return http.put(`${URL_PROJECTS}/${id}.json`, { project });
+  updateProject(data: { id: number; project: Project }) {
+    return http.put(`${URL_PROJECTS}/${data.id}.json`, { project: data.project });
   },
 
-  archiveProject(id: number) {
-    return http.put(`${URL_PROJECTS}/${id}/archive.json`);
+  archiveProject(data: { id: number }) {
+    return http.put(`${URL_PROJECTS}/${data.id}/archive.json`);
   },
 
-  unarchiveProject(id: number) {
-    return http.put(`${URL_PROJECTS}/${id}/unarchive.json`);
+  unarchiveProject(data: { id: number }) {
+    return http.put(`${URL_PROJECTS}/${data.id}/unarchive.json`);
   },
 
-  deleteProject(id: number) {
-    return http.delete(`${URL_PROJECTS}/${id}.json`);
+  deleteProject(data: { id: number }) {
+    return http.delete(`${URL_PROJECTS}/${data.id}.json`);
   },
 };
 
