@@ -3,6 +3,7 @@ import useScrollToTop from "~/hooks/useScrollToTop";
 
 const ProjectsPage = () => {
   useScrollToTop();
+
   return <div>ProjectsPage</div>;
 };
 

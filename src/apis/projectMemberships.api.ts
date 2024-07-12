@@ -1,5 +1,4 @@
-import http from "src/utils/http";
-import { SuccessResponse } from "~/types/utils.type";
+import http from "~/utils/http";
 
 // Interface for the role in a membership
 export interface Role {
@@ -48,27 +47,27 @@ export interface UpdatedMembership {
 const projectMembershipsApi = {
   // Get all memberships for a project
   getProjectMemberships(projectId: string | number) {
-    return http.get<SuccessResponse<MembershipsResponse>>(`/projects/${projectId}/memberships.xml`);
+    return http.get<MembershipsResponse>(`/projects/${projectId}/memberships.json`);
   },
 
   // Get a specific membership by ID
   getMembership(membershipId: number) {
-    return http.get<SuccessResponse<Membership>>(`/memberships/${membershipId}.xml`);
+    return http.get<Membership>(`/memberships/${membershipId}.json`);
   },
 
   // Create a new membership for a project
   createMembership(projectId: string | number, newMembership: NewMembership) {
-    return http.post<SuccessResponse<Membership>>(`/projects/${projectId}/memberships.xml`, { membership: newMembership });
+    return http.post<Membership>(`/projects/${projectId}/memberships.json`, { membership: newMembership });
   },
 
   // Update a membership by ID
   updateMembership(membershipId: number, updatedMembership: UpdatedMembership) {
-    return http.put<void>(`/memberships/${membershipId}.xml`, { membership: updatedMembership });
+    return http.put<void>(`/memberships/${membershipId}.json`, { membership: updatedMembership });
   },
 
   // Delete a membership by ID
   deleteMembership(membershipId: number) {
-    return http.delete<void>(`/memberships/${membershipId}.xml`);
+    return http.delete<void>(`/memberships/${membershipId}.json`);
   },
 };
 
