@@ -3,8 +3,9 @@ export interface User {
 }
 
 export interface UserLoginInput {
-  username: string;
+  email: string;
   password: string;
+  isStayLogin: boolean;
 }
 
 export interface UserAccount {
