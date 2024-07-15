@@ -22,6 +22,7 @@ export default {
         400: "440px",
         42: "168px",
         21: "90px",
+        half: "50%",
       },
 
       padding: {
