@@ -1,9 +1,9 @@
-import Home from "~/pages/home/HomePage";
-import MyPage from "~/pages/myPage/MyPage";
-import LoginPage from "~/pages/login/LoginPage";
-import ProjectsPage from "~/pages/projects/ProjectsPage";
 import DefaultLayout from "~/layouts/DefaultLayout";
-import LostPasswordPage from "~/pages/lostPassword/LostPasswordPage";
+import LoginPage from "~/pages/Login/LoginPage";
+import LostPasswordPage from "~/pages/LostPassword/LostPasswordPage";
+import HomePage from "~/pages/Home/HomePage";
+import ProjectsPage from "~/pages/Projects/ProjectsPage";
+import MyPage from "~/pages/MyPage/MyPage";
 
 const publicRoutes = [
   { path: "/login", component: LoginPage, layout: DefaultLayout },
@@ -11,7 +11,7 @@ const publicRoutes = [
 ];
 const privateRoutes = [
   { path: "/my-page", component: MyPage, layout: DefaultLayout },
-  { path: "/", component: Home, layout: DefaultLayout },
+  { path: "/", component: HomePage, layout: DefaultLayout },
   { path: "/projects", component: ProjectsPage, layout: DefaultLayout },
 ];
 export { privateRoutes, publicRoutes };
