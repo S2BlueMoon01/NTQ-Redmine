@@ -3,6 +3,7 @@ import useScrollToTop from "~/hooks/useScrollToTop";
 import { UserLoginInput } from "~/types/user.type";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "~/components/Button/Button";
+import { Link } from "react-router-dom";
 
 const LoginPage = () => {
   useScrollToTop();
@@ -13,14 +14,14 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm<UserLoginInput>();
 
-  const onSubmit: SubmitHandler<UserLoginInput> = (data) => {
+  const submit: SubmitHandler<UserLoginInput> = () => {
     // Call API
   };
 
   return (
     <div className="flex justify-center align-cent align-center ">
       <div className=" min-w-400 min-h-42 mt-15 border-2 border-solid border-[#fdbf3b] p-3 bg-light-yellow">
-        <form onSubmit={handleSubmit(onSubmit)} className="flex gap-x-2 mt-1.5">
+        <form onSubmit={handleSubmit(submit)} className="flex gap-x-2 mt-1.5">
           <div className="flex flex-col gap-y-1 width text-right">
             <label htmlFor="login" className="text-xs text-gray-rain font-bold p-1.5">
               Login:
@@ -29,13 +30,13 @@ const LoginPage = () => {
             <label htmlFor="password" className="text-xs text-gray-rain font-bold p-1.5 mt-[2px]">
               Password:
             </label>
-            <a
-              href="#!"
+            <Link
+              to={"/lost-password"}
               rel="noopener noreferrer"
               className="text-[#169] text-xs p-[0.375rem] mt-[28px] hover:text-[#c61a1a] hover:underline whitespace-nowrap"
             >
               Lost password
-            </a>
+            </Link>
           </div>
 
           <div className="flex flex-col">

@@ -10,12 +10,12 @@ const LostPasswordPage = () => {
     formState: { errors },
   } = useForm<{ email: string }>();
 
-  const [errorMessage, setUnknownUser] = useState("");
+  const [errorMessage] = useState("");
 
   const onSubmit: SubmitHandler<{ email: string }> = (data) => {
+    console.log(data);
     // Call API
     // If don't find email
-    // setUnknownUser(error)
   };
 
   return (

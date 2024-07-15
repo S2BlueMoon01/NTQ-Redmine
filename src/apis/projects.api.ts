@@ -7,7 +7,7 @@ export const URL_PROJECTS = "projects";
 const projectsApi = {
   getAllProjects(data?: { include?: string; limit?: number; page?: number }) {
     const params = data;
-    return http.get<ListDataResponse<Project, "project">>(`${URL_PROJECTS}.json`, { params });
+    return http.get<ListDataResponse<Project, "projects">>(`${URL_PROJECTS}.json`, { params });
   },
 
   getProjectById(data: { id: number; include?: string }) {
