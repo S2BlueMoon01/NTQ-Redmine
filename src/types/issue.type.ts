@@ -42,7 +42,7 @@ export interface Issue {
   description: string;
   start_date: string;
   done_ratio: number;
-  due_date?: string;
+  due_date: string;
   estimated_hours?: number;
   spent_hours?: number;
   custom_fields: CustomField[];
@@ -55,3 +55,7 @@ export interface IssueStatus {
   name: string;
   is_closed: boolean;
 }
+
+export interface GroupedIssueByDay  {
+  [key: string]: Issue[];
+};
