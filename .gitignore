@@ -23,4 +23,11 @@ dist-ssr
 *.sln
 *.sw?
 
+# Environment
 .env
+
+# coverage
+coverage
+
+# Test
+*.test.ts
