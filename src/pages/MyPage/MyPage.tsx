@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import useScrollToTop from "~/hooks/useScrollToTop";
 import IconAdd from "~/assets/images/icon-add.png";
 import IconBack from "~/assets/images/icon-back.png";
+import TableComponent from "./_components/Table";
 
 const optionBlock = ["Issues assigned to me", "Reported issues", "Watched issues", "Latest news", "Calendar", "Documents", "Spent time"];
 
@@ -11,6 +12,7 @@ const MyPage = () => {
 
   return (
     <>
+      <TableComponent />
       <div className="p-2.5 pt-1 flex items-center justify-between ">
         <h2 className="text-xl font-semibold pt-0.5 pr-3 mb-3 text-mouse-gray">My page</h2>
         <>

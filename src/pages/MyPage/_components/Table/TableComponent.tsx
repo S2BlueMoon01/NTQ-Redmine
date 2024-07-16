@@ -1,7 +1,7 @@
 import React from "react";
 import "./Table.css";
 import ArrowRightIcon from "~/assets/images/arrow_right.png";
-import Card from "~/components/Card/Card";
+import Card from "~/pages/MyPage/_components/Card/Card";
 import { getWeekNumber, arrangeIssue, getWeekDates, getDay } from "~/utils/utils";
 import { Issue } from "~/types/issue.type";
 
