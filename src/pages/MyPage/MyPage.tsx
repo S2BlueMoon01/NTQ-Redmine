@@ -4,7 +4,7 @@ import IconAdd from "~/assets/images/icon-add.png";
 import IconBack from "~/assets/images/icon-back.png";
 import Table from "../../components/Table";
 import Calendar from "./_components/Calendar";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const optionBlock = ["Issues assigned to me", "Reported issues", "Watched issues", "Latest news", "Calendar", "Documents", "Spent time"];
 const columnNames = ["#", "Project", "Tracker", "Subject"];
@@ -77,9 +77,9 @@ const MyPage = () => {
             </a>
             <div className="flex justify-between">
               <p className="text-mouse-gray font-semibold	">Total Time: {totalHours}.00</p>
-              {/* <Link className="hover:underline" to="/my-page/add-time">
+              <Link className="hover:underline" to="/my-page/add-time">
                 Add
-              </Link> */}
+              </Link>
             </div>
             <Table
               className="bg-slate-500 min-w-full "
