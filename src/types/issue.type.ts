@@ -56,6 +56,6 @@ export interface IssueStatus {
   is_closed: boolean;
 }
 
-export interface GroupedIssueByDay  {
+export interface GroupedIssueByDay {
   [key: string]: Issue[];
-};
+}
