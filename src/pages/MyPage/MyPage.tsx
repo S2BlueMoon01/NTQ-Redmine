@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import useScrollToTop from "~/hooks/useScrollToTop";
 import IconAdd from "~/assets/images/icon-add.png";
 import IconBack from "~/assets/images/icon-back.png";
+import BoardSectionList from "~/components/BoardSectionList";
 import Table from "../../components/Table";
 import Calendar from "./_components/Calendar";
 // import { Link } from "react-router-dom";
@@ -111,6 +112,7 @@ const MyPage = () => {
             <Table className="bg-slate-500 min-w-full mt-3" columnNames={columnNames} dataTable={dataTable} />
           </div>
         </div>
+        <BoardSectionList />
       </div>
     </>
   );
