@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import useScrollToTop from "~/hooks/useScrollToTop";
 import IconAdd from "~/assets/images/icon-add.png";
 import IconBack from "~/assets/images/icon-back.png";
+import BoardSectionList from "~/components/BoardSectionList";
 import Table from "../../components/Table";
 import TableComponent from "./_components/Table";
 
@@ -43,6 +44,8 @@ const MyPage = () => {
           )}
         </>
       </div>
+
+      <div>
       <div className="pt-2">
         <div>
           <a className="text-ocean-blue font-semibold	hover:underline " href="">
@@ -70,6 +73,7 @@ const MyPage = () => {
             <Table className="bg-slate-500 min-w-full mt-3" columnNames={columnNames} dataTable={dataTable} />
           </div>
         </div>
+          <BoardSectionList />
       </div>
     </>
   );
