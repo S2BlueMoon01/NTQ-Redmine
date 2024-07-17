@@ -45,7 +45,6 @@ const MyPage = () => {
         </>
       </div>
 
-      <div>
       <div className="pt-2">
         <div>
           <a className="text-ocean-blue font-semibold	hover:underline " href="">
@@ -73,7 +72,7 @@ const MyPage = () => {
             <Table className="bg-slate-500 min-w-full mt-3" columnNames={columnNames} dataTable={dataTable} />
           </div>
         </div>
-          <BoardSectionList />
+        <BoardSectionList />
       </div>
     </>
   );

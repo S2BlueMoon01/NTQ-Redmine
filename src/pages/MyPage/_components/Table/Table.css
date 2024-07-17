@@ -1,26 +1,28 @@
 td {
-  border: 1px solid #EEEEEE;
+  border: 1px solid #eeeeee;
   padding: 3px 2px;
   box-sizing: border-box;
 }
 
 th {
-  background-color:#EEEEEE;
-  color:#505050;
+  background-color: #eeeeee;
+  color: #505050;
   font-size: 12px;
   padding: 4px;
 }
 
-th:first-child, td:first-child {
+th:first-child,
+td:first-child {
   width: 22px;
   padding: 4px;
 }
 
 td:first-child {
-  background:#EEEEEE;
+  background: #eeeeee;
 }
 
-th:not(:first-child), td:not(:first-child) {
+th:not(:first-child),
+td:not(:first-child) {
   width: calc((100% - 22px) / 2);
 }
 

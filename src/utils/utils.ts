@@ -8,7 +8,6 @@ import ArrowLeftIcon from "~/assets/images/arrow_left.png";
 import DiamondIcon from "~/assets/images/bullet_diamond.png";
 import { GroupedIssueByDay, Issue } from "~/types/issue.type";
 
-
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -33,14 +32,13 @@ export const getTaskById = (tasks: Task[], id: string): Task | undefined => {
   return tasks.find((task) => task.id === id);
 };
 
-export function getWeekNumber(d: Date) : number[] {
+export function getWeekNumber(d: Date): number[] {
   d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
-  const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
-  const weekNo = Math.ceil(( ( (d.getTime() - yearStart.getTime()) / 86400000) + 1)/7);
+  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
   return [d.getUTCFullYear(), weekNo];
 }
-
 
 export function checkDateStatus(startDate: string, dueDate: string): string {
   const start = new Date(startDate);
@@ -48,33 +46,33 @@ export function checkDateStatus(startDate: string, dueDate: string): string {
   const today = new Date();
   let url = "";
 
-  if (start.getFullYear() === today.getFullYear() &&
-      start.getMonth() === today.getMonth() &&
-      start.getDate() === today.getDate() &&
-      (today.getFullYear() !== due.getFullYear() ||
-      today.getMonth() !== due.getMonth() ||
-      today.getDate() !== due.getDate())) {
+  if (
+    start.getFullYear() === today.getFullYear() &&
+    start.getMonth() === today.getMonth() &&
+    start.getDate() === today.getDate() &&
+    (today.getFullYear() !== due.getFullYear() || today.getMonth() !== due.getMonth() || today.getDate() !== due.getDate())
+  ) {
     url = ArrowRightIcon;
     // ArrowRightIcon: start = today
-
-  } else if (due.getFullYear() === today.getFullYear() &&
-      due.getMonth() === today.getMonth() &&
-      due.getDate() === today.getDate() &&
-     ( today.getFullYear() !== start.getFullYear() ||
-      today.getMonth() !== start.getMonth() ||
-      today.getDate() !== start.getDate())) {
+  } else if (
+    due.getFullYear() === today.getFullYear() &&
+    due.getMonth() === today.getMonth() &&
+    due.getDate() === today.getDate() &&
+    (today.getFullYear() !== start.getFullYear() || today.getMonth() !== start.getMonth() || today.getDate() !== start.getDate())
+  ) {
     // ArrowLeftIcon: due = today
 
     url = ArrowLeftIcon;
-  } else if (due.getFullYear() === start.getFullYear() &&
-      due.getMonth() === start.getMonth() &&
-      due.getDate() === start.getDate() &&
-      today.getFullYear() === start.getFullYear() &&
-      today.getMonth() === start.getMonth() &&
-      today.getDate() === start.getDate()) {
+  } else if (
+    due.getFullYear() === start.getFullYear() &&
+    due.getMonth() === start.getMonth() &&
+    due.getDate() === start.getDate() &&
+    today.getFullYear() === start.getFullYear() &&
+    today.getMonth() === start.getMonth() &&
+    today.getDate() === start.getDate()
+  ) {
     url = DiamondIcon;
     // DiamondIcon: start = date = today
-
   }
 
   return url;
@@ -102,17 +100,20 @@ export function getWeekDates(): Date[] {
   return dates;
 }
 
-export function arrangeIssue (response: Issue[], dates: string[]): GroupedIssueByDay[] {
-  const dateMap: { [key: string]: Issue[] } = response.reduce((acc, item) => {
-    const day = item.start_date.split("-")[2];
-    if (!acc[day]) {
-      acc[day] = [];
-    }
-    acc[day].push(item);
-    return acc;
-  }, {} as { [key: string]: Issue[] });
+export function arrangeIssue(response: Issue[], dates: string[]): GroupedIssueByDay[] {
+  const dateMap: { [key: string]: Issue[] } = response.reduce(
+    (acc, item) => {
+      const day = item.start_date.split("-")[2];
+      if (!acc[day]) {
+        acc[day] = [];
+      }
+      acc[day].push(item);
+      return acc;
+    },
+    {} as { [key: string]: Issue[] },
+  );
 
-  const result = dates.map(date => {
+  const result = dates.map((date) => {
     const day = date.split("-")[2];
     return { [day]: dateMap[day] || [] };
   });
@@ -120,7 +121,7 @@ export function arrangeIssue (response: Issue[], dates: string[]): GroupedIssueB
   return result;
 }
 
-export function getDay() : string {
+export function getDay(): string {
   const today = new Date();
   const day = String(today.getDate()).padStart(2, "0");
 
