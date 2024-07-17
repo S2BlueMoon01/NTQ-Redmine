@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import useScrollToTop from "~/hooks/useScrollToTop";
 import IconAdd from "~/assets/images/icon-add.png";
 import IconBack from "~/assets/images/icon-back.png";
+import BoardSectionList from "~/components/BoardSectionList";
 
 const optionBlock = ["Issues assigned to me", "Reported issues", "Watched issues", "Latest news", "Calendar", "Documents", "Spent time"];
 
@@ -34,6 +35,9 @@ const MyPage = () => {
             </p>
           )}
         </>
+      </div>
+      <div>
+        <BoardSectionList />
       </div>
     </>
   );

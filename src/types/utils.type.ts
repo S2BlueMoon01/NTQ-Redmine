@@ -21,3 +21,12 @@ export type ListDataResponse<T, K extends string = "data"> = {
 export type NoUndefinedField<T> = {
   [P in keyof T]-?: NoUndefinedField<NonNullable<T[P]>>;
 };
+
+export type Task = {
+  id: string;
+  title: string;
+};
+
+export type BoardSections = {
+  [key: string]: Task[];
+};
