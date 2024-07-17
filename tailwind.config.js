@@ -9,7 +9,7 @@ export default {
         "charcoal-blue": "#3E5B76",
         "blue-gray": "#628DB6",
         "mouse-gray": "#555",
-        "light-yellow": "#FFEBC1",
+        "light-yellow": "#ffffdd",
       },
       minHeight: {
         84: "84vh",

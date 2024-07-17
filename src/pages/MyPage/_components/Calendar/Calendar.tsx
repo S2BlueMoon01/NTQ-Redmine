@@ -143,7 +143,7 @@ const Calendar = () => {
 
   return (
     <>
-      <h2 className="text-base text-[#555] font-bold">Calendar</h2>
+      <h2 className="text-base text-mouse-gray font-bold">Calendar</h2>
       <table className="w-full border-collapse table-fixed">
         <thead>
           <tr>
@@ -159,22 +159,22 @@ const Calendar = () => {
         </thead>
         <tbody>
           <tr>
-            <td className="text-xs w-[22px] p-1 text-[#505050] ">{week}</td>
+            <td className="text-xs w-[22px] p-1 text-mouse-gray ">{week}</td>
             {mainArrays.map((item) => {
               return (
                 <td
                   key={Object.keys(item).toString()}
-                  className={`${getDay() === Object.keys(item).toString() ? "bg-[#ffffdd]" : ""} hover:bg-[#ffffdd] relative pt-8`}
+                  className={`${getDay() === Object.keys(item).toString() ? "bg-light-yellow" : ""} hover:bg-light-yellow relative pt-8`}
                 >
                   <div className="text-right text-[#505050] absolute top-1 right-1">{Object.keys(item).toString()}</div>
                   {item[Object.keys(item)[0]].map((issue) => (
                     <div key={issue.id} className="py-1">
-                      <div className="flex flex-wrap p-[6px] w-full text-[10.8px] text-[#505050] bg-[#ffffdd] border relative card">
+                      <div className="flex flex-wrap p-1.5 w-full text-[10.8px] text-mouse-gray bg-light-yellow border relative card">
                         {issue.project.name}-
                         <span>
                           <img src={ArrowRightIcon} alt="ArrowRightIcon" />
                         </span>
-                        <a href="#!" className="text-[#116699] ">
+                        <a href="#!" className="text-ocean-blue ">
                           {issue.tracker.name} #{issue.id}:
                         </a>
                         {issue.subject}

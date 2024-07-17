@@ -10,7 +10,7 @@ const Card = ({ issue }: { issue: Issue }) => {
     <div className="pop-up z-10 flex absolute top-3 left-6 flex-col gap-y-1 p-1 min-w-[278px] min-h-[152px] border border-black bg-[#fff] text-[8.64px] opacity-0 invisible">
       <div className="flex pb-5 items-center">
         <img src={ArrowRightIcon} alt="" />
-        <a href="#!" className="text-[#116699]">
+        <a href="#!" className="text-ocean-blue">
           {issue.tracker.name} #{issue.id}
         </a>
         : {issue.subject}
