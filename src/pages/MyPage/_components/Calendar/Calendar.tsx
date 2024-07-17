@@ -1,11 +1,11 @@
 import React from "react";
-import "./Table.css";
+import "./Calendar.css";
 import ArrowRightIcon from "~/assets/images/arrow_right.png";
 import Card from "~/pages/MyPage/_components/Card/Card";
 import { getWeekNumber, arrangeIssue, getWeekDates, getDay } from "~/utils/utils";
 import { Issue } from "~/types/issue.type";
 
-const TableComponent = () => {
+const Calendar = () => {
   const week = getWeekNumber(new Date())[1];
 
   const apiResponse: Issue[] = [
@@ -192,4 +192,4 @@ const TableComponent = () => {
   );
 };
 
-export default TableComponent;
+export default Calendar;
