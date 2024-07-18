@@ -7,8 +7,6 @@ type ErrorBoundaryProps = {
 const ErrorBoundary = ({ children }: ErrorBoundaryProps) => {
   const [hasError, setHasError] = useState(false);
 
-  // Mô phỏng componentDidCatch bằng cách sử dụng useEffect và một global error listener
-  // Lưu ý: Đây không phải là một giải pháp thay thế hoàn hảo cho componentDidCatch
   useEffect(() => {
     const handleError = (error: ErrorEvent) => {
       console.error("Uncaught error: ", error);
@@ -23,7 +21,7 @@ const ErrorBoundary = ({ children }: ErrorBoundaryProps) => {
   }, []);
 
   if (hasError) {
-    // Render UI khi có lỗi
+    localStorage.clear();
     return (
       <main className="flex h-screen w-full flex-col items-center justify-center">
         <h1 className="text-9xl font-extrabold tracking-widest text-gray-900">500</h1>
