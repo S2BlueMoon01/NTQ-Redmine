@@ -25,9 +25,9 @@ const totalHours = dataTime.reduce((acc, current) => acc + parseInt(current.Hour
 
 const newData = {
   Activity: "Today",
-  Project: "", // Lấy Project từ phần tử đầu tiên của dataTime (giả sử tất cả cùng một Project)
-  Comment: "", // Không có comment
-  Hours: totalHours.toString(), // Chuyển tổng Hours thành chuỗi
+  Project: "",
+  Comment: "",
+  Hours: totalHours.toString(),
 };
 
 const tables = [
@@ -78,8 +78,8 @@ const MyPage = () => {
             </a>
             <div className="flex justify-between">
               <p className="text-mouse-gray font-semibold	">Total Time: {totalHours}.00</p>
-              <Link className="hover:underline" to="/my-page/add-time">
-                Add
+              <Link className="grid grid-cols-none	 hover:underline" to="/my-page/add-time">
+                <img className="mr-1" src={IconAdd} alt="Add" /> <p className="text-xs">log time</p>
               </Link>
             </div>
             <Table
