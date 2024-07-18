@@ -1,6 +1,7 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { SyncLoader } from "react-spinners";
 import projectsApi from "~/apis/projects.api";
 import LatestProject from "~/assets/images/latest-projects.png";
 import useScrollToTop from "~/hooks/useScrollToTop";
@@ -8,6 +9,7 @@ import { DataProject } from "~/types/project.type";
 
 const HomePage = () => {
   const [listProject, setListProject] = useState<DataProject[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useScrollToTop();
 
@@ -22,6 +24,7 @@ const HomePage = () => {
       });
 
       setListProject(listProjects);
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -44,8 +47,8 @@ const HomePage = () => {
           </div>
           <div className="pl-10 my-3">
             <ul className="text-mouse-gray text-xs list-disc">
-              {listProject &&
-                listProject.length > 0 &&
+              <SyncLoader loading={loading} color="#169" size={5} />
+              {listProject && listProject.length > 0 ? (
                 listProject.map((item) => {
                   return (
                     <li key={item.id}>
@@ -55,7 +58,10 @@ const HomePage = () => {
                       ({item.created_on})<p>{item.description}</p>
                     </li>
                   );
-                })}
+                })
+              ) : (
+                <></>
+              )}
             </ul>
           </div>
         </div>

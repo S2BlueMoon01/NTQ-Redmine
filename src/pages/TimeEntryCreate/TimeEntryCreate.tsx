@@ -5,6 +5,7 @@ import Input from "~/components/Input";
 import Label from "~/components/Label";
 import Select from "~/components/Select";
 import ErrorImg from "~/assets/images/error-img.png";
+import moment from "moment";
 
 interface IFormInput {
   project: string;
@@ -27,6 +28,7 @@ const SpentTime = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInput>();
+  const currentDate = moment().format("YYYY-MM-DD");
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data, errors?.hours?.message);
 
@@ -85,7 +87,7 @@ const SpentTime = () => {
             </Select>
             <Input id="issue" {...register("issue")} />
 
-            <Input type="date" id="date" value="2024-07-17" min="2018-01-01" {...register("date")} />
+            <Input type="date" id="date" value={currentDate} min="2018-01-01" {...register("date")} />
             <Input id="hours" {...register("hours", { required: "Hours can't be blank" })} />
             <Input id="comment" {...register("comment")} />
             <Select id="activity" {...register("activity", { required: "Activity  can't be blank" })}>
