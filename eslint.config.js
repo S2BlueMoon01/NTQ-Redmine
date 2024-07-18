@@ -9,7 +9,7 @@ export default [
   {
     settings: {
       react: {
-        version: "detect", // Tự động phát hiện phiên bản React
+        version: "detect",
       },
     },
   },
@@ -41,7 +41,6 @@ export default [
       "prefer-const": "off",
       "jsx-a11y/label-has-associated-control": "off",
       "react/jsx-indent": ["error", 2],
-
       "react/jsx-one-expression-per-line": "off",
       "react/function-component-definition": [
         2,

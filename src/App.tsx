@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import "./App.css";
 import AuthProtect from "./components/AuthProtect";
 import { privateRoutes, publicRoutes } from "./routes";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   return (
