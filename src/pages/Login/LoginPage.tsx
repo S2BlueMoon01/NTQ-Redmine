@@ -4,6 +4,7 @@ import { UserLoginInput } from "~/types/user.type";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "~/components/Button/Button";
 import { Link } from "react-router-dom";
+import Input from "~/components/Input";
 
 const LoginPage = () => {
   useScrollToTop();
@@ -33,16 +34,15 @@ const LoginPage = () => {
             <Link
               to={"/lost-password"}
               rel="noopener noreferrer"
-              className="text-[#169] text-xs p-[0.375rem] mt-[28px] hover:text-[#c61a1a] hover:underline whitespace-nowrap"
+              className="text-ocean-blue text-xs p-[0.375rem] mt-7 hover:text-[#c61a1a] hover:underline whitespace-nowrap"
             >
               Lost password
             </Link>
           </div>
 
           <div className="flex flex-col">
-            <input
-              type="text"
-              className="h-6 border m-1 min-w-[300px] text-sm pl-1"
+            <Input
+              className="min-w-[300px]"
               id="login"
               {...register("email", {
                 required: "Email is required.",
@@ -57,7 +57,7 @@ const LoginPage = () => {
               })}
             />
             {errors.email && <p className="text-xs text-[red] pl-2">{errors.email.message}</p>}
-            <input
+            <Input
               type="password"
               className="h-6 border m-1 text-sm pl-1"
               id="password"
@@ -75,7 +75,7 @@ const LoginPage = () => {
             />
             {errors.password && <p className="text-xs text-[red] pl-2">{errors.password.message}</p>}
             <div className="flex items-center gap-x-[6px] ml-2 mt-1.5">
-              <input type="checkbox" {...register("isStayLogin")} />
+              <Input className="m-0" type="checkbox" {...register("isStayLogin")} />
               <span className="font-bold text-xs text-gray-rain">Stay logged in</span>
             </div>
             <div className="text-right">
