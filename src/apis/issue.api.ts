@@ -16,14 +16,14 @@ const issuesApi = {
     subproject_id?: number;
     tracker_id?: number;
     status_id?: string;
-    assigned_to_id?: string;
+    assigned_to_id?: string | number;
     parent_id?: number;
     cf_x?: string;
     created_on?: string;
     updated_on?: string;
   }) {
     const params = data;
-    return http.get<ListDataResponse<Issue[]>>(`${URL_ISSUES}.json`, { params });
+    return http.get<ListDataResponse<Issue[], "issues">>(`${URL_ISSUES}.json`, { params });
   },
 
   getIssueById(data: {
