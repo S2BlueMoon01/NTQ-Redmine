@@ -8,7 +8,6 @@ import ReportedIssues from "./_components/ReportedIssues/ReportedIssues";
 import IssuesAssigned from "./_components/IssuesAsigned";
 import WatchedIssues from "./_components/WatchedIssues";
 import SpentTime from "./_components/SpentTime";
-import { Link } from "react-router-dom";
 import Filter from "./_components/Filter";
 
 const optionBlock = ["Issues assigned to me", "Reported issues", "Watched issues", "Latest news", "Calendar", "Documents", "Spent time"];
