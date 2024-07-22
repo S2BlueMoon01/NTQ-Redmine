@@ -43,7 +43,7 @@ const Filter = () => {
   ];
 
   const [isDragDown, setIsDragDown] = useState(true);
-  const [size, setSize] = useState<number | undefined>(undefined);
+  const [size, setSize] = useState<number>(0);
 
   const handleAddSize = () => {
     if (size === 0) {
@@ -65,7 +65,7 @@ const Filter = () => {
         <hr />
         <div className="flex items-center px-1 absolute top-[-8px] left-3 bg-[#fff] cursor-pointer" onClick={handleClickDragDown}>
           <div className="text-gray-700">
-            <img src={isDragDown ? ArrowExpanded : ArrowCollapsed} alt="" />
+            <img src={isDragDown ? ArrowExpanded : ArrowCollapsed} alt="icon eqxpend" />
           </div>
 
           <span className="text-[10.8px] text-gray-rain">Filters</span>
@@ -106,7 +106,7 @@ const Filter = () => {
                           </option>
                         ))}
                       </Select>
-                      <img src={TogglePlus} alt="TogglePlus" className="cursor-pointer" onClick={handleAddSize} />
+                      <img src={TogglePlus} alt="Toggle Plus" className="cursor-pointer" onClick={handleAddSize} />
                     </>
                   )}
                   {item.type === "date" && (
@@ -120,7 +120,7 @@ const Filter = () => {
           </div>
           <div>
             <span className="text-[10.8px] text-gray-rain">Add filter </span>
-            <Select className="border ">
+            <Select className="border">
               <option value="Developer">Developer</option>
             </Select>
           </div>
