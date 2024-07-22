@@ -6,19 +6,28 @@ import TableSpentTime from "../TableSpentTime";
 import timeEntriesApi from "~/apis/timeEntries.api";
 import { TimeEntriesTable } from "~/types/timeEntries.type";
 import moment from "moment";
+import { removeBlockFromBoardSections } from "~/utils/utils";
+import { optionBlockMyPage } from "~/constants/constants";
+import { useGlobalStore } from "~/store/global-store";
 
 const columnNames = ["Activity", "Project", "Comment", "Hours", "Action"];
 
-interface ChildComponentProps {
-  handleOnChange?: () => void;
-  isShowButtonClose: boolean;
-}
-
-const SpentTime: React.FC<ChildComponentProps> = ({ handleOnChange, isShowButtonClose = false }) => {
-  const [listTimeEntries, setListTimeEntries] = useState<TimeEntriesTable[]>([]);
+const SpentTime: React.FC = () => {
+  const { isEditMyPage, removeBlock } = useGlobalStore((state) => ({
+    isEditMyPage: state.isEditMyPage,
+    removeBlock: state.removeBlock,
+  }));
+  
+   const [listTimeEntries, setListTimeEntries] = useState<TimeEntriesTable[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const totalHours = listTimeEntries && listTimeEntries.reduce((acc, current) => acc + current.hours, 0).toFixed(2);
-
+  const handleClose = () => {
+    const blockId = optionBlockMyPage.find((block) => block.title === "Spent time")?.id || "";
+    removeBlockFromBoardSections({
+      blockId: blockId,
+    });
+    removeBlock(blockId);
+  };
   const fetchTimeEntries = async () => {
     try {
       const response = await timeEntriesApi.listTimeEntries({ user_id: "me" });
@@ -45,7 +54,7 @@ const SpentTime: React.FC<ChildComponentProps> = ({ handleOnChange, isShowButton
   useEffect(() => {
     fetchTimeEntries();
   }, []);
-
+  
   return (
     <div className=" flex flex-col gap-3">
       <div className="flex justify-between items-center">
@@ -55,7 +64,7 @@ const SpentTime: React.FC<ChildComponentProps> = ({ handleOnChange, isShowButton
           </Link>
           <p className="text-16 text-mouse-gray font-medium">(last 7 days)</p>
         </div>
-        {isShowButtonClose && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={handleOnChange} src={CloseImg} alt="closeButton" />}
+        {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={() => handleClose()} src={CloseImg} alt="closeButton" />}
       </div>
       <div className="flex justify-between">
         <p className="text-mouse-gray font-semibold	">Total Time: {totalHours}</p>

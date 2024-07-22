@@ -22,12 +22,12 @@ export type NoUndefinedField<T> = {
   [P in keyof T]-?: NoUndefinedField<NonNullable<T[P]>>;
 };
 
-export type Task = {
+export type Block = {
   id: string;
   title: string;
   component?: unknown;
 };
 
 export type BoardSections = {
-  [key: string]: Task[];
+  [key: string]: Block[];
 };
