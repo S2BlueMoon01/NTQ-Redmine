@@ -4,8 +4,14 @@ import ArrowRightIcon from "~/assets/images/arrow_right.png";
 import Card from "~/pages/MyPage/_components/Card/Card";
 import { getWeekNumber, arrangeIssue, getWeekDates, getDay } from "~/utils/utils";
 import { Issue } from "~/types/issue.type";
+import CloseImg from "~/assets/images/close-img.png";
 
-const Calendar = () => {
+interface ChildComponentProps {
+  handleOnChange?: () => void;
+  isShowButtonClose: boolean;
+}
+
+const Calendar: React.FC<ChildComponentProps> = ({ handleOnChange, isShowButtonClose = false }) => {
   const week = getWeekNumber(new Date())[1];
 
   const apiResponse: Issue[] = [
@@ -143,7 +149,10 @@ const Calendar = () => {
 
   return (
     <>
-      <h2 className="text-base text-mouse-gray font-bold">Calendar</h2>
+      <div className="flex justify-between items-center ">
+        <h2 className="text-base text-mouse-gray font-bold">Calendar</h2>
+        {isShowButtonClose && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={handleOnChange} src={CloseImg} alt="closeButton" />}
+      </div>
       <table className="w-full border-collapse table-fixed">
         <thead>
           <tr>
@@ -164,7 +173,7 @@ const Calendar = () => {
               return (
                 <td
                   key={Object.keys(item).toString()}
-                  className={`${getDay() === Object.keys(item).toString() ? "bg-light-yellow" : ""} hover:bg-light-yellow relative pt-8`}
+                  className={`${getDay() === Object.keys(item).toString() ? "bg-light-yellow font-bold" : ""} hover:bg-light-yellow relative pt-8 text-xs`}
                 >
                   <div className="text-right text-[#505050] absolute top-1 right-1">{Object.keys(item).toString()}</div>
                   {item[Object.keys(item)[0]].map((issue) => (

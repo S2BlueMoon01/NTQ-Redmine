@@ -10,7 +10,7 @@ type PropsComponent = {
   dataTable?: { [key: string]: string | number | undefined }[];
 };
 
-const Table: React.FC<PropsComponent> = ({ className, columnNames = [], dataTable = [], loading = true }) => {
+const TableSpentTime: React.FC<PropsComponent> = ({ className, columnNames = [], dataTable = [], loading = true }) => {
   return (
     <table className={`table-auto text-mouse-gray ${className}`}>
       <thead className="bg-gray-200   ">
@@ -56,4 +56,4 @@ const Table: React.FC<PropsComponent> = ({ className, columnNames = [], dataTabl
   );
 };
 
-export default Table;
+export default TableSpentTime;

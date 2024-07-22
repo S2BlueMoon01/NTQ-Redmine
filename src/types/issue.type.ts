@@ -38,16 +38,16 @@ export interface Issue {
   priority: Priority;
   author: User;
   assigned_to: User;
-  subject: string;
+  subject?: string;
   description: string;
-  start_date: string;
-  done_ratio: number;
-  due_date: string;
+  start_date?: string;
+  done_ratio?: number;
+  due_date?: string;
   estimated_hours?: number;
   spent_hours?: number;
-  custom_fields: CustomField[];
-  created_on: string;
-  updated_on: string;
+  custom_fields?: CustomField[];
+  created_on?: string;
+  updated_on?: string;
 }
 
 export interface IssueStatus {
