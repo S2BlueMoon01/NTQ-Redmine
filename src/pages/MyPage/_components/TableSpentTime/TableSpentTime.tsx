@@ -2,15 +2,41 @@ import React from "react";
 import EditImg from "~/assets/images/edit-img.png";
 import DeleteImg from "~/assets/images/delete-img.png";
 import { BeatLoader } from "react-spinners";
+import { TimeEntriesTable } from "~/types/timeEntries.type";
+import moment from "moment";
 
-type PropsComponent = {
+interface PropsComponent {
   className?: string;
   columnNames: string[];
   loading?: boolean;
-  dataTable?: { [key: string]: string | number | undefined }[];
+  dataTable?: TimeEntriesTable[];
+}
+
+interface GroupedTimeEntries {
+  date: string;
+  entries: TimeEntriesTable[];
+  totalHours: number;
+}
+
+const groupTimeEntriesByDate = (entries: TimeEntriesTable[]): GroupedTimeEntries[] => {
+  const groupedEntries = entries.reduce<{ [key: string]: GroupedTimeEntries }>((acc, entry) => {
+    const date = entry.date;
+    if (!acc[date]) {
+      acc[date] = { date, entries: [], totalHours: 0 };
+    }
+    acc[date].entries.push(entry);
+    acc[date].totalHours += entry.hours;
+    return acc;
+  }, {});
+
+  return Object.values(groupedEntries);
 };
 
 const TableSpentTime: React.FC<PropsComponent> = ({ className, columnNames = [], dataTable = [], loading = true }) => {
+  const today = moment().format("MM/DD/YYYY");
+  const groupedEntries = groupTimeEntriesByDate(dataTable);
+  const styleTd = "text-center text-xs whitespace-nowrap";
+
   return (
     <table className={`table-auto text-mouse-gray ${className}`}>
       <thead className="bg-gray-200   ">
@@ -20,7 +46,7 @@ const TableSpentTime: React.FC<PropsComponent> = ({ className, columnNames = [],
               className={`text-center text-xs border border-solid border-gray-300 border-b-slate-600 text-gray-600 px-5 tracking-wider w-auto ${index === 1 || index === 3 ? "w-auto " : "w-auto"}`}
               key={columnName}
             >
-              {columnName}
+              {columnName === "Action" ? "" : columnName}
             </th>
           ))}
         </tr>
@@ -28,28 +54,38 @@ const TableSpentTime: React.FC<PropsComponent> = ({ className, columnNames = [],
       <tbody className="bg-white divide-y divide-gray-200">
         {loading && (
           <tr className="h-7">
-            <td className="text-center  w-full" colSpan={columnNames.length}>
+            <td className="text-center w-full" colSpan={columnNames.length}>
               <div className="flex justify-center">
                 <BeatLoader color="#169" size={5} />
               </div>
             </td>
           </tr>
         )}
-        {dataTable.map((row, rowIndex) => (
-          <tr key={rowIndex} className="hover:bg-yellow-100 h-7">
-            {columnNames.map((columnName, colIndex) => (
-              <td key={colIndex} className="text-center text-sm border border-solid border-gray-300 whitespace-nowrap ">
-                {columnName === "Action" ? (
-                  <div className="flex text-center text-sm justify-center">
-                    <img className="mr-1 cursor-pointer" src={EditImg} onClick={() => alert("Edit")} />
-                    <img className="mr-1 cursor-pointer" src={DeleteImg} onClick={() => alert("Delete")} />
-                  </div>
-                ) : (
-                  row[columnName]
-                )}
-              </td>
-            ))}
-          </tr>
+        {groupedEntries.map((group) => (
+          <React.Fragment key={group.date}>
+            <tr className="hover:bg-yellow-100 bg-gray-100 h-7">
+              <td className={`${styleTd} font-bold`}>{group.date === today ? "Today" : group.date}</td>
+              <td colSpan={2}></td>
+              <td className={styleTd}>{group.totalHours.toFixed(2)}</td>
+              <td></td>
+            </tr>
+            {group.entries.map((entry) => {
+              return (
+                <tr key={entry.id} className="hover:bg-yellow-100 h-7">
+                  <td className={styleTd}>{entry.activity}</td>
+                  <td className={styleTd}>{entry.project}</td>
+                  <td className={styleTd}>{entry.comment}</td>
+                  <td className={styleTd}>{entry.hours.toFixed(2)}</td>
+                  <td className={styleTd}>
+                    <div className="flex text-center text-sm justify-center">
+                      <img className="mr-1 cursor-pointer" src={EditImg} onClick={() => alert("Edit")} />
+                      <img className="mr-1 cursor-pointer" src={DeleteImg} onClick={() => alert("Delete")} />
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </React.Fragment>
         ))}
       </tbody>
     </table>

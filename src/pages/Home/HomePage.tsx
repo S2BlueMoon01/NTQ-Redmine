@@ -16,12 +16,15 @@ const HomePage = () => {
   const fetchProject = async () => {
     try {
       const response = await projectsApi.getAllProjects();
-      const listProjects = response.data.projects.map((project: DataProject) => {
-        return {
-          ...project,
-          created_on: moment(project.created_on).format("MM/DD/YYYY hh:mm A"),
-        };
-      });
+      console.log(response.data.projects);
+      const listProjects =
+        response?.data?.projects &&
+        response.data.projects.map((project: DataProject) => {
+          return {
+            ...project,
+            created_on: moment(project.created_on).format("MM/DD/YYYY hh:mm A"),
+          };
+        });
 
       setListProject(listProjects);
       setLoading(false);

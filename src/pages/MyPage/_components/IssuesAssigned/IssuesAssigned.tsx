@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import issuesApi from "~/apis/issue.api";
 import Table from "~/components/Table";
 import CloseImg from "~/assets/images/close-img.png";
+
 import { useGlobalStore } from "~/store/global-store";
 import { removeBlockFromBoardSections } from "~/utils/utils";
 import { optionBlockMyPage } from "~/constants/constants";
@@ -32,9 +33,9 @@ const IssuesAssigned: React.FC = () => {
         response.data?.issues.map((issue) => {
           return {
             "#": issue.id,
-            Subject: issue.subject,
-            Tracker: issue.tracker.name,
-            Project: issue.project.name,
+            subject: issue.subject,
+            tracker: issue.tracker.name,
+            project: issue.project.name,
           };
         });
       setListIssuesAssigned(listIssues);

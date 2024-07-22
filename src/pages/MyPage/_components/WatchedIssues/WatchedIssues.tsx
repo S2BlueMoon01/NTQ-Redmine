@@ -3,6 +3,7 @@ import issuesApi from "~/apis/issue.api";
 import Table from "~/components/Table";
 import CloseImg from "~/assets/images/close-img.png";
 import { Link } from "react-router-dom";
+import { IssueTable } from "~/types/issue.type";
 import { removeBlockFromBoardSections } from "~/utils/utils";
 import { optionBlockMyPage } from "~/constants/constants";
 import { useGlobalStore } from "~/store/global-store";
@@ -21,7 +22,7 @@ const WatchedIssues: React.FC = () => {
     isEditMyPage: state.isEditMyPage,
     removeBlock: state.removeBlock,
   }));
-  const [listIssuesWatcher, setListIssuesWatcher] = useState<IssueTableType[]>([]);
+   const [listIssuesWatcher, setListIssuesWatcher] = useState<IssueTable[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchIssuesWatcher = async () => {
@@ -32,9 +33,9 @@ const WatchedIssues: React.FC = () => {
         response.data?.issues.map((issue) => {
           return {
             "#": issue.id,
-            Subject: issue.subject,
-            Tracker: issue.tracker.name,
-            Project: issue.project.name,
+            subject: issue.subject,
+            tracker: issue.tracker.name,
+            project: issue.project.name,
           };
         });
       setListIssuesWatcher(listIssues);

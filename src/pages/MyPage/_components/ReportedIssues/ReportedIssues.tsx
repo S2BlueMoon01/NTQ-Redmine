@@ -3,18 +3,12 @@ import issuesApi from "~/apis/issue.api";
 import Table from "~/components/Table";
 import CloseImg from "~/assets/images/close-img.png";
 import { Link } from "react-router-dom";
+import { IssueTable } from "~/types/issue.type";
 import { useGlobalStore } from "~/store/global-store";
 import { removeBlockFromBoardSections } from "~/utils/utils";
 import { optionBlockMyPage } from "~/constants/constants";
 
-const columnNames = ["#", "Project", "Tracker", "Subject"];
-
-type IssueTableType = {
-  "#": number;
-  Project: string | undefined;
-  Tracker: string | undefined;
-  Subject: string | undefined;
-};
+const columnNames = ["#", "project", "tracker", "subject"];
 
 const ReportedIssues: React.FC = () => {
   const { isEditMyPage, removeBlock } = useGlobalStore((state) => ({
@@ -33,9 +27,9 @@ const ReportedIssues: React.FC = () => {
           .map((issue) => {
             return {
               "#": issue.id,
-              Subject: issue.subject,
-              Tracker: issue.tracker.name,
-              Project: issue.project.name,
+              subject: issue.subject,
+              tracker: issue.tracker.name,
+              project: issue.project.name,
             };
           });
       setListReportedIssues(reportedIssues);
