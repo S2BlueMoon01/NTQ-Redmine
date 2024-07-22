@@ -59,3 +59,10 @@ export interface IssueStatus {
 export interface GroupedIssueByDay {
   [key: string]: Issue[];
 }
+
+export type IssueTable = {
+  "#": number;
+  project: string | undefined;
+  tracker: string | undefined;
+  subject: string | undefined;
+};

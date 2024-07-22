@@ -3,23 +3,17 @@ import issuesApi from "~/apis/issue.api";
 import Table from "~/components/Table";
 import CloseImg from "~/assets/images/close-img.png";
 import { Link } from "react-router-dom";
-
-type IssueTableType = {
-  "#": number;
-  Project: string | undefined;
-  Tracker: string | undefined;
-  Subject: string | undefined;
-};
+import { IssueTable } from "~/types/issue.type";
 
 interface ChildComponentProps {
   handleOnChange?: () => void;
   isShowButtonClose: boolean;
 }
 
-const columnNames = ["#", "Project", "Tracker", "Subject"];
+const columnNames = ["#", "project", "tracker", "subject"];
 
 const WatchedIssues: React.FC<ChildComponentProps> = ({ handleOnChange, isShowButtonClose = false }) => {
-  const [listIssuesWatcher, setListIssuesWatcher] = useState<IssueTableType[]>([]);
+  const [listIssuesWatcher, setListIssuesWatcher] = useState<IssueTable[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchIssuesWatcher = async () => {
@@ -30,9 +24,9 @@ const WatchedIssues: React.FC<ChildComponentProps> = ({ handleOnChange, isShowBu
         response.data?.issues.map((issue) => {
           return {
             "#": issue.id,
-            Subject: issue.subject,
-            Tracker: issue.tracker.name,
-            Project: issue.project.name,
+            subject: issue.subject,
+            tracker: issue.tracker.name,
+            project: issue.project.name,
           };
         });
       setListIssuesWatcher(listIssues);

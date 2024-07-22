@@ -73,7 +73,6 @@ const MyPage = () => {
           <Calendar handleOnChange={handleCloseTablePersonalize} isShowButtonClose={isShowButtonClose} />
           <SpentTime handleOnChange={handleCloseTablePersonalize} isShowButtonClose={isShowButtonClose} />
           <WatchedIssues handleOnChange={handleCloseTablePersonalize} isShowButtonClose={isShowButtonClose} />
-          <Filter />
         </div>
 
         <div className="mt-6 grid gap-6 grid-cols-2">
@@ -81,6 +80,7 @@ const MyPage = () => {
           <IssuesAssigned handleOnChange={handleCloseTablePersonalize} isShowButtonClose={isShowButtonClose} />
         </div>
         <BoardSectionList />
+        <Filter />
       </div>
     </>
   );

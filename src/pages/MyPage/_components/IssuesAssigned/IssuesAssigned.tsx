@@ -3,23 +3,17 @@ import { Link } from "react-router-dom";
 import issuesApi from "~/apis/issue.api";
 import Table from "~/components/Table";
 import CloseImg from "~/assets/images/close-img.png";
-
-type IssueTableType = {
-  "#": number;
-  Project: string | undefined;
-  Tracker: string | undefined;
-  Subject: string | undefined;
-};
+import { IssueTable } from "~/types/issue.type";
 
 interface ChildComponentProps {
   handleOnChange?: () => void;
   isShowButtonClose: boolean;
 }
 
-const columnNames = ["#", "Project", "Tracker", "Subject"];
+const columnNames = ["#", "project", "tracker", "subject"];
 
 const IssuesAssigned: React.FC<ChildComponentProps> = ({ handleOnChange, isShowButtonClose = false }) => {
-  const [listIssuesAssigned, setListIssuesAssigned] = useState<IssueTableType[]>([]);
+  const [listIssuesAssigned, setListIssuesAssigned] = useState<IssueTable[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchIssuesAssigned = async () => {
@@ -30,9 +24,9 @@ const IssuesAssigned: React.FC<ChildComponentProps> = ({ handleOnChange, isShowB
         response.data?.issues.map((issue) => {
           return {
             "#": issue.id,
-            Subject: issue.subject,
-            Tracker: issue.tracker.name,
-            Project: issue.project.name,
+            subject: issue.subject,
+            tracker: issue.tracker.name,
+            project: issue.project.name,
           };
         });
       setListIssuesAssigned(listIssues);

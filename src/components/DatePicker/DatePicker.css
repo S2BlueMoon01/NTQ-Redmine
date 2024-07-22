@@ -18,7 +18,7 @@
 }
 
 .react-datepicker__week-number {
-  color: rgb(54, 49, 49)
+  color: rgb(54, 49, 49);
 }
 
 .react-datepicker__day {
@@ -74,7 +74,7 @@
 
 .react-datepicker__navigation-icon--next::before {
   transform: rotate(180deg);
-  left:-2px;
+  left: -2px;
 }
 
 .react-datepicker__navigation-icon::before {
@@ -84,10 +84,11 @@
 }
 
 .react-datepicker__navigation:hover *::before {
-  border-color:transparent #fff transparent transparent;
+  border-color: transparent #fff transparent transparent;
 }
 
-.react-datepicker__day:hover, .react-datepicker__day--selected {
+.react-datepicker__day:hover,
+.react-datepicker__day--selected {
   background-color: #ffffff;
   border: 1px solid #628db6;
   border-radius: 0px;
