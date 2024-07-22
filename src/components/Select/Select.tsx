@@ -1,9 +1,11 @@
 import React, { forwardRef, SelectHTMLAttributes } from "react";
+import "./Select.css";
 
 type PropsComponent = {
   defaultValue?: string;
   className?: string;
   children: React.ReactNode;
+  size?: number;
 } & SelectHTMLAttributes<HTMLSelectElement>;
 
 const Select = forwardRef<HTMLSelectElement, PropsComponent>(({ className, defaultValue = "", children, ...rest }, ref) => {

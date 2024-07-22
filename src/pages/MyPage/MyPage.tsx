@@ -8,6 +8,7 @@ import ReportedIssues from "./_components/ReportedIssues/ReportedIssues";
 import IssuesAssigned from "./_components/IssuesAssigned";
 import WatchedIssues from "./_components/WatchedIssues";
 import SpentTime from "./_components/SpentTime";
+import Filter from "./_components/Filter";
 
 const optionBlock = ["Issues assigned to me", "Reported issues", "Watched issues", "Latest news", "Calendar", "Documents", "Spent time"];
 
@@ -72,6 +73,7 @@ const MyPage = () => {
           <Calendar handleOnChange={handleCloseTablePersonalize} isShowButtonClose={isShowButtonClose} />
           <SpentTime handleOnChange={handleCloseTablePersonalize} isShowButtonClose={isShowButtonClose} />
           <WatchedIssues handleOnChange={handleCloseTablePersonalize} isShowButtonClose={isShowButtonClose} />
+          <Filter />
         </div>
 
         <div className="mt-6 grid gap-6 grid-cols-2">
