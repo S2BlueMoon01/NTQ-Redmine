@@ -8,17 +8,9 @@ import ReportedIssues from "./_components/ReportedIssues/ReportedIssues";
 import IssuesAssigned from "./_components/IssuesAsigned";
 import WatchedIssues from "./_components/WatchedIssues";
 import SpentTime from "./_components/SpentTime";
-import { Link } from "react-router-dom";
 import Filter from "./_components/Filter";
 
 const optionBlock = ["Issues assigned to me", "Reported issues", "Watched issues", "Latest news", "Calendar", "Documents", "Spent time"];
-
-// const tables = [
-//   { id: 1, name: "Spent time", columnNames: ["Activity", "Project", "Comment", "Hours"], dataTable: [newData, ...dataTime], action: true },
-//   { id: 2, name: "Watched issues", columnNames: ["#", "Project", "Tracker", "Subject"], dataTable: dataTable },
-//   { id: 3, name: "Reported issues", columnNames: ["#", "Project", "Tracker", "Subject"], dataTable: dataTable },
-//   { id: 4, name: "Issues assigned to me", columnNames: ["#", "Project", "Tracker", "Subject"], dataTable: dataTable },
-// ];
 
 const MyPage = () => {
   useScrollToTop();

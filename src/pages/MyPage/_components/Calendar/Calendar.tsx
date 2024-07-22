@@ -164,7 +164,7 @@ const Calendar = () => {
               return (
                 <td
                   key={Object.keys(item).toString()}
-                  className={`${getDay() === Object.keys(item).toString() ? "bg-light-yellow" : ""} hover:bg-light-yellow relative pt-8`}
+                  className={`${getDay() === Object.keys(item).toString() ? "bg-light-yellow font-bold" : ""} hover:bg-light-yellow relative pt-8 text-xs`}
                 >
                   <div className="text-right text-[#505050] absolute top-1 right-1">{Object.keys(item).toString()}</div>
                   {item[Object.keys(item)[0]].map((issue) => (
