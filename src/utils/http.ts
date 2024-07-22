@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import config from "~/constants/config";
 import HttpStatusCode from "~/constants/httpStatusCode.enum";
 
@@ -43,9 +43,9 @@ class Http {
         // Chỉ toast lỗi không phải 422 và 401
         if (![HttpStatusCode.UnprocessableEntity, HttpStatusCode.Unauthorized].includes(error.response?.status as number)) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const data: any | undefined = error.response?.data;
-          const message = data?.message || error.message;
-          toast.error(message);
+          // const data: any | undefined = error.response?.data;
+          // const message = data?.message || error.message;
+          // toast.error(message);
         }
 
         // Nếu timeout hoặc lỗi mạng thì retry lại

@@ -21,7 +21,7 @@ const Dialog = () => {
                 <div className="text-lg	font-bold text-[#555]">Clone Redmine 2</div>
                 <div className="text-lg font-light">
                   Added by{" "}
-                  <a href="" className="text-[#116699]">
+                  <a href="" className="text-ocean-blue">
                     Quyet Nguyen Van (Internship) 7 days
                   </a>{" "}
                   ago.
@@ -71,7 +71,7 @@ const Dialog = () => {
                         alt=""
                       />
                     </div>
-                    <a href="" className="text-[#116699]">
+                    <a href="" className="text-ocean-blue">
                       Son (internship) Nguyen Hoang Huu
                     </a>
                   </span>
@@ -154,7 +154,7 @@ const Dialog = () => {
               <label htmlFor="" className="py-3 inline-block text-lg font-bold">
                 Related issues
               </label>
-              <a href="" className="text-[#116699]">
+              <a href="" className="text-ocean-blue">
                 Add
               </a>
             </div>
@@ -163,9 +163,9 @@ const Dialog = () => {
         <hr className="my-2" />
 
         <div className="flex gap-2 justify-end pb-[10px] pr-5">
-          <button className="text-[#116699] bg-[#fff] font-bold px-3 py-1 border rounded-md">details</button>
-          <button className="text-[#116699] bg-[#fff] font-bold px-3 py-1 border rounded-md">edit</button>
-          <button className="text-[#116699] bg-[#fff] font-bold px-3 py-1 border rounded-md">close</button>
+          <button className="text-ocean-blue bg-[#fff] font-bold px-3 py-1 border rounded-md">details</button>
+          <button className="text-ocean-blue bg-[#fff] font-bold px-3 py-1 border rounded-md">edit</button>
+          <button className="text-ocean-blue bg-[#fff] font-bold px-3 py-1 border rounded-md">close</button>
         </div>
       </div>
     </div>

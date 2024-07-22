@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import issuesApi from "~/apis/issue.api";
 import Table from "~/components/Table";
 import CloseImg from "~/assets/images/close-img.png";
-import { Link } from "react-router-dom";
+import { useGlobalStore } from "~/store/global-store";
 import { removeBlockFromBoardSections } from "~/utils/utils";
 import { optionBlockMyPage } from "~/constants/constants";
-import { useGlobalStore } from "~/store/global-store";
 
 type IssueTableType = {
   "#": number;
@@ -16,17 +16,17 @@ type IssueTableType = {
 
 const columnNames = ["#", "Project", "Tracker", "Subject"];
 
-const WatchedIssues: React.FC = () => {
+const IssuesAssigned: React.FC = () => {
   const { isEditMyPage, removeBlock } = useGlobalStore((state) => ({
     isEditMyPage: state.isEditMyPage,
     removeBlock: state.removeBlock,
   }));
-  const [listIssuesWatcher, setListIssuesWatcher] = useState<IssueTableType[]>([]);
+  const [listIssuesAssigned, setListIssuesAssigned] = useState<IssueTableType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchIssuesWatcher = async () => {
+  const fetchIssuesAssigned = async () => {
     try {
-      const response = await issuesApi.listIssues({ watcher_id: "me" });
+      const response = await issuesApi.listIssues({ assigned_to_id: 2805 });
       const listIssues =
         response.data?.issues &&
         response.data?.issues.map((issue) => {
@@ -37,7 +37,7 @@ const WatchedIssues: React.FC = () => {
             Project: issue.project.name,
           };
         });
-      setListIssuesWatcher(listIssues);
+      setListIssuesAssigned(listIssues);
       setIsLoading(false);
     } catch (error) {
       console.error(error);
@@ -46,7 +46,7 @@ const WatchedIssues: React.FC = () => {
   };
 
   const handleClose = () => {
-    const blockId = optionBlockMyPage.find((block) => block.title === "Watched issues")?.id || "";
+    const blockId = optionBlockMyPage.find((block) => block.title === "Issues assigned to me")?.id || "";
     removeBlockFromBoardSections({
       blockId: blockId,
     });
@@ -54,20 +54,20 @@ const WatchedIssues: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchIssuesWatcher();
+    fetchIssuesAssigned();
   }, []);
 
   return (
     <div>
-      <div className="flex justify-between items-center ">
+      <div className="flex justify-between items-center">
         <Link className="text-ocean-blue font-semibold	hover:underline " to="/issues">
-          Watched issues ({listIssuesWatcher && listIssuesWatcher.length > 0 ? listIssuesWatcher.length : 0})
+          Issues assigned to me ({listIssuesAssigned.length > 0 ? listIssuesAssigned.length : 0})
         </Link>
         {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={() => handleClose()} src={CloseImg} alt="closeButton" />}
       </div>
-      <Table className="bg-slate-500 min-w-full mt-3" loading={isLoading} columnNames={columnNames} dataTable={listIssuesWatcher} />
+      <Table className="bg-slate-500 min-w-full mt-3" loading={isLoading} columnNames={columnNames} dataTable={listIssuesAssigned} />
     </div>
   );
 };
 
-export default WatchedIssues;
+export default IssuesAssigned;

@@ -3,30 +3,32 @@ import useScrollToTop from "~/hooks/useScrollToTop";
 import IconAdd from "~/assets/images/icon-add.png";
 import IconBack from "~/assets/images/icon-back.png";
 import BoardSectionList from "~/components/BoardSectionList";
-import { optionBlockMyPage } from "~/constants/constants";
-import { addBlockToBoardSections, getBoardSectionsFromLS } from "~/utils/utils";
 import { Block } from "~/types/utils.type";
+import { useGlobalStore } from "~/store/global-store";
+import { optionBlockMyPage } from "~/constants/constants";
 
 const MyPage = () => {
   useScrollToTop();
-  const [isShowPersonalize, setIsShowPersonalize] = useState<boolean>(false);
+  const { isEditMyPage, setIsEditMyPage, addBlockToBoardSections, boardSections } = useGlobalStore((state) => ({
+    isEditMyPage: state.isEditMyPage,
+    setIsEditMyPage: state.setIsEditMyPage,
+    addBlockToBoardSections: state.addBlockToBoardSections,
+    boardSections: state.boardSections,
+  }));
   const [blockSelect, setBlockSelect] = useState<Block>();
-  // use key to re-render component
-  const [key, setKey] = useState<string>(Math.random().toString());
 
-  // get data from local storage
-  const localStorageData = getBoardSectionsFromLS();
+  // use key to re-render component
+
   const selectedIds = new Set<string>();
-  if (localStorageData) {
-    Object.values(localStorageData).forEach((board: Block[]) => {
+
+  if (boardSections) {
+    Object.values(boardSections).forEach((board: Block[]) => {
       board.forEach((block) => {
         selectedIds.add(block.id);
       });
     });
   }
-  console.log("🚀 ~ board.forEach ~ selectedIds:", selectedIds);
 
-  // filter unselected blocks
   const unselectedBlocks = optionBlockMyPage.filter((block) => !selectedIds.has(block.id));
 
   const handleAddBlock = (block: Block | undefined) => {
@@ -35,18 +37,24 @@ const MyPage = () => {
       addBlockToBoardSections({
         block,
         boardId: "Board-1",
-        boardSections: localStorageData,
       });
-      setKey(Math.random().toString());
     }
+  };
+
+  const handleShowOptionSelected = () => {
+    setIsEditMyPage(true);
+  };
+
+  const handleClosePersonalize = () => {
+    setIsEditMyPage(false);
   };
 
   return (
     <>
-      <div className="p-2.5 pt-1 flex items-center justify-between ">
+      <div className="p-2.5 pt-1 flex items-center justify-between">
         <h2 className="text-xl font-semibold pt-0.5 pr-3 mb-3 text-mouse-gray">My page</h2>
         <>
-          {isShowPersonalize ? (
+          {isEditMyPage ? (
             <div className="text-xs text-mouse-gray flex items-center">
               <label>My page block:</label>
               <select
@@ -70,18 +78,18 @@ const MyPage = () => {
               <button className="text-ocean-blue ml-2 hover:underline flex" onClick={() => handleAddBlock(blockSelect)}>
                 <img className="mr-1" src={IconAdd} alt="Add" /> Add
               </button>
-              <button className="text-ocean-blue ml-2 hover:underline flex" onClick={() => setIsShowPersonalize(!isShowPersonalize)}>
+              <button className="text-ocean-blue ml-2 hover:underline flex" onClick={handleClosePersonalize}>
                 <img className="mr-1" src={IconBack} alt="Back" /> Back
               </button>
             </div>
           ) : (
-            <p className="text-ocean-blue text-xs cursor-pointer leading-6 hover:underline" onClick={() => setIsShowPersonalize(!isShowPersonalize)}>
+            <p className="text-ocean-blue text-xs cursor-pointer leading-6 hover:underline" onClick={handleShowOptionSelected}>
               Personalize this page
             </p>
           )}
         </>
       </div>
-      <BoardSectionList key={key} isDragDropEnabled={isShowPersonalize} />
+      <BoardSectionList isDragDropEnabled={isEditMyPage} />
     </>
   );
 };
