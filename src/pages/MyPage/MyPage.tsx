@@ -3,24 +3,43 @@ import useScrollToTop from "~/hooks/useScrollToTop";
 import IconAdd from "~/assets/images/icon-add.png";
 import IconBack from "~/assets/images/icon-back.png";
 import BoardSectionList from "~/components/BoardSectionList";
-import Calendar from "./_components/Calendar";
-import ReportedIssues from "./_components/ReportedIssues/ReportedIssues";
-import IssuesAssigned from "./_components/IssuesAsigned";
-import WatchedIssues from "./_components/WatchedIssues";
-import SpentTime from "./_components/SpentTime";
-
-const optionBlock = ["Issues assigned to me", "Reported issues", "Watched issues", "Latest news", "Calendar", "Documents", "Spent time"];
-
-// const tables = [
-//   { id: 1, name: "Spent time", columnNames: ["Activity", "Project", "Comment", "Hours"], dataTable: [newData, ...dataTime], action: true },
-//   { id: 2, name: "Watched issues", columnNames: ["#", "Project", "Tracker", "Subject"], dataTable: dataTable },
-//   { id: 3, name: "Reported issues", columnNames: ["#", "Project", "Tracker", "Subject"], dataTable: dataTable },
-//   { id: 4, name: "Issues assigned to me", columnNames: ["#", "Project", "Tracker", "Subject"], dataTable: dataTable },
-// ];
+import { optionBlockMyPage } from "~/constants/constants";
+import { addBlockToBoardSections, getBoardSectionsFromLS } from "~/utils/utils";
+import { Block } from "~/types/utils.type";
 
 const MyPage = () => {
   useScrollToTop();
   const [isShowPersonalize, setIsShowPersonalize] = useState<boolean>(false);
+  const [blockSelect, setBlockSelect] = useState<Block>();
+  // use key to re-render component
+  const [key, setKey] = useState<string>(Math.random().toString());
+
+  // get data from local storage
+  const localStorageData = getBoardSectionsFromLS();
+  const selectedIds = new Set<string>();
+  if (localStorageData) {
+    Object.values(localStorageData).forEach((board: Block[]) => {
+      board.forEach((block) => {
+        selectedIds.add(block.id);
+      });
+    });
+  }
+  console.log("🚀 ~ board.forEach ~ selectedIds:", selectedIds);
+
+  // filter unselected blocks
+  const unselectedBlocks = optionBlockMyPage.filter((block) => !selectedIds.has(block.id));
+
+  const handleAddBlock = (block: Block | undefined) => {
+    if (block) {
+      setBlockSelect(undefined);
+      addBlockToBoardSections({
+        block,
+        boardId: "Board-1",
+        boardSections: localStorageData,
+      });
+      setKey(Math.random().toString());
+    }
+  };
 
   return (
     <>
@@ -30,11 +49,25 @@ const MyPage = () => {
           {isShowPersonalize ? (
             <div className="text-xs text-mouse-gray flex items-center">
               <label>My page block:</label>
-              <select className="border border-solid py-1 ml-1" defaultValue="">
+              <select
+                className="border border-solid py-1 ml-1"
+                value={blockSelect?.title}
+                onChange={(e) =>
+                  setBlockSelect({
+                    id: unselectedBlocks.find((item) => item.title === e.target.value)?.id || Math.random().toString(),
+                    title: e.target.value,
+                  })
+                }
+              >
                 <option value="">Select an option</option>
-                {optionBlock.length > 0 && optionBlock.map((item) => <option key={item}>{item}</option>)}
+                {unselectedBlocks.length > 0 &&
+                  unselectedBlocks.map((item) => (
+                    <option value={item.title} key={item.id}>
+                      {item.title}
+                    </option>
+                  ))}
               </select>
-              <button className="text-ocean-blue ml-2 hover:underline flex">
+              <button className="text-ocean-blue ml-2 hover:underline flex" onClick={() => handleAddBlock(blockSelect)}>
                 <img className="mr-1" src={IconAdd} alt="Add" /> Add
               </button>
               <button className="text-ocean-blue ml-2 hover:underline flex" onClick={() => setIsShowPersonalize(!isShowPersonalize)}>
@@ -48,20 +81,7 @@ const MyPage = () => {
           )}
         </>
       </div>
-
-      <div className="pt-2">
-        <div className="grid gap-6 ">
-          <Calendar />
-          <SpentTime />
-          <WatchedIssues />
-        </div>
-
-        <div className="mt-6 grid gap-6 grid-cols-2">
-          <ReportedIssues />
-          <IssuesAssigned />
-        </div>
-        <BoardSectionList />
-      </div>
+      <BoardSectionList key={key} isDragDropEnabled={isShowPersonalize} />
     </>
   );
 };

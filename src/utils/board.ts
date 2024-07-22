@@ -1,9 +1,9 @@
-import { BoardSections, Task } from "~/types/utils.type";
+import { BoardSections, Block } from "~/types/utils.type";
 
-export const initializeBoard = (tasks: Task[]): BoardSections => {
+export const initializeBoard = (data: Block[]): BoardSections => {
   return {
-    "Board-1": tasks.slice(0, 3),
-    "Board-2": tasks.slice(3, 6),
-    "Board-3": tasks.slice(6, 9),
+    "Board-1": data.slice(0, 3),
+    "Board-2": data.slice(3, 6),
+    "Board-3": data.slice(6, 9),
   };
 };

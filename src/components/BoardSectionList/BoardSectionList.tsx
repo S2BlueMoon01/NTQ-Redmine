@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { flushSync } from "react-dom";
-import { INITIAL_TASKS } from "~/data/data";
 import { BoardSections as BoardSectionsType } from "~/types/utils.type";
 import { initializeBoard } from "~/utils/board";
 import Board from "./_components/Board";
+import { optionBlockMyPage } from "~/constants/constants";
+import BlockItem from "./_components/BlockItem";
+import { getBoardSectionsFromLS, setBoardSectionsFromLS } from "~/utils/utils";
 
-const BoardSectionList = () => {
+const BoardSectionList = ({ isDragDropEnabled = false }: { isDragDropEnabled?: boolean }) => {
   const [boardSections, setBoardSections] = useState<BoardSectionsType>(() => {
-    const savedSections = localStorage.getItem("boardSections");
-    return savedSections ? JSON.parse(savedSections) : initializeBoard(INITIAL_TASKS);
+    const savedSections = getBoardSectionsFromLS();
+    return savedSections ? savedSections : initializeBoard(optionBlockMyPage);
   });
 
   const handleDragEnd = (result: DropResult) => {
@@ -48,20 +50,54 @@ const BoardSectionList = () => {
   };
 
   useEffect(() => {
-    localStorage.setItem("boardSections", JSON.stringify(boardSections));
+    setBoardSectionsFromLS(boardSections);
   }, [boardSections]);
 
   return (
     <div className="mx-auto py-4">
-      <DragDropContext onDragEnd={handleDragEnd}>
+      {isDragDropEnabled ? (
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <div className="flex flex-col w-full gap-4">
+            <Board boardId="Board-1" blocks={boardSections["Board-1"]} />
+            <div className="grid grid-cols-2 gap-4 overflow-hidden">
+              <Board boardId="Board-2" blocks={boardSections["Board-2"]} />
+              <Board boardId="Board-3" blocks={boardSections["Board-3"]} />
+            </div>
+          </div>
+        </DragDropContext>
+      ) : (
         <div className="flex flex-col w-full gap-4">
-          <Board boardId="Board-1" boardTitle="Board 1" tasks={boardSections["Board-1"]} />
+          {boardSections["Board-1"].length > 0 && (
+            <div className="w-full flex flex-col gap-4 p-4 rounded-md shadow-md border-dashed border border-gray-200">
+              {boardSections["Board-1"].map((block) => (
+                <div key={block.id}>
+                  <BlockItem block={block} />
+                </div>
+              ))}
+            </div>
+          )}
           <div className="grid grid-cols-2 gap-4 overflow-hidden">
-            <Board boardId="Board-2" boardTitle="Board 2" tasks={boardSections["Board-2"]} />
-            <Board boardId="Board-3" boardTitle="Board 3" tasks={boardSections["Board-3"]} />
+            {boardSections["Board-2"].length > 0 && (
+              <div className="w-full flex flex-col gap-4 p-4 rounded-md shadow-md border-dashed border border-gray-200">
+                {boardSections["Board-2"].map((block) => (
+                  <div key={block.id}>
+                    <BlockItem block={block} />
+                  </div>
+                ))}
+              </div>
+            )}
+            {boardSections["Board-3"].length > 0 && (
+              <div className="w-full flex flex-col gap-4 p-4 rounded-md shadow-md border-dashed border border-gray-200">
+                {boardSections["Board-3"].map((block) => (
+                  <div key={block.id}>
+                    <BlockItem block={block} />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
-      </DragDropContext>
+      )}
     </div>
   );
 };

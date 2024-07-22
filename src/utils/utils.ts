@@ -1,12 +1,13 @@
 import axios, { AxiosError } from "axios";
-import HttpStatusCode from "~/constants/httpStatusCode.enum";
-import { ErrorResponse, Task } from "~/types/utils.type";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import ArrowRightIcon from "~/assets/images/arrow_right.png";
 import ArrowLeftIcon from "~/assets/images/arrow_left.png";
+import ArrowRightIcon from "~/assets/images/arrow_right.png";
 import DiamondIcon from "~/assets/images/bullet_diamond.png";
+import HttpStatusCode from "~/constants/httpStatusCode.enum";
 import { GroupedIssueByDay, Issue } from "~/types/issue.type";
+import { Block, ErrorResponse } from "~/types/utils.type";
+import { BoardSections as BoardSectionsType } from "~/types/utils.type";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -28,7 +29,7 @@ export function isAxiosExpiredTokenError<UnauthorizedError>(error: unknown): err
   return isAxiosUnauthorizedError<ErrorResponse<{ name: string; message: string }>>(error) && error.response?.data?.data?.name === "EXPIRED_TOKEN";
 }
 
-export const getTaskById = (tasks: Task[], id: string): Task | undefined => {
+export const getTaskById = (tasks: Block[], id: string): Block | undefined => {
   return tasks.find((task) => task.id === id);
 };
 
@@ -127,3 +128,18 @@ export function getDay(): string {
 
   return day;
 }
+
+export const getBoardSectionsFromLS = (): Record<string, Block[]> => {
+  const boardSections = localStorage.getItem("boardSections");
+  return boardSections ? JSON.parse(boardSections) : null;
+};
+
+export const setBoardSectionsFromLS = (boardSections: BoardSectionsType) => {
+  localStorage.setItem("boardSections", JSON.stringify(boardSections));
+};
+
+export const addBlockToBoardSections = ({ boardSections, block, boardId }: { boardSections: BoardSectionsType; block: Block; boardId: string }) => {
+  const newBoardSections = { ...boardSections };
+  newBoardSections[boardId] = [block, ...newBoardSections[boardId]];
+  setBoardSectionsFromLS(newBoardSections);
+};
