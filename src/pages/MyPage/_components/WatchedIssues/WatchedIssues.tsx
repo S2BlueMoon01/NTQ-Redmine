@@ -12,7 +12,7 @@ const WatchedIssues = () => {
   return (
     <div>
       <a className="text-ocean-blue font-semibold	hover:underline " href="">
-        Reported issues ({dataTable && dataTable.length > 0 ? dataTable.length : 0})
+        Watched issues ({dataTable && dataTable.length > 0 ? dataTable.length : 0})
       </a>
       <Table className="bg-slate-500 min-w-full mt-3" columnNames={columnNames} dataTable={dataTable} />
     </div>

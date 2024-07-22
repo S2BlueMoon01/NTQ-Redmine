@@ -24,7 +24,7 @@ const newData = {
 };
 
 const tables = [
-  { id: 1, name: "Spent time", columnNames: ["Activity", "Project", "Comment", "Hours"], dataTable: [newData, ...dataTime], action: true },
+  { id: 1, name: "Spent time", columnNames: ["Activity", "Project", "Comment", "Hours", "Action"], dataTable: [newData, ...dataTime] },
   { id: 2, name: "Watched issues", columnNames: ["#", "Project", "Tracker", "Subject"], dataTable: dataTable },
   { id: 3, name: "Reported issues", columnNames: ["#", "Project", "Tracker", "Subject"], dataTable: dataTable },
   { id: 4, name: "Issues assigned to me", columnNames: ["#", "Project", "Tracker", "Subject"], dataTable: dataTable },
@@ -45,7 +45,7 @@ const SpentTime = () => {
           <img className="mr-1 w-fit h-fit" src={IconAdd} alt="Add" /> <p className="text-xs">log time</p>
         </Link>
       </div>
-      <Table className="bg-slate-500 min-w-full " columnNames={tables[0].columnNames} dataTable={tables[0].dataTable} action={tables[0].action} />
+      <Table className="bg-slate-500 min-w-full " columnNames={tables[0].columnNames} dataTable={tables[0].dataTable} />
     </div>
   );
 };

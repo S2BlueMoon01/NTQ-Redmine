@@ -8,8 +8,8 @@ export interface ErrorResponse<Data> {
   data?: Data;
 }
 
-export type ListDataResponse<T, K extends string = "data"> = {
-  [key in K]: T[];
+export type ListDataResponse<T, K extends string> = {
+  [key in K]: T;
 } & {
   total_count: number;
   limit: number;
@@ -25,6 +25,7 @@ export type NoUndefinedField<T> = {
 export type Task = {
   id: string;
   title: string;
+  component?: unknown;
 };
 
 export type BoardSections = {
