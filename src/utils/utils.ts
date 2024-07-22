@@ -1,12 +1,14 @@
 import axios, { AxiosError } from "axios";
-import HttpStatusCode from "~/constants/httpStatusCode.enum";
-import { ErrorResponse, Task } from "~/types/utils.type";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import ArrowRightIcon from "~/assets/images/arrow_right.png";
 import ArrowLeftIcon from "~/assets/images/arrow_left.png";
+import ArrowRightIcon from "~/assets/images/arrow_right.png";
 import DiamondIcon from "~/assets/images/bullet_diamond.png";
+import { optionBlockMyPage } from "~/constants/constants";
+import HttpStatusCode from "~/constants/httpStatusCode.enum";
 import { GroupedIssueByDay, Issue } from "~/types/issue.type";
+import { Block, BoardSections, ErrorResponse } from "~/types/utils.type";
+import { BoardSections as BoardSectionsType } from "~/types/utils.type";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -28,7 +30,7 @@ export function isAxiosExpiredTokenError<UnauthorizedError>(error: unknown): err
   return isAxiosUnauthorizedError<ErrorResponse<{ name: string; message: string }>>(error) && error.response?.data?.data?.name === "EXPIRED_TOKEN";
 }
 
-export const getTaskById = (tasks: Task[], id: string): Task | undefined => {
+export const getTaskById = (tasks: Block[], id: string): Block | undefined => {
   return tasks.find((task) => task.id === id);
 };
 
@@ -103,7 +105,8 @@ export function getWeekDates(): Date[] {
 export function arrangeIssue(response: Issue[], dates: string[]): GroupedIssueByDay[] {
   const dateMap: { [key: string]: Issue[] } = response.reduce(
     (acc, item) => {
-      const day = item.start_date.split("-")[2];
+      const day = item.start_date?.split("-")[2];
+      if (!day) return acc;
       if (!acc[day]) {
         acc[day] = [];
       }
@@ -127,3 +130,60 @@ export function getDay(): string {
 
   return day;
 }
+
+export const getBoardSectionsFromLS = (): Record<string, Block[]> | null => {
+  const data = localStorage.getItem("boardSections");
+  const boardSections = JSON.parse(data || "{}");
+  const isValid = isValidBoardSections(boardSections);
+  return isValid ? boardSections : null;
+};
+
+export const setBoardSectionsFromLS = (boardSections: BoardSectionsType) => {
+  localStorage.setItem("boardSections", JSON.stringify(boardSections));
+};
+
+export const addBlockToBoardSections = ({ block, boardId }: { block: Block; boardId: string }) => {
+  const boardSections = getBoardSectionsFromLS();
+  const newBoardSections = { ...boardSections };
+  newBoardSections[boardId] = [block, ...newBoardSections[boardId]];
+  setBoardSectionsFromLS(newBoardSections);
+};
+
+export const removeBlockFromBoardSections = ({ blockId }: { blockId: string }) => {
+  const boardSections = getBoardSectionsFromLS();
+  const newBoardSections = { ...boardSections };
+  Object.keys(newBoardSections).forEach((boardId) => {
+    newBoardSections[boardId] = newBoardSections[boardId].filter((block) => block.id !== blockId);
+  });
+  setBoardSectionsFromLS(newBoardSections);
+};
+
+export const getUnselectedBlocks = (): Block[] => {
+  const selectedIds = new Set<string>();
+  const localStorageData = getBoardSectionsFromLS();
+  if (localStorageData) {
+    Object.values(localStorageData).forEach((board: Block[]) => {
+      board.forEach((block) => {
+        selectedIds.add(block.id);
+      });
+    });
+  }
+
+  return optionBlockMyPage.filter((block) => !selectedIds.has(block.id));
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const isValidBoardSections = (obj: any): obj is BoardSections => {
+  const keys = ["Board-1", "Board-2", "Board-3"];
+
+  // Kiểm tra nếu obj không phải là đối tượng hoặc không có đúng 3 key cần thiết
+  if (typeof obj !== "object" || obj === null || Object.keys(obj).length !== 3) {
+    return false;
+  }
+
+  // Kiểm tra nếu mỗi key tồn tại trong obj và là một mảng các đối tượng Block
+  return keys.every(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (key) => key in obj && Array.isArray(obj[key]) && obj[key].every((item: any) => typeof item.id === "string" && typeof item.title === "string"),
+  );
+};
