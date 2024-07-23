@@ -57,8 +57,6 @@ const Filter = () => {
     setIsDragDown((isDragDown) => !isDragDown);
   };
 
-  fakeData.map((item) => item.sortBy.map((option) => console.log(option.value)));
-
   return (
     <>
       <div className="relative pb-2">
