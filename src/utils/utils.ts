@@ -131,6 +131,38 @@ export function getDay(): string {
   return day;
 }
 
+export function convertDateFormat (dateString: string): string {
+  const [year, month, day] = dateString.split("-");
+  return `${month}/${day}/${year}`;
+};
+
+export function getSecondsDifference (isoDateString?: string): string {
+  let timeAgo = "";
+
+  if ( typeof isoDateString ===  "undefined") {
+    return timeAgo;
+  } else {
+    const inputDate = new Date(isoDateString);
+    const currentDate = new Date();
+    const differenceInMilliseconds = currentDate.getTime() - inputDate.getTime();
+    const differenceInSeconds = Math.floor(differenceInMilliseconds / 1000);
+    if (differenceInSeconds < 60) {
+      timeAgo = "less than a minute";
+    } else if (60 < differenceInSeconds && differenceInSeconds < 3600) {
+      timeAgo = `${Math.round(differenceInSeconds/60)} minutes`;
+    } else if ( 3600 < differenceInSeconds && differenceInSeconds < 86400) {
+      timeAgo = `${Math.round(differenceInSeconds/3600)} hours`;
+    } else if ( 86400 < differenceInSeconds && differenceInSeconds < 2592000) {
+      timeAgo = `${Math.round(differenceInSeconds/86400)} days`;
+    } else if ( 2592000 < differenceInSeconds && differenceInSeconds < 31104000) {
+      timeAgo = `${Math.round(differenceInSeconds/2592000)} months`;
+    } else if ( 31104000 < differenceInSeconds) {
+      timeAgo = `${Math.round(differenceInSeconds/31104000)} years`;
+    }
+  }
+  return timeAgo;
+};
+
 export const getBoardSectionsFromLS = (): Record<string, Block[]> | null => {
   const data = localStorage.getItem("boardSections");
   const boardSections = JSON.parse(data || "{}");
