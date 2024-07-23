@@ -37,7 +37,7 @@ export interface Issue {
   status: Status;
   priority: Priority;
   author: User;
-  assigned_to: User;
+  assigned_to?: User;
   subject?: string;
   description: string;
   start_date?: string;
