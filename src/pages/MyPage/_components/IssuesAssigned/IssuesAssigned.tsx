@@ -7,22 +7,16 @@ import CloseImg from "~/assets/images/close-img.png";
 import { useGlobalStore } from "~/store/global-store";
 import { removeBlockFromBoardSections } from "~/utils/utils";
 import { optionBlockMyPage } from "~/constants/constants";
+import { IssueTable } from "~/types/issue.type";
 
-type IssueTableType = {
-  "#": number;
-  Project: string | undefined;
-  Tracker: string | undefined;
-  Subject: string | undefined;
-};
-
-const columnNames = ["#", "Project", "Tracker", "Subject"];
+const columnNames = ["#", "project", "tracker", "subject"];
 
 const IssuesAssigned: React.FC = () => {
   const { isEditMyPage, removeBlock } = useGlobalStore((state) => ({
     isEditMyPage: state.isEditMyPage,
     removeBlock: state.removeBlock,
   }));
-  const [listIssuesAssigned, setListIssuesAssigned] = useState<IssueTableType[]>([]);
+  const [listIssuesAssigned, setListIssuesAssigned] = useState<IssueTable[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchIssuesAssigned = async () => {

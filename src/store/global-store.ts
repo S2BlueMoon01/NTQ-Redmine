@@ -11,7 +11,7 @@ type Actions = {
   setIsEditMyPage: (data: boolean) => void;
   setBoardSections: (data: BoardSections) => void;
   removeBlock: (blockId: string) => void;
-  addBlockToBoardSections: ({ boardId, block }: { boardId: string; block: Block }) => void;
+  addBlockToBoardSections: ({ boardId, block }: { boardId: string; block: Block }) => v
 };
 
 export const useGlobalStore = create<State & Actions>()(
