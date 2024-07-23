@@ -60,7 +60,7 @@ const BoardSectionList = ({ isDragDropEnabled = false }: { isDragDropEnabled?: b
   }, []);
 
   return (
-    <div className="mx-auto py-4">
+    <div className="mx-auto pb-4">
       {isDragDropEnabled ? (
         <DragDropContext onDragEnd={handleDragEnd}>
           <div className="flex flex-col w-full gap-4">

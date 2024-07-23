@@ -91,7 +91,6 @@ const MyPage = () => {
       </div>
 
       <BoardSectionList isDragDropEnabled={isEditMyPage} />
-
     </>
   );
 };

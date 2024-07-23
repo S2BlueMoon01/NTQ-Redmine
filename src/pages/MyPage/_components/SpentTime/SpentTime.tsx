@@ -17,8 +17,8 @@ const SpentTime: React.FC = () => {
     isEditMyPage: state.isEditMyPage,
     removeBlock: state.removeBlock,
   }));
-  
-   const [listTimeEntries, setListTimeEntries] = useState<TimeEntriesTable[]>([]);
+
+  const [listTimeEntries, setListTimeEntries] = useState<TimeEntriesTable[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const totalHours = listTimeEntries && listTimeEntries.reduce((acc, current) => acc + current.hours, 0).toFixed(2);
   const handleClose = () => {
@@ -54,7 +54,7 @@ const SpentTime: React.FC = () => {
   useEffect(() => {
     fetchTimeEntries();
   }, []);
-  
+
   return (
     <div className=" flex flex-col gap-3">
       <div className="flex justify-between items-center">
