@@ -15,7 +15,7 @@ const ReportedIssues: React.FC = () => {
     isEditMyPage: state.isEditMyPage,
     removeBlock: state.removeBlock,
   }));
-  const [listReportedIssues, setListReportedIssues] = useState<IssueTableType[]>([]);
+  const [listReportedIssues, setListReportedIssues] = useState<IssueTable[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const fetchReportedIssues = async () => {
     try {

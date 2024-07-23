@@ -10,7 +10,8 @@ type State = {
 type Actions = {
   setIsEditMyPage: (data: boolean) => void;
   setBoardSections: (data: BoardSections) => void;
-  removeBlock: (boardId: string, blockId: string) => void;
+  removeBlock: (blockId: string) => void;
+  addBlockToBoardSections: ({ boardId, block }: { boardId: string; block: Block }) => void;
 };
 
 export const useGlobalStore = create<State & Actions>()(
@@ -27,9 +28,16 @@ export const useGlobalStore = create<State & Actions>()(
         state.boardSections = boardSections;
       });
     },
-    removeBlock: (boardId, blockId) => {
+    removeBlock: (blockId) => {
       set((state) => {
-        state.boardSections[boardId] = state.boardSections[boardId].filter((block: Block) => block.id !== blockId);
+        Object.keys(state.boardSections).forEach((boardId) => {
+          state.boardSections[boardId] = state.boardSections[boardId].filter((block) => block.id !== blockId);
+        });
+      });
+    },
+    addBlockToBoardSections: ({ boardId, block }: { boardId: string; block: Block }) => {
+      set((state) => {
+        state.boardSections[boardId] = [block, ...state.boardSections[boardId]];
       });
     },
   })),

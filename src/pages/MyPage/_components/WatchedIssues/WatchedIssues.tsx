@@ -8,13 +8,6 @@ import { removeBlockFromBoardSections } from "~/utils/utils";
 import { optionBlockMyPage } from "~/constants/constants";
 import { useGlobalStore } from "~/store/global-store";
 
-type IssueTableType = {
-  "#": number;
-  Project: string | undefined;
-  Tracker: string | undefined;
-  Subject: string | undefined;
-};
-
 const columnNames = ["#", "Project", "Tracker", "Subject"];
 
 const WatchedIssues: React.FC = () => {
@@ -22,7 +15,7 @@ const WatchedIssues: React.FC = () => {
     isEditMyPage: state.isEditMyPage,
     removeBlock: state.removeBlock,
   }));
-   const [listIssuesWatcher, setListIssuesWatcher] = useState<IssueTable[]>([]);
+  const [listIssuesWatcher, setListIssuesWatcher] = useState<IssueTable[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchIssuesWatcher = async () => {
