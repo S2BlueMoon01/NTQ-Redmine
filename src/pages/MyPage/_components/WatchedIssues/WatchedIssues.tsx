@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import issuesApi from "~/apis/issue.api";
-import Table from "~/components/Table";
+import TableIssues from "~/components/TableIssues";
 import CloseImg from "~/assets/images/close-img.png";
 import { Link } from "react-router-dom";
 import { IssueTable } from "~/types/issue.type";
@@ -59,7 +59,7 @@ const WatchedIssues: React.FC = () => {
         </Link>
         {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={() => handleClose()} src={CloseImg} alt="closeButton" />}
       </div>
-      <Table className="bg-slate-500 min-w-full mt-3" loading={isLoading} columnNames={columnNames} dataTable={listIssuesWatcher} />
+      <TableIssues className="bg-slate-500 min-w-full mt-3" loading={isLoading} columnNames={columnNames} dataTable={listIssuesWatcher} />
     </div>
   );
 };

@@ -1,6 +1,4 @@
 import React from "react";
-import EditImg from "~/assets/images/edit-img.png";
-import DeleteImg from "~/assets/images/delete-img.png";
 import { BeatLoader } from "react-spinners";
 import Dialog from "~/pages/MyPage/_components/Dialog";
 
@@ -9,9 +7,10 @@ interface PropsComponent {
   columnNames: string[];
   loading?: boolean;
   dataTable?: { [key: string]: string | number | undefined }[];
+  isCheckbox?: boolean;
 }
 
-const Table: React.FC<PropsComponent> = ({ className, columnNames = [], dataTable = [], loading = true }) => {
+const TableIssues: React.FC<PropsComponent> = ({ className, columnNames = [], dataTable = [], loading = true }) => {
   return (
     <table className={`table-auto text-xs text-mouse-gray ${className}`}>
       <thead className="bg-gray-200   ">
@@ -37,19 +36,13 @@ const Table: React.FC<PropsComponent> = ({ className, columnNames = [], dataTabl
           </tr>
         )}
         {dataTable.map((row, rowIndex) => (
-          <tr key={rowIndex} className="hover:bg-yellow-100 h-7">
+          <tr key={rowIndex} className={rowIndex % 2 === 0 ? "bg-gray-100 hover:bg-yellow-100 h-7" : "hover:bg-yellow-100 h-7"}>
             {columnNames.map((columnName) => {
               const id = row["#"];
               return (
                 <td key={columnName} className="text-center whitespace-nowrap px-3">
-                  {columnName === "Action" ? (
-                    <div className="flex text-center justify-center">
-                      <img className="mr-1 cursor-pointer" src={EditImg} onClick={() => alert("Edit")} />
-                      <img className="mr-1 cursor-pointer" src={DeleteImg} onClick={() => alert("Delete")} />
-                    </div>
-                  ) : (
-                    row[columnName] !== undefined && (typeof id === "number" ? <Dialog issueId={id} content={row[columnName] as string} /> : null)
-                  )}
+                  {row[columnName] !== undefined &&
+                    (typeof id === "number" ? <Dialog issueId={id} content={row[columnName] as string} /> : row[columnName])}
                 </td>
               );
             })}
@@ -60,4 +53,4 @@ const Table: React.FC<PropsComponent> = ({ className, columnNames = [], dataTabl
   );
 };
 
-export default Table;
+export default TableIssues;

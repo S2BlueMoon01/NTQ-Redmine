@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import issuesApi from "~/apis/issue.api";
-import Table from "~/components/Table";
+import TableIssues from "~/components/TableIssues";
 import CloseImg from "~/assets/images/close-img.png";
 
 import { useGlobalStore } from "~/store/global-store";
@@ -21,7 +21,7 @@ const IssuesAssigned: React.FC = () => {
 
   const fetchIssuesAssigned = async () => {
     try {
-      const response = await issuesApi.listIssues({ assigned_to_id: 2805 });
+      const response = await issuesApi.listIssues({ assigned_to_id: "me" });
       const listIssues =
         response.data?.issues &&
         response.data?.issues.map((issue) => {
@@ -60,7 +60,7 @@ const IssuesAssigned: React.FC = () => {
         </Link>
         {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={() => handleClose()} src={CloseImg} alt="closeButton" />}
       </div>
-      <Table className="bg-slate-500 min-w-full mt-3" loading={isLoading} columnNames={columnNames} dataTable={listIssuesAssigned} />
+      <TableIssues className="bg-slate-500 min-w-full mt-3" loading={isLoading} columnNames={columnNames} dataTable={listIssuesAssigned} />
     </div>
   );
 };

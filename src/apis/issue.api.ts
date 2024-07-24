@@ -17,6 +17,7 @@ const issuesApi = {
     tracker_id?: number;
     status_id?: string;
     assigned_to_id?: string | number;
+    author_id?: string | number;
     watcher_id?: string | number;
     parent_id?: number;
     cf_x?: string;
@@ -32,7 +33,7 @@ const issuesApi = {
     include?: Array<"attachments" | "relations" | "children" | "changesets" | "journals" | "watchers" | "allowed_statuses">;
   }) {
     const params = data.include && data.include.length > 0 ? { include: data.include.join(",") } : {};
-    return http.get<{issue:Issue}>(`${URL_ISSUES}/${data.id}.json`, { params });
+    return http.get<{ issue: Issue }>(`${URL_ISSUES}/${data.id}.json`, { params });
   },
 
   createIssue(issue: Partial<Issue>) {

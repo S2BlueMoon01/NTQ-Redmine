@@ -7,6 +7,7 @@ import DiamondIcon from "~/assets/images/bullet_diamond.png";
 import { optionBlockMyPage } from "~/constants/constants";
 import HttpStatusCode from "~/constants/httpStatusCode.enum";
 import { GroupedIssueByDay, Issue } from "~/types/issue.type";
+import { GroupedTimeEntries, TimeEntriesTable } from "~/types/timeEntries.type";
 import { Block, BoardSections, ErrorResponse } from "~/types/utils.type";
 import { BoardSections as BoardSectionsType } from "~/types/utils.type";
 
@@ -131,15 +132,15 @@ export function getDay(): string {
   return day;
 }
 
-export function convertDateFormat (dateString: string): string {
+export function convertDateFormat(dateString: string): string {
   const [year, month, day] = dateString.split("-");
   return `${month}/${day}/${year}`;
-};
+}
 
-export function getSecondsDifference (isoDateString?: string): string {
+export function getSecondsDifference(isoDateString?: string): string {
   let timeAgo = "";
 
-  if ( typeof isoDateString ===  "undefined") {
+  if (typeof isoDateString === "undefined") {
     return timeAgo;
   } else {
     const inputDate = new Date(isoDateString);
@@ -149,19 +150,19 @@ export function getSecondsDifference (isoDateString?: string): string {
     if (differenceInSeconds < 60) {
       timeAgo = "less than a minute";
     } else if (60 < differenceInSeconds && differenceInSeconds < 3600) {
-      timeAgo = `${Math.round(differenceInSeconds/60)} minutes`;
-    } else if ( 3600 < differenceInSeconds && differenceInSeconds < 86400) {
-      timeAgo = `${Math.round(differenceInSeconds/3600)} hours`;
-    } else if ( 86400 < differenceInSeconds && differenceInSeconds < 2592000) {
-      timeAgo = `${Math.round(differenceInSeconds/86400)} days`;
-    } else if ( 2592000 < differenceInSeconds && differenceInSeconds < 31104000) {
-      timeAgo = `${Math.round(differenceInSeconds/2592000)} months`;
-    } else if ( 31104000 < differenceInSeconds) {
-      timeAgo = `${Math.round(differenceInSeconds/31104000)} years`;
+      timeAgo = `${Math.round(differenceInSeconds / 60)} minutes`;
+    } else if (3600 < differenceInSeconds && differenceInSeconds < 86400) {
+      timeAgo = `${Math.round(differenceInSeconds / 3600)} hours`;
+    } else if (86400 < differenceInSeconds && differenceInSeconds < 2592000) {
+      timeAgo = `${Math.round(differenceInSeconds / 86400)} days`;
+    } else if (2592000 < differenceInSeconds && differenceInSeconds < 31104000) {
+      timeAgo = `${Math.round(differenceInSeconds / 2592000)} months`;
+    } else if (31104000 < differenceInSeconds) {
+      timeAgo = `${Math.round(differenceInSeconds / 31104000)} years`;
     }
   }
   return timeAgo;
-};
+}
 
 export const getBoardSectionsFromLS = (): Record<string, Block[]> | null => {
   const data = localStorage.getItem("boardSections");
@@ -218,4 +219,18 @@ export const isValidBoardSections = (obj: any): obj is BoardSections => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (key) => key in obj && Array.isArray(obj[key]) && obj[key].every((item: any) => typeof item.id === "string" && typeof item.title === "string"),
   );
+};
+
+export const groupTimeEntriesByDate = (entries: TimeEntriesTable[]): GroupedTimeEntries[] => {
+  const groupedEntries = entries.reduce<{ [key: string]: GroupedTimeEntries }>((acc, entry) => {
+    const date = entry.date;
+    if (!acc[date]) {
+      acc[date] = { date, entries: [], totalHours: 0 };
+    }
+    acc[date].entries.push(entry);
+    acc[date].totalHours += entry.hours;
+    return acc;
+  }, {});
+
+  return Object.values(groupedEntries);
 };

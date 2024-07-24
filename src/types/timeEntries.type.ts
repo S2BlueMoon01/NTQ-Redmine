@@ -41,3 +41,9 @@ export interface TimeEntriesTable {
   project: string | undefined;
   date: string;
 }
+
+export interface GroupedTimeEntries {
+  date: string;
+  entries: TimeEntriesTable[];
+  totalHours: number;
+}
