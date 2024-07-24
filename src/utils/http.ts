@@ -1,6 +1,4 @@
-/* eslint-disable indent */
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
-// import { toast } from "react-toastify";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders } from "axios";
 import config from "~/constants/config";
 import HttpStatusCode from "~/constants/httpStatusCode.enum";
 
@@ -9,12 +7,14 @@ const apiKey = import.meta.env.VITE_API_ACCESS_KEY as string;
 interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   retry?: boolean;
   __retryCount?: number;
+  originalUrl?: string;
+  headers: AxiosRequestHeaders;
 }
 
 class Http {
   instance: AxiosInstance;
   retryCount: number = 3;
-  retryDelay: number = 1000;
+  retryDelay: number = 200;
 
   constructor() {
     this.instance = axios.create({
@@ -28,7 +28,11 @@ class Http {
 
     this.instance.interceptors.request.use(
       (config) => {
-        return config;
+        const customConfig = config as CustomAxiosRequestConfig;
+        if (!customConfig.originalUrl) {
+          customConfig.originalUrl = customConfig.url;
+        }
+        return customConfig;
       },
       (error) => {
         return Promise.reject(error);
@@ -40,7 +44,6 @@ class Http {
         return response;
       },
       async (error: AxiosError<CustomAxiosRequestConfig>) => {
-        // Chỉ toast lỗi không phải 422 và 401
         if (![HttpStatusCode.UnprocessableEntity, HttpStatusCode.Unauthorized].includes(error.response?.status as number)) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           // const data: any | undefined = error.response?.data;
@@ -48,36 +51,39 @@ class Http {
           // toast.error(message);
         }
 
-        // Nếu timeout hoặc lỗi mạng thì retry lại
         const config = error.config as CustomAxiosRequestConfig;
+
         if (error.code === "ECONNABORTED" || error.code === "ERR_NETWORK" || !error.response) {
-          // If config does not exist or the retry option is not set, reject
           if (!config || config.retry === false) {
             return Promise.reject(error);
           }
 
-          // Set the variable for keeping track of the retry count
           config.__retryCount = config.__retryCount || 0;
 
-          // Check if we've maxed out the total number of retries
           if (config.__retryCount >= this.retryCount) {
-            // Reject with the error
             return Promise.reject(error);
           }
 
-          // Increase the retry count
           config.__retryCount += 1;
 
-          // Create new promise to handle exponential backoff
           const backoff = new Promise<void>((resolve) => {
-            setTimeout(() => {
-              resolve();
-            }, this.retryDelay);
+            setTimeout(
+              () => {
+                resolve();
+              },
+              this.retryDelay * (config.__retryCount ?? 1),
+            );
           });
 
-          // Return the promise in which recalls axios to retry the request
+          const newConfig = {
+            ...config,
+            url: config.originalUrl,
+            __retryCount: config.__retryCount,
+            headers: { ...config.headers },
+          };
+
           return backoff.then(() => {
-            return this.instance(config);
+            return this.instance(newConfig);
           });
         }
 
