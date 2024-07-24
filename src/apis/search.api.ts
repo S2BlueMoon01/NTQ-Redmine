@@ -49,7 +49,7 @@ const searchApi = {
       if (options.attachments) params += `&attachments=${options.attachments}`;
     }
 
-    return http.get<ListDataResponse<SearchResult[]>>(`/search.json?${params}`);
+    return http.get<ListDataResponse<SearchResult[], "">>(`/search.json?${params}`);
   },
 };
 
