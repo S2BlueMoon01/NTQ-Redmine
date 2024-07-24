@@ -42,21 +42,21 @@ export function getWeekNumber(d: Date): number[] {
   return [d.getUTCFullYear(), weekNo];
 }
 
-export function checkDateStatus(startDate: string | undefined, dueDate: string|undefined , day:string): string {
+export function checkDateStatus(startDate: string | undefined, dueDate: string | undefined, day: string): string {
   let url = ArrowRightIcon;
 
   if (!startDate && !dueDate) {
     return url;
   }
 
-  if (!startDate && !!dueDate ) {
+  if (!startDate && !!dueDate) {
     const date = new Date(dueDate).getDate();
     if (date === +day) {
       return ArrowLeftIcon;
     }
   }
 
-  if (!!startDate && !dueDate ) {
+  if (!!startDate && !dueDate) {
     const date = new Date(startDate).getDate();
     if (date === +day) {
       return ArrowRightIcon;
@@ -67,17 +67,11 @@ export function checkDateStatus(startDate: string | undefined, dueDate: string|u
     const start = new Date(startDate).getDate();
     const due = new Date(dueDate).getDate();
 
-    if (
-      start !== due && start === +day
-    ) {
+    if (start !== due && start === +day) {
       url = ArrowRightIcon;
-    } else if (
-      start !== due && due === +day
-    ) {
+    } else if (start !== due && due === +day) {
       url = ArrowLeftIcon;
-    } else if (
-      start === due && due === +day
-    ) {
+    } else if (start === due && due === +day) {
       url = DiamondIcon;
     }
   }
@@ -134,15 +128,15 @@ export function getDay(): string {
   return day;
 }
 
-export function convertDateFormat (dateString: string): string {
+export function convertDateFormat(dateString: string): string {
   const [year, month, day] = dateString.split("-");
   return `${month}/${day}/${year}`;
-};
+}
 
-export function getSecondsDifference (isoDateString?: string): string {
+export function getSecondsDifference(isoDateString?: string): string {
   let timeAgo = "";
 
-  if ( typeof isoDateString ===  "undefined") {
+  if (typeof isoDateString === "undefined") {
     return timeAgo;
   } else {
     const inputDate = new Date(isoDateString);
@@ -152,19 +146,19 @@ export function getSecondsDifference (isoDateString?: string): string {
     if (differenceInSeconds < 60) {
       timeAgo = "less than a minute";
     } else if (60 < differenceInSeconds && differenceInSeconds < 3600) {
-      timeAgo = `${Math.round(differenceInSeconds/60)} minutes`;
-    } else if ( 3600 < differenceInSeconds && differenceInSeconds < 86400) {
-      timeAgo = `${Math.round(differenceInSeconds/3600)} hours`;
-    } else if ( 86400 < differenceInSeconds && differenceInSeconds < 2592000) {
-      timeAgo = `${Math.round(differenceInSeconds/86400)} days`;
-    } else if ( 2592000 < differenceInSeconds && differenceInSeconds < 31104000) {
-      timeAgo = `${Math.round(differenceInSeconds/2592000)} months`;
-    } else if ( 31104000 < differenceInSeconds) {
-      timeAgo = `${Math.round(differenceInSeconds/31104000)} years`;
+      timeAgo = `${Math.round(differenceInSeconds / 60)} minutes`;
+    } else if (3600 < differenceInSeconds && differenceInSeconds < 86400) {
+      timeAgo = `${Math.round(differenceInSeconds / 3600)} hours`;
+    } else if (86400 < differenceInSeconds && differenceInSeconds < 2592000) {
+      timeAgo = `${Math.round(differenceInSeconds / 86400)} days`;
+    } else if (2592000 < differenceInSeconds && differenceInSeconds < 31104000) {
+      timeAgo = `${Math.round(differenceInSeconds / 2592000)} months`;
+    } else if (31104000 < differenceInSeconds) {
+      timeAgo = `${Math.round(differenceInSeconds / 31104000)} years`;
     }
   }
   return timeAgo;
-};
+}
 
 export const getBoardSectionsFromLS = (): Record<string, Block[]> | null => {
   const data = localStorage.getItem("boardSections");

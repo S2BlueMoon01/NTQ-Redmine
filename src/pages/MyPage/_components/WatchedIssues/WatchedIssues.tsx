@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { IssueTable } from "~/types/issue.type";
 import { removeBlockFromBoardSections } from "~/utils/utils";
 import { optionBlockMyPage } from "~/constants/constants";
-import { useGlobalStore } from "~/store/global-store";
+import { useGlobalStore } from "~/store/globalStore";
 
 const columnNames = ["#", "project", "tracker", "subject"];
 

@@ -4,7 +4,7 @@ import issuesApi from "~/apis/issue.api";
 import Table from "~/components/Table";
 import CloseImg from "~/assets/images/close-img.png";
 
-import { useGlobalStore } from "~/store/global-store";
+import { useGlobalStore } from "~/store/globalStore";
 import { removeBlockFromBoardSections } from "~/utils/utils";
 import { optionBlockMyPage } from "~/constants/constants";
 import { IssueTable } from "~/types/issue.type";

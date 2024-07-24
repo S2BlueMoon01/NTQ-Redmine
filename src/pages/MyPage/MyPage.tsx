@@ -4,7 +4,7 @@ import IconAdd from "~/assets/images/icon-add.png";
 import IconBack from "~/assets/images/icon-back.png";
 import BoardSectionList from "~/components/BoardSectionList";
 import { Block } from "~/types/utils.type";
-import { useGlobalStore } from "~/store/global-store";
+import { useGlobalStore } from "~/store/globalStore";
 import { optionBlockMyPage } from "~/constants/constants";
 
 const MyPage = () => {
@@ -16,8 +16,6 @@ const MyPage = () => {
     boardSections: state.boardSections,
   }));
   const [blockSelect, setBlockSelect] = useState<Block>();
-
-  // use key to re-render component
 
   const selectedIds = new Set<string>();
 

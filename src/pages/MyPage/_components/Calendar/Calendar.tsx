@@ -5,7 +5,7 @@ import { getWeekNumber, groupTasksByExactDate, getWeekDates, getDay, removeBlock
 import { Issue } from "~/types/issue.type";
 import { SyncLoader } from "react-spinners";
 import CloseImg from "~/assets/images/close-img.png";
-import { useGlobalStore } from "~/store/global-store";
+import { useGlobalStore } from "~/store/globalStore";
 import { optionBlockMyPage } from "~/constants/constants";
 import issuesApi from "~/apis/issue.api";
 import { checkDateStatus } from "~/utils/utils";

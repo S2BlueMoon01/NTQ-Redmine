@@ -4,7 +4,7 @@ import Table from "~/components/Table";
 import CloseImg from "~/assets/images/close-img.png";
 import { Link } from "react-router-dom";
 import { IssueTable } from "~/types/issue.type";
-import { useGlobalStore } from "~/store/global-store";
+import { useGlobalStore } from "~/store/globalStore";
 import { removeBlockFromBoardSections } from "~/utils/utils";
 import { optionBlockMyPage } from "~/constants/constants";
 

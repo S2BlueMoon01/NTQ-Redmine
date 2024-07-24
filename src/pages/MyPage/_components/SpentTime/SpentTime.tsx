@@ -8,7 +8,7 @@ import { TimeEntriesTable } from "~/types/timeEntries.type";
 import moment from "moment";
 import { removeBlockFromBoardSections } from "~/utils/utils";
 import { optionBlockMyPage } from "~/constants/constants";
-import { useGlobalStore } from "~/store/global-store";
+import { useGlobalStore } from "~/store/globalStore";
 
 const columnNames = ["Activity", "Project", "Comment", "Hours", "Action"];
 

@@ -1,5 +1,5 @@
 .title_dialog {
-  background: #759fcf url("../../../../assets/images/background_dialogIssue.png") 50% 50% repeat-x;;
+  background: #759fcf url("../../../../assets/images/background_dialogIssue.png") 50% 50% repeat-x;
 }
 
 .icon_close {
@@ -13,7 +13,7 @@
 }
 
 .link {
-  color : #116699;
+  color: #116699;
   font-size: 13.2px;
 }
 
@@ -21,5 +21,3 @@
   color: #c61a1a;
   text-decoration: underline;
 }
-
-

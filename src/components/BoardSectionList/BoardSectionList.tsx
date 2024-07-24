@@ -4,7 +4,7 @@ import { flushSync } from "react-dom";
 import Board from "./_components/Board";
 import BlockItem from "./_components/BlockItem";
 import { getBoardSectionsFromLS, isValidBoardSections, setBoardSectionsFromLS } from "~/utils/utils";
-import { useGlobalStore } from "~/store/global-store";
+import { useGlobalStore } from "~/store/globalStore";
 import { produce } from "immer";
 import { initializeBoard } from "~/utils/board";
 import { optionBlockMyPage } from "~/constants/constants";

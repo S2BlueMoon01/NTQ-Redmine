@@ -32,7 +32,7 @@ const issuesApi = {
     include?: Array<"attachments" | "relations" | "children" | "changesets" | "journals" | "watchers" | "allowed_statuses">;
   }) {
     const params = data.include && data.include.length > 0 ? { include: data.include.join(",") } : {};
-    return http.get<{issue:Issue}>(`${URL_ISSUES}/${data.id}.json`, { params });
+    return http.get<{ issue: Issue }>(`${URL_ISSUES}/${data.id}.json`, { params });
   },
 
   createIssue(issue: Partial<Issue>) {
