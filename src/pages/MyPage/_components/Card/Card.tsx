@@ -1,4 +1,3 @@
-import React from "react";
 import { Issue } from "~/types/issue.type";
 import { checkDateStatus } from "~/utils/utils";
 

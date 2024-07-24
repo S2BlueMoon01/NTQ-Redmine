@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import useScrollToTop from "~/hooks/useScrollToTop";
+import { useState } from "react";
 import IconAdd from "~/assets/images/icon-add.png";
 import IconBack from "~/assets/images/icon-back.png";
 import BoardSectionList from "~/components/BoardSectionList";
-import { Block } from "~/types/utils.type";
-import { useGlobalStore } from "~/store/globalStore";
 import { optionBlockMyPage } from "~/constants/constants";
+import useScrollToTop from "~/hooks/useScrollToTop";
+import { useGlobalStore } from "~/store/globalStore";
+import { Block } from "~/types/utils.type";
 
 const MyPage = () => {
   useScrollToTop();

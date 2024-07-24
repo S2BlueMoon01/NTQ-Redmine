@@ -1,4 +1,3 @@
-import React from "react";
 import useScrollToTop from "~/hooks/useScrollToTop";
 import { UserLoginInput } from "~/types/user.type";
 import { useForm, SubmitHandler } from "react-hook-form";

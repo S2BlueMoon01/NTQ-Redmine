@@ -1,12 +1,12 @@
-import React, { useState, useRef } from "react";
-import { Issue } from "~/types/issue.type";
-import issuesApi from "~/apis/issue.api";
-import { SyncLoader } from "react-spinners";
+import React, { useRef, useState } from "react";
 import Draggable from "react-draggable";
+import { SyncLoader } from "react-spinners";
+import issuesApi from "~/apis/issue.api";
+import { Issue } from "~/types/issue.type";
 import "./Dialog.css";
 
-import { convertDateFormat, getSecondsDifference } from "~/utils/utils";
 import Loading from "~/components/Loading";
+import { convertDateFormat, getSecondsDifference } from "~/utils/utils";
 
 const Dialog: React.FC<{ issueId: number; content: string }> = ({ issueId = 122712, content = "" }) => {
   const [isVisible, setIsVisible] = useState(false);

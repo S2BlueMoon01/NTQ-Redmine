@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import issuesApi from "~/apis/issue.api";
-import Table from "~/components/Table";
-import CloseImg from "~/assets/images/close-img.png";
 import { Link } from "react-router-dom";
-import { IssueTable } from "~/types/issue.type";
-import { removeBlockFromBoardSections } from "~/utils/utils";
+import issuesApi from "~/apis/issue.api";
+import CloseImg from "~/assets/images/close-img.png";
+import Table from "~/components/Table";
 import { optionBlockMyPage } from "~/constants/constants";
 import { useGlobalStore } from "~/store/globalStore";
+import { IssueTable } from "~/types/issue.type";
+import { removeBlockFromBoardSections } from "~/utils/utils";
 
 const columnNames = ["#", "project", "tracker", "subject"];
 

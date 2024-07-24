@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { SyncLoader } from "react-spinners";
 import projectsApi from "~/apis/projects.api";
