@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 type ErrorBoundaryProps = {
   children: ReactNode;

@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
+import { produce } from "immer";
+import { useEffect } from "react";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { flushSync } from "react-dom";
-import Board from "./_components/Board";
-import BlockItem from "./_components/BlockItem";
-import { getBoardSectionsFromLS, isValidBoardSections, setBoardSectionsFromLS } from "~/utils/utils";
-import { useGlobalStore } from "~/store/globalStore";
-import { produce } from "immer";
-import { initializeBoard } from "~/utils/board";
 import { optionBlockMyPage } from "~/constants/constants";
+import { useGlobalStore } from "~/store/globalStore";
+import { initializeBoard } from "~/utils/board";
+import { getBoardSectionsFromLS, isValidBoardSections, setBoardSectionsFromLS } from "~/utils/utils";
+import BlockItem from "./_components/BlockItem";
+import Board from "./_components/Board";
 
 const BoardSectionList = ({ isDragDropEnabled = false }: { isDragDropEnabled?: boolean }) => {
   const { boardSections, setBoardSections } = useGlobalStore((state) => ({

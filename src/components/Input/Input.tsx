@@ -1,4 +1,4 @@
-import React, { forwardRef, InputHTMLAttributes } from "react";
+import { forwardRef, InputHTMLAttributes } from "react";
 
 type PropsComponent = {
   className?: string;

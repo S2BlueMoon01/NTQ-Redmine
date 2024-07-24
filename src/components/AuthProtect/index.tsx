@@ -1,4 +1,4 @@
-import React, { Fragment, ReactNode } from "react";
+import { Fragment, ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 
 const AuthProtect = ({ children }: { children: ReactNode }) => {

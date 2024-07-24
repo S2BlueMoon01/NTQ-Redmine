@@ -1,7 +1,7 @@
 import React from "react";
-import EditImg from "~/assets/images/edit-img.png";
-import DeleteImg from "~/assets/images/delete-img.png";
 import { BeatLoader } from "react-spinners";
+import DeleteImg from "~/assets/images/delete-img.png";
+import EditImg from "~/assets/images/edit-img.png";
 import Dialog from "~/pages/MyPage/_components/Dialog";
 
 interface PropsComponent {

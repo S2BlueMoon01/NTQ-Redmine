@@ -1,4 +1,3 @@
-import React from "react";
 import LoadingEffect from "~/assets/images/loading.gif";
 
 const Loading = () => {
