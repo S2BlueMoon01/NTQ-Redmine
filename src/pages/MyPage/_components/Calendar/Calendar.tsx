@@ -84,7 +84,10 @@ const Calendar: React.FC = () => {
                       <div className="flex flex-wrap p-1.5 w-full text-[10.8px] text-mouse-gray bg-light-yellow border relative card">
                         {issue.project.name}-
                         <span>
-                          <img src={checkDateStatus(issue.start_date, issue.due_date, Object.keys(item).toString())} alt="ArrowRightIcon" />
+                          <img
+                            src={checkDateStatus({ startDate: issue.start_date, dueDate: issue.due_date, day: Object.keys(item).toString() })}
+                            alt="ArrowRightIcon"
+                          />
                         </span>
                         <a href="#!" className="text-ocean-blue ">
                           {issue.tracker.name} #{issue.id}:
