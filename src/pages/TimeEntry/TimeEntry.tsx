@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Filter from "../MyPage/_components/Filter";
 import { Link } from "react-router-dom";
 import IconAdd from "~/assets/images/icon-add.png";
@@ -6,51 +6,9 @@ import ApplyImg from "~/assets/images/apply-img.png";
 import ReLoadImg from "~/assets/images/reload-img.png";
 import DetailTimeEntries from "./_components/DetailTimeEntries";
 import ReportTimeEntries from "./_components/ReportTimeEntries";
-import moment from "moment";
-import timeEntriesApi from "~/apis/timeEntries.api";
-
-interface ListDataTime {
-  id: number;
-  project: string;
-  date: string;
-  user: string;
-  activity: string;
-  comment: string | undefined;
-  hours: number;
-}
 
 const TimeEntry = () => {
   const [tabActive, setTabActive] = useState<boolean>(true);
-  const [listTimeEntries, setListTimeEntries] = useState<ListDataTime[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  const fetchTimeEntries = async () => {
-    try {
-      const response = await timeEntriesApi.listTimeEntries();
-      const listDataTable =
-        response.data?.time_entries &&
-        response.data?.time_entries.map((time) => {
-          return {
-            id: time.id,
-            project: time.project.name,
-            date: moment(time.created_on).format("MM/DD/YYYY"),
-            user: time.user.name,
-            activity: time.activity.name,
-            comment: time.comments,
-            hours: time.hours,
-          };
-        });
-      setListTimeEntries(listDataTable);
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchTimeEntries();
-  }, []);
 
   return (
     <div className="flex flex-col gap-3 pt-2">
@@ -88,7 +46,7 @@ const TimeEntry = () => {
           Report
         </li>
       </ul>
-      {tabActive ? <DetailTimeEntries dataTable={listTimeEntries} loading={isLoading} /> : <ReportTimeEntries />}
+      {tabActive ? <DetailTimeEntries /> : <ReportTimeEntries />}
     </div>
   );
 };
