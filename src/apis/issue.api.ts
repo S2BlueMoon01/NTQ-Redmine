@@ -17,6 +17,7 @@ const issuesApi = {
     tracker_id?: number;
     status_id?: string;
     assigned_to_id?: string | number;
+    author_id?: string | number;
     watcher_id?: string | number;
     parent_id?: number;
     cf_x?: string;

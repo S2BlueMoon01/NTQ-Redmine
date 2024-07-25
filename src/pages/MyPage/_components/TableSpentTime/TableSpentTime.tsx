@@ -4,6 +4,7 @@ import { BeatLoader } from "react-spinners";
 import DeleteImg from "~/assets/images/delete-img.png";
 import EditImg from "~/assets/images/edit-img.png";
 import { TimeEntriesTable } from "~/types/timeEntries.type";
+import { groupTimeEntriesByDate } from "~/utils/utils";
 
 interface PropsComponent {
   className?: string;
@@ -11,26 +12,6 @@ interface PropsComponent {
   loading?: boolean;
   dataTable?: TimeEntriesTable[];
 }
-
-interface GroupedTimeEntries {
-  date: string;
-  entries: TimeEntriesTable[];
-  totalHours: number;
-}
-
-const groupTimeEntriesByDate = (entries: TimeEntriesTable[]): GroupedTimeEntries[] => {
-  const groupedEntries = entries.reduce<{ [key: string]: GroupedTimeEntries }>((acc, entry) => {
-    const date = entry.date;
-    if (!acc[date]) {
-      acc[date] = { date, entries: [], totalHours: 0 };
-    }
-    acc[date].entries.push(entry);
-    acc[date].totalHours += entry.hours;
-    return acc;
-  }, {});
-
-  return Object.values(groupedEntries);
-};
 
 const TableSpentTime: React.FC<PropsComponent> = ({ className, columnNames = [], dataTable = [], loading = true }) => {
   const today = moment().format("MM/DD/YYYY");
