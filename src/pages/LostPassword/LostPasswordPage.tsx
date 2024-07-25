@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import ErrorImg from "~/assets/images/error-img.png";
 import { Button } from "~/components/Button/Button";
-import { useForm, SubmitHandler } from "react-hook-form";
 
 const LostPasswordPage = () => {
   const {

@@ -20,7 +20,7 @@ export const URL_USERS = "users";
 const usersApi = {
   getAllUsers(status?: number, name?: string, group_id?: number) {
     const params = { status, name, group_id };
-    return http.get<ListDataResponse<User[]>>(`${URL_USERS}.json`, { params });
+    return http.get<ListDataResponse<User[], "users">>(`${URL_USERS}.json`, { params });
   },
 
   createUser(user: User) {

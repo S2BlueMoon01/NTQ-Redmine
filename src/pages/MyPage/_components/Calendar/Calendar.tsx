@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Calendar.css";
-import ArrowRightIcon from "~/assets/images/arrow_right.png";
 import Card from "~/pages/MyPage/_components/Card/Card";
-import { getWeekNumber, arrangeIssue, getWeekDates, getDay, removeBlockFromBoardSections } from "~/utils/utils";
+import { getWeekNumber, groupTasksByExactDate, getWeekDates, getDay, removeBlockFromBoardSections } from "~/utils/utils";
 import { Issue } from "~/types/issue.type";
+import { SyncLoader } from "react-spinners";
 import CloseImg from "~/assets/images/close-img.png";
-import { useGlobalStore } from "~/store/global-store";
+import { useGlobalStore } from "~/store/globalStore";
 import { optionBlockMyPage } from "~/constants/constants";
+import issuesApi from "~/apis/issue.api";
+import { checkDateStatus } from "~/utils/utils";
 
 const Calendar: React.FC = () => {
   const { isEditMyPage, removeBlock } = useGlobalStore((state) => ({
@@ -15,138 +17,27 @@ const Calendar: React.FC = () => {
   }));
   const week = getWeekNumber(new Date())[1];
 
-  const apiResponse: Issue[] = [
-    {
-      id: 122640,
-      project: {
-        id: 323,
-        name: "[Fresher]_ ReactJS Fresher",
-      },
-      tracker: {
-        id: 4,
-        name: "Task",
-      },
-      status: {
-        id: 9,
-        name: "Build",
-      },
-      priority: {
-        id: 3,
-        name: "High",
-      },
-      author: {
-        id: 2799,
-        name: "Viet (Internship) Nguyen Van",
-      },
-      assigned_to: {
-        id: 2799,
-        name: "Viet (Internship) Nguyen Van",
-      },
-      subject: "task abcádf",
-      description: "fix bug",
-      start_date: "2024-07-16",
-      due_date: "2024-07-20",
-      done_ratio: 10,
-      estimated_hours: 88.0,
-      custom_fields: [
-        {
-          id: 13,
-          name: "Severity",
-          value: "Cosmetic",
-        },
-      ],
-      created_on: "2024-07-09T01:56:21Z",
-      updated_on: "2024-07-09T01:56:21Z",
-    },
-    {
-      id: 122641,
-      project: {
-        id: 323,
-        name: "[Fresher]_ ReactJS Fresher",
-      },
-      tracker: {
-        id: 4,
-        name: "Task",
-      },
-      status: {
-        id: 9,
-        name: "Build",
-      },
-      priority: {
-        id: 3,
-        name: "High",
-      },
-      author: {
-        id: 2799,
-        name: "Viet (Internship) Nguyen Van",
-      },
-      assigned_to: {
-        id: 2799,
-        name: "Viet (Internship) Nguyen Van",
-      },
-      subject: "task abcádf",
-      description: "fix bug",
-      start_date: "2024-07-15",
-      due_date: "2024-07-20",
-      done_ratio: 10,
-      estimated_hours: 88.0,
-      custom_fields: [
-        {
-          id: 13,
-          name: "Severity",
-          value: "Cosmetic",
-        },
-      ],
-      created_on: "2024-07-09T01:56:21Z",
-      updated_on: "2024-07-09T01:56:21Z",
-    },
-    {
-      id: 122642,
-      project: {
-        id: 323,
-        name: "[Fresher]_ ReactJS Fresher",
-      },
-      tracker: {
-        id: 4,
-        name: "Task",
-      },
-      status: {
-        id: 9,
-        name: "Build",
-      },
-      priority: {
-        id: 3,
-        name: "High",
-      },
-      author: {
-        id: 2799,
-        name: "Viet (Internship) Nguyen Van",
-      },
-      assigned_to: {
-        id: 2799,
-        name: "Viet (Internship) Nguyen Van",
-      },
-      subject: "task abcádf",
-      description: "fix bug",
-      start_date: "2024-07-15",
-      due_date: "2024-07-20",
-      done_ratio: 10,
-      estimated_hours: 88.0,
-      custom_fields: [
-        {
-          id: 13,
-          name: "Severity",
-          value: "Cosmetic",
-        },
-      ],
-      created_on: "2024-07-09T01:56:21Z",
-      updated_on: "2024-07-09T01:56:21Z",
-    },
-  ];
+  const [listIssues, setListIssues] = useState<Issue[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const daysOfWeek = getWeekDates().map((d) => d.toISOString().split("T")[0]);
+  const fetchListIssue = async () => {
+    try {
+      setLoading(true);
+      const response = await issuesApi.listIssues();
+      setListIssues(response.data.issues);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  };
 
-  const mainArrays = arrangeIssue(apiResponse, daysOfWeek);
+  useEffect(() => {
+    fetchListIssue();
+  }, []);
+
+  const daysOfWeek = getWeekDates(week);
+
+  const mainArrays = groupTasksByExactDate(listIssues, daysOfWeek);
 
   const handleClose = () => {
     const blockId = optionBlockMyPage.find((block) => block.title === "Calendar")?.id || "";
@@ -158,6 +49,7 @@ const Calendar: React.FC = () => {
 
   return (
     <>
+      <SyncLoader loading={loading} color="#169" size={5} />
       <div className="flex justify-between items-center ">
         <h2 className="text-base text-mouse-gray font-bold">Calendar</h2>
         {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={() => handleClose()} src={CloseImg} alt="closeButton" />}
@@ -182,21 +74,23 @@ const Calendar: React.FC = () => {
               return (
                 <td
                   key={Object.keys(item).toString()}
-                  className={`${getDay() === Object.keys(item).toString() ? "bg-light-yellow font-bold" : ""} hover:bg-light-yellow relative pt-8 text-xs`}
+                  className={`${getDay() === Object.keys(item).toString() ? "bg-light-yellow" : ""} hover:bg-light-yellow relative pt-8 text-xs`}
                 >
-                  <div className="text-right text-[#505050] absolute top-1 right-1">{Object.keys(item).toString()}</div>
+                  <div className={`${getDay() === Object.keys(item).toString() ? "font-bold" : ""} text-right text-[#505050] absolute top-1 right-1`}>
+                    {Object.keys(item).toString()}
+                  </div>
                   {item[Object.keys(item)[0]].map((issue) => (
                     <div key={issue.id} className="py-1">
                       <div className="flex flex-wrap p-1.5 w-full text-[10.8px] text-mouse-gray bg-light-yellow border relative card">
                         {issue.project.name}-
                         <span>
-                          <img src={ArrowRightIcon} alt="ArrowRightIcon" />
+                          <img src={checkDateStatus(issue.start_date, issue.due_date, Object.keys(item).toString())} alt="ArrowRightIcon" />
                         </span>
                         <a href="#!" className="text-ocean-blue ">
                           {issue.tracker.name} #{issue.id}:
                         </a>
                         {issue.subject}
-                        <Card issue={issue} />
+                        <Card issue={issue} day={Object.keys(item).toString()} />
                       </div>
                     </div>
                   ))}

@@ -1,19 +1,45 @@
 import globals from "globals";
-import pluginJs from "@eslint/js";
-import tseslint from "typescript-eslint";
-import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
-import { fixupConfigRules } from "@eslint/compat";
+import tsParser from "@typescript-eslint/parser";
+import pluginReact from "eslint-plugin-react";
+import pluginTs from "@typescript-eslint/eslint-plugin";
+
+const tsPlugin = pluginTs;
+const reactPlugin = pluginReact;
+
+const recommendedReactConfig = {
+  rules: {
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-uses-react": "off",
+    "react/jsx-uses-vars": "warn",
+  },
+};
+
+const recommendedTsConfig = {
+  rules: {
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+  },
+};
 
 export default [
-  { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
   {
-    settings: {
-      react: {
-        version: "detect",
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+        ecmaVersion: 2020,
+        sourceType: "module",
       },
+      globals: globals.browser,
     },
   },
   {
+    plugins: {
+      "@typescript-eslint": tsPlugin,
+      react: reactPlugin,
+    },
     rules: {
       "arrow-body-style": "off",
       "prefer-arrow-callback": "off",
@@ -43,7 +69,7 @@ export default [
       "react/jsx-indent": ["error", 2],
       "react/jsx-one-expression-per-line": "off",
       "react/function-component-definition": [
-        2,
+        "error",
         {
           namedComponents: "arrow-function",
           unnamedComponents: "arrow-function",
@@ -56,9 +82,6 @@ export default [
       "import/no-mutable-exports": "off",
     },
   },
-  { languageOptions: { parserOptions: { ecmaFeatures: { jsx: true } } } },
-  { languageOptions: { globals: globals.browser } },
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
-  ...fixupConfigRules(pluginReactConfig),
+  recommendedReactConfig,
+  recommendedTsConfig,
 ];

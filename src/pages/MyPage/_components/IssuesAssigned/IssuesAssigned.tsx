@@ -4,10 +4,10 @@ import issuesApi from "~/apis/issue.api";
 import TableIssues from "~/components/TableIssues";
 import CloseImg from "~/assets/images/close-img.png";
 
-import { useGlobalStore } from "~/store/global-store";
-import { removeBlockFromBoardSections } from "~/utils/utils";
 import { optionBlockMyPage } from "~/constants/constants";
+import { useGlobalStore } from "~/store/globalStore";
 import { IssueTable } from "~/types/issue.type";
+import { removeBlockFromBoardSections } from "~/utils/utils";
 
 const columnNames = ["#", "project", "tracker", "subject"];
 

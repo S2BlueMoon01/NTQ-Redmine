@@ -1,15 +1,13 @@
-import React from "react";
-import ArrowRightIcon from "~/assets/images/arrow_right.png";
 import { Issue } from "~/types/issue.type";
 import { checkDateStatus } from "~/utils/utils";
 
-const Card = ({ issue }: { issue: Issue }) => {
-  const urlIcon = checkDateStatus(issue.start_date, issue.due_date);
+const Card = ({ issue, day }: { issue: Issue; day: string }) => {
+  const urlIcon = checkDateStatus(issue.start_date, issue.due_date, day);
 
   return (
     <div className="pop-up z-10 flex absolute top-3 left-6 flex-col gap-y-1 p-1 min-w-[278px] min-h-[152px] border border-black bg-[#fff] text-[8.64px] opacity-0 invisible">
       <div className="flex pb-5 items-center">
-        <img src={ArrowRightIcon} alt="" />
+        <img src={urlIcon} alt="" />
         <a href="#!" className="text-ocean-blue">
           {issue.tracker.name} #{issue.id}
         </a>
@@ -41,7 +39,7 @@ const Card = ({ issue }: { issue: Issue }) => {
 
       <div className="flex gap-1">
         <span className="font-bold">Assignee:</span>
-        <span>{issue.assigned_to.name}</span>
+        <span>{issue?.assigned_to?.name}</span>
       </div>
 
       <div className="flex gap-1">

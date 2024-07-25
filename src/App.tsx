@@ -1,10 +1,10 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import AuthProtect from "./components/AuthProtect";
 import { privateRoutes, publicRoutes } from "./routes";
-import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   return (

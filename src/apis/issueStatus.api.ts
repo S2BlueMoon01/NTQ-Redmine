@@ -5,7 +5,7 @@ import http from "~/utils/http";
 const issueStatusesApi = {
   // Get all issue statuses
   getIssueStatuses() {
-    return http.get<ListDataResponse<IssueStatus[]>>("/issue_statuses.json");
+    return http.get<ListDataResponse<IssueStatus[], "issues">>("/issue_statuses.json");
   },
 };
 

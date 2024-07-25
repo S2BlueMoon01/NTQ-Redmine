@@ -1,9 +1,9 @@
-import React from "react";
-import EditImg from "~/assets/images/edit-img.png";
-import DeleteImg from "~/assets/images/delete-img.png";
-import { BeatLoader } from "react-spinners";
-import { TimeEntriesTable } from "~/types/timeEntries.type";
 import moment from "moment";
+import React from "react";
+import { BeatLoader } from "react-spinners";
+import DeleteImg from "~/assets/images/delete-img.png";
+import EditImg from "~/assets/images/edit-img.png";
+import { TimeEntriesTable } from "~/types/timeEntries.type";
 import { groupTimeEntriesByDate } from "~/utils/utils";
 
 interface PropsComponent {

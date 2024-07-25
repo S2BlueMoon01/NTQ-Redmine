@@ -1,4 +1,3 @@
-import React from "react";
 import Calendar from "~/pages/MyPage/_components/Calendar";
 import IssuesAssigned from "~/pages/MyPage/_components/IssuesAssigned";
 import ReportedIssues from "~/pages/MyPage/_components/ReportedIssues";

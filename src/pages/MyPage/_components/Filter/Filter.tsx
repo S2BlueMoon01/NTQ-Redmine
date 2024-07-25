@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import Select from "~/components/Select";
-import Input from "~/components/Input";
-import TogglePlus from "~/assets/images/bullet_toggle_plus.png";
+import { useState } from "react";
 import ArrowCollapsed from "~/assets/images/arrow_collapsed.png";
 import ArrowExpanded from "~/assets/images/arrow_expanded.png";
+import TogglePlus from "~/assets/images/bullet_toggle_plus.png";
 import DatePickerCustom from "~/components/DatePicker";
+import Input from "~/components/Input";
+import Select from "~/components/Select";
 
 const Filter = () => {
   const fakeData = [

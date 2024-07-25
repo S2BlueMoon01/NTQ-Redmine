@@ -1,14 +1,14 @@
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import IconAdd from "~/assets/images/icon-add.png";
-import CloseImg from "~/assets/images/close-img.png";
-import TableSpentTime from "../TableSpentTime";
 import timeEntriesApi from "~/apis/timeEntries.api";
-import { TimeEntriesTable } from "~/types/timeEntries.type";
-import moment from "moment";
-import { removeBlockFromBoardSections } from "~/utils/utils";
+import CloseImg from "~/assets/images/close-img.png";
+import IconAdd from "~/assets/images/icon-add.png";
 import { optionBlockMyPage } from "~/constants/constants";
-import { useGlobalStore } from "~/store/global-store";
+import { useGlobalStore } from "~/store/globalStore";
+import { TimeEntriesTable } from "~/types/timeEntries.type";
+import { removeBlockFromBoardSections } from "~/utils/utils";
+import TableSpentTime from "../TableSpentTime";
 
 const columnNames = ["Activity", "Project", "Comment", "Hours", "Action"];
 
