@@ -1,5 +1,6 @@
 import React, { forwardRef, SelectHTMLAttributes } from "react";
 import "./Select.css";
+import { cn } from "~/utils/utils";
 
 type PropsComponent = {
   defaultValue?: string;
@@ -10,7 +11,7 @@ type PropsComponent = {
 
 const Select = forwardRef<HTMLSelectElement, PropsComponent>(({ className, defaultValue = "", children, ...rest }, ref) => {
   return (
-    <select className={`border h-6 m-1 text-sm pl-1 ${className}`} defaultValue={defaultValue} ref={ref} {...rest}>
+    <select className={cn("border h-6 m-1 text-sm pl-1", className)} defaultValue={defaultValue} ref={ref} {...rest}>
       {children}
     </select>
   );

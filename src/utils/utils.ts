@@ -43,7 +43,7 @@ export function getWeekNumber(d: Date): number[] {
   return [d.getUTCFullYear(), weekNo];
 }
 
-export function checkDateStatus(startDate: string | undefined, dueDate: string | undefined, day: string): string {
+export function checkDateStatus({ startDate, dueDate, day }: { startDate: string | undefined; dueDate: string | undefined; day: string; }): string {
   let url = ArrowRightIcon;
 
   if (!startDate && !dueDate) {
