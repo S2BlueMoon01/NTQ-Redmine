@@ -4,8 +4,6 @@ import { BeatLoader } from "react-spinners";
 import timeEntriesApi from "~/apis/timeEntries.api";
 import moment from "moment";
 import issuesApi from "~/apis/issue.api";
-// import issuesApi from "~/apis/issue.api";
-// import { TimeEntries } from "~/types/timeEntries.type";
 
 interface ListDataTable {
   id: number;
@@ -19,9 +17,13 @@ interface ListDataTable {
   [key: string]: string | number | JSX.Element | undefined;
 }
 
-const columnNames = ["project", "date", "user", "issues", "activity", "comment", "hours"];
+const columnNamesSample = ["project", "date", "user", "issues", "activity", "comment", "hours", "", "Name"];
 
-const DetailTimeEntries = () => {
+interface DetailTimeEntriesProps {
+  columnNames: string[];
+}
+
+const DetailTimeEntries: React.FC<DetailTimeEntriesProps> = ({ columnNames = columnNamesSample }) => {
   const [checkList, setCheckList] = useState<number[]>([]);
   const [isAllChecked, setIsAllChecked] = useState<boolean>(false);
   const [listDataTableTime, setListDataTable] = useState<ListDataTable[]>([]);

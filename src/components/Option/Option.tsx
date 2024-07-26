@@ -4,80 +4,83 @@ import ArrowExpanded from "~/assets/images/arrow_expanded.png";
 import { Button } from "~/components/Button/Button";
 
 import Select from "../Select";
+interface OptionProps {
+  onChangeOptions: (optionArray: string[]) => void;
+}
 
-const Option = () => {
-  const [isDragDown, setIsDragDown] = useState(true);
+const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
+  const [isDragDown, setIsDragDown] = useState(false);
   const [availableColumns, setAvailableColumns] = useState([
-    "Product Category",
-    "Target",
-    "Similar",
-    "Cause",
-    "Solution",
-    "Process",
-    "From Customer",
-    "Version",
-    "FunctionID",
-    "Bug Type",
-    "Severity",
-    "TestCaseID",
-    "Purpose",
-    "Department",
-    "Duplicate issue",
-    "Tested OK",
-    "QnA Related",
-    "Difficulty",
-    "Test on staging OK",
-    "Defect Origin",
-    "QC Activity",
-    "Defect Type",
-    "Cause Category",
-    "Main PIC",
-    "Reviewer",
-    "Defect Author",
-    "Release Date",
-    "Merge to CR",
-    "Customer",
-    "Expected Revenue ($)",
-    "% Success",
-    "Sale",
-    "Why not find out?",
-    "Next Due Date",
-    "Next Action",
-    "Builded",
-    "Current State",
-    "Test checklist",
-    "Reproduce?",
-    "After Refactor",
-    "Swat",
-    "Test Environment",
-    "Late Release",
-    "Release Note",
-    "Dev_ Self Tested OK?",
-    "Contract Type",
-    "Project Line",
-    "Business Domain",
-    "Technology",
-    "Project Size (MM)",
-    "Team size (MM)",
-    "Is Degrade?",
-    "Cause (Lost/Closed/Pending)",
-    "New customer?",
-    "Reopen count",
-    "New customer info",
-    "Customer Type",
-    "PIC OS",
-    "Đánh giá của AM",
-    "Đánh giá của OS",
-    "Market",
-    "Certainty",
-    "Opp's Type",
-    "Service Offering",
-    "Release OK",
+    "product category",
+    "target",
+    "similar",
+    "cause",
+    "solution",
+    "process",
+    "from customer",
+    "version",
+    "functionId",
+    "bug type",
+    "severity",
+    "testCaseId",
+    "purpose",
+    "department",
+    "duplicate issue",
+    "tested ok",
+    "qna related",
+    "difficulty",
+    "test on staging ok",
+    "defect origin",
+    "qc activity",
+    "defect type",
+    "cause category",
+    "main pic",
+    "reviewer",
+    "defect author",
+    "release date",
+    "merge to cr",
+    "customer",
+    "expected revenue ($)",
+    "% success",
+    "sale",
+    "why not find out?",
+    "next due date",
+    "next action",
+    "builded",
+    "current state",
+    "test checklist",
+    "reproduce?",
+    "after refactor",
+    "swat",
+    "test environment",
+    "late release",
+    "release note",
+    "dev_ self tested ok?",
+    "contract type",
+    "project line",
+    "business domain",
+    "technology",
+    "project size (mm)",
+    "team size (mm)",
+    "is degrade?",
+    "cause (lost/closed/pending)",
+    "new customer?",
+    "reopen count",
+    "new customer info",
+    "customer type",
+    "pic os",
+    "đánh giá của am",
+    "đánh giá của os",
+    "market",
+    "certainty",
+    "opp's type",
+    "service offering",
+    "release ok",
   ]);
 
   const [middleArray, setMiddleArray] = useState<string[]>([]);
 
-  const [selectedColumns, setSelectedColumns] = useState(["Project", "Date", "User", "Activity", "Issue", "Comment", "Hours"]);
+  const [selectedColumns, setSelectedColumns] = useState(["project", "date", "user", "activity", "issues", "comment", "hours"]);
 
   const handleClickDragDown = () => {
     setIsDragDown((isDragDown) => !isDragDown);
@@ -93,6 +96,7 @@ const Option = () => {
         const newSelect = [...selectedColumns, row];
         setAvailableColumns(newAvailable);
         setSelectedColumns(newSelect);
+        onChangeOptions(newSelect);
       }
     } else if (nameColum === "selected") {
       const row = selectedColumns.find((option) => {
@@ -103,6 +107,7 @@ const Option = () => {
         const newAvailable = [...availableColumns, row];
         setAvailableColumns(newAvailable);
         setSelectedColumns(newSelect);
+        onChangeOptions(newSelect);
       }
     }
   };
@@ -124,6 +129,7 @@ const Option = () => {
       const newAvailableColumns = availableColumns.filter((item) => !middleArray.includes(item));
       setAvailableColumns(newAvailableColumns);
       setSelectedColumns(newSelectedColumns);
+      onChangeOptions(newSelectedColumns);
       setMiddleArray([]);
     }
   };
@@ -134,6 +140,7 @@ const Option = () => {
       const newSelectedColumns = selectedColumns.filter((item) => !middleArray.includes(item));
       setAvailableColumns(newAvailableColumns);
       setSelectedColumns(newSelectedColumns);
+      onChangeOptions(newSelectedColumns);
       setMiddleArray([]);
     }
   };
@@ -146,6 +153,7 @@ const Option = () => {
         const move = copySelectedColumns.splice(index, 1)[0];
         copySelectedColumns.splice(index - 1, 0, move);
         setSelectedColumns(copySelectedColumns);
+        onChangeOptions(copySelectedColumns);
       }
     });
     setMiddleArray([]);
@@ -159,6 +167,7 @@ const Option = () => {
         const move = copySelectedColumns.splice(index, 1)[0];
         copySelectedColumns.splice(index + 1, 0, move);
         setSelectedColumns(copySelectedColumns);
+        onChangeOptions(copySelectedColumns);
       }
     });
     setMiddleArray([]);
@@ -174,6 +183,7 @@ const Option = () => {
         const move = copySelectedColumns.splice(index, 1)[0];
         copySelectedColumns.unshift(move);
         setSelectedColumns(copySelectedColumns);
+        onChangeOptions(copySelectedColumns);
       }
     });
     setMiddleArray([]);
@@ -187,6 +197,7 @@ const Option = () => {
         const move = copySelectedColumns.splice(index, 1)[0];
         copySelectedColumns.push(move);
         setSelectedColumns(copySelectedColumns);
+        onChangeOptions(copySelectedColumns);
       }
     });
     setMiddleArray([]);
@@ -204,51 +215,64 @@ const Option = () => {
           <span className="text-[10.8px] text-gray-rain">Options</span>
         </div>
       </div>
-      <div className="flex items-center mt-1 ml-4">
-        <span className="text-gray-rain text-[10.8px] mr-1">Columns</span>
-        <div className="flex flex-col">
-          <div className="text-gray-rain text-[10.8px] inline-block">Available Columns</div>
-          <Select size={10} className="h-full w-[150px] text-[13.3px] m-0" multiple onChange={(e) => handleMultiSelect(e)}>
-            {availableColumns.map((option) => (
-              <option key={option} value={option} className="h-[18px] pb-[1px] pl-0.5" onDoubleClick={() => handleClickItem(option, "available")}>
-                {option}
-              </option>
-            ))}
-          </Select>
+
+      {isDragDown && (
+        <div className="flex items-center mt-1 ml-4">
+          <span className="text-gray-rain text-[10.8px] mr-1">Columns</span>
+          <div className="flex flex-col">
+            <div className="text-gray-rain text-[10.8px] inline-block">Available Columns</div>
+            <Select size={10} className="h-full w-[150px] text-[13.3px] m-0" multiple onChange={(e) => handleMultiSelect(e)}>
+              {availableColumns.map((option) => (
+                <option
+                  key={option}
+                  value={option}
+                  className="h-[18px] pb-[1px] pl-0.5 capitalize"
+                  onDoubleClick={() => handleClickItem(option, "available")}
+                >
+                  {option}
+                </option>
+              ))}
+            </Select>
+          </div>
+          <div className="flex flex-col gap-[2px]">
+            <Button className="w-8" onClick={moveLeft}>
+              →
+            </Button>
+            <Button className="w-8" onClick={moveRight}>
+              ←
+            </Button>
+          </div>
+          <div className="flex flex-col ml-1">
+            <div className="text-gray-rain text-[10.8px] inline-block">Selected Columns</div>
+            <Select size={10} className="h-full w-[150px] text-[13.3px] m-0" multiple onChange={(e) => handleMultiSelect(e)}>
+              {selectedColumns.map((option) => (
+                <option
+                  key={option}
+                  value={option}
+                  className="h-[18px] pb-[1px] pl-0.5 capitalize"
+                  onDoubleClick={() => handleClickItem(option, "selected")}
+                >
+                  {option}
+                </option>
+              ))}
+            </Select>
+          </div>
+          <div className="flex flex-col gap-[2px]">
+            <Button className="w-8" onClick={moveTop}>
+              ⇈
+            </Button>
+            <Button className="w-8" onClick={moveUp}>
+              ↑
+            </Button>
+            <Button className="w-8" onClick={moveDown}>
+              ↓
+            </Button>
+            <Button className="w-8" onClick={moveBottom}>
+              ⇊
+            </Button>
+          </div>
         </div>
-        <div className="flex flex-col gap-[2px]">
-          <Button className="w-8" onClick={moveLeft}>
-            →
-          </Button>
-          <Button className="w-8" onClick={moveRight}>
-            ←
-          </Button>
-        </div>
-        <div className="flex flex-col ml-1">
-          <div className="text-gray-rain text-[10.8px] inline-block">Selected Columns</div>
-          <Select size={10} className="h-full w-[150px] text-[13.3px] m-0" multiple onChange={(e) => handleMultiSelect(e)}>
-            {selectedColumns.map((option) => (
-              <option key={option} value={option} className="h-[18px] pb-[1px] pl-0.5" onDoubleClick={() => handleClickItem(option, "selected")}>
-                {option}
-              </option>
-            ))}
-          </Select>
-        </div>
-        <div className="flex flex-col gap-[2px]">
-          <Button className="w-8" onClick={moveTop}>
-            ⇈
-          </Button>
-          <Button className="w-8" onClick={moveUp}>
-            ↑
-          </Button>
-          <Button className="w-8" onClick={moveDown}>
-            ↓
-          </Button>
-          <Button className="w-8" onClick={moveBottom}>
-            ⇊
-          </Button>
-        </div>
-      </div>
+      )}
     </>
   );
 };
