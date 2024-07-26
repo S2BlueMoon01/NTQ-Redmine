@@ -12,7 +12,7 @@ const projectsApi = {
 
   getProjectById(data: { id: number; include?: string }) {
     const params = data.include ? { include: data.include } : {};
-    return http.get<Project>(`${URL_PROJECTS}/${data.id}.json`, { params });
+    return http.get<{ project: Project }>(`${URL_PROJECTS}/${data.id}.json`, { params });
   },
 
   createProject(data: { project: Project }) {

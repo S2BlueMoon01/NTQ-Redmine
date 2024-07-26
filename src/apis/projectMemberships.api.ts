@@ -20,7 +20,7 @@ export interface Membership {
     id: number;
     name: string;
   };
-  user?: User;
+  user: User;
   group?: User;
   roles: Role[];
 }
