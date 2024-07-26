@@ -1,3 +1,5 @@
+import { Tracker } from "~/apis/tracker.api";
+
 export interface CustomField {
   id: number;
   name: string;
@@ -11,6 +13,7 @@ export interface Project {
   description: string;
   status: number;
   custom_fields: CustomField[];
+  trackers?: Tracker[];
   created_on: string;
   updated_on: string;
 }
