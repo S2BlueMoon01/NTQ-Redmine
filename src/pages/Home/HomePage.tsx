@@ -16,17 +16,12 @@ const HomePage = () => {
   const fetchProject = async () => {
     try {
       const response = await projectsApi.getAllProjects();
-      console.log(response.data.projects);
-      const listProjects =
-        response?.data?.projects &&
-        response.data.projects.map((project: DataProject) => {
-          return {
-            ...project,
-            created_on: moment(project.created_on).format("MM/DD/YYYY hh:mm A"),
-          };
-        });
+      const listProjects = response?.data?.projects?.map((project: DataProject) => ({
+        ...project,
+        created_on: moment(project.created_on).format("MM/DD/YYYY hh:mm A"),
+      }));
 
-      setListProject(listProjects);
+      setListProject(listProjects || []);
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -53,20 +48,14 @@ const HomePage = () => {
           <div className="pl-10 my-3">
             <ul className="text-mouse-gray text-xs list-disc">
               <SyncLoader loading={loading} color="#169" size={5} />
-              {listProject && listProject.length > 0 ? (
-                listProject.map((item) => {
-                  return (
-                    <li key={item.id}>
-                      <Link className="text-ocean-blue hover:underline" to={`/projects/${item.identifier}`}>
-                        {item.name}
-                      </Link>{" "}
-                      ({item.created_on})<p>{item.description}</p>
-                    </li>
-                  );
-                })
-              ) : (
-                <></>
-              )}
+              {listProject.map((item) => (
+                <li key={item.id}>
+                  <Link className="text-ocean-blue hover:underline" to={`/projects/${item.identifier}`}>
+                    {item.name}
+                  </Link>{" "}
+                  ({item.created_on})<p>{item.description}</p>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
