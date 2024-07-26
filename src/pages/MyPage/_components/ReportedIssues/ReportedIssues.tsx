@@ -17,22 +17,19 @@ const ReportedIssues: React.FC = () => {
   }));
   const [listReportedIssues, setListReportedIssues] = useState<IssueTable[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
   const fetchReportedIssues = async () => {
     try {
       const response = await issuesApi.listIssues();
-      const reportedIssues =
-        response.data?.issues &&
-        response.data?.issues
-          .filter((issue) => issue.author?.id === 2805)
-          .map((issue) => {
-            return {
-              "#": issue.id,
-              subject: issue.subject,
-              tracker: issue.tracker.name,
-              project: issue.project.name,
-            };
-          });
-      setListReportedIssues(reportedIssues);
+      const reportedIssues = response.data?.issues
+        ?.filter((issue) => issue.author?.id === 2805)
+        ?.map((issue) => ({
+          "#": issue.id,
+          subject: issue.subject,
+          tracker: issue.tracker.name,
+          project: issue.project.name,
+        }));
+      setListReportedIssues(reportedIssues || []);
       setIsLoading(false);
     } catch (error) {
       console.error(error);
@@ -51,13 +48,14 @@ const ReportedIssues: React.FC = () => {
   useEffect(() => {
     fetchReportedIssues();
   }, []);
+
   return (
     <div>
       <div className="flex justify-between items-center ">
-        <Link className="text-ocean-blue font-semibold	hover:underline " to="/issues">
-          Reported issues ({listReportedIssues.length > 0 ? listReportedIssues.length : 0})
+        <Link className="text-ocean-blue font-semibold hover:underline " to="/issues">
+          Reported issues ({listReportedIssues.length})
         </Link>
-        {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={() => handleClose()} src={CloseImg} alt="closeButton" />}
+        {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={handleClose} src={CloseImg} alt="closeButton" />}
       </div>
       <Table className="bg-slate-500 min-w-full mt-3" loading={isLoading} columnNames={columnNames} dataTable={listReportedIssues} />
     </div>

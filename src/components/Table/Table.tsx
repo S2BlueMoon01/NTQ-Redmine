@@ -12,13 +12,13 @@ interface PropsComponent {
 }
 
 const Table: React.FC<PropsComponent> = ({ className, columnNames = [], dataTable = [], loading = true }) => {
-  return (
-    <table className={`table-auto text-xs text-mouse-gray ${className}`}>
-      <thead className="bg-gray-200   ">
+  const renderTableHeader = () => {
+    return (
+      <thead className="bg-gray-200">
         <tr className="h-7">
           {columnNames.map((columnName, index) => (
             <th
-              className={`text-center capitalize  border border-solid border-gray-300 border-b-slate-600 text-gray-600 px-5 tracking-wider w-auto ${index === 1 || index === 3 ? "w-auto " : "w-auto"}`}
+              className={`text-center capitalize border border-solid border-gray-300 border-b-slate-600 text-gray-600 px-5 tracking-wider ${index === 1 || index === 3 ? "w-auto" : "w-auto"}`}
               key={columnName}
             >
               {columnName}
@@ -26,6 +26,11 @@ const Table: React.FC<PropsComponent> = ({ className, columnNames = [], dataTabl
           ))}
         </tr>
       </thead>
+    );
+  };
+
+  const renderTableBody = () => {
+    return (
       <tbody className="bg-white divide-y divide-gray-200">
         {loading && (
           <tr className="h-7">
@@ -56,6 +61,13 @@ const Table: React.FC<PropsComponent> = ({ className, columnNames = [], dataTabl
           </tr>
         ))}
       </tbody>
+    );
+  };
+
+  return (
+    <table className={`table-auto text-xs text-mouse-gray ${className}`}>
+      {renderTableHeader()}
+      {renderTableBody()}
     </table>
   );
 };

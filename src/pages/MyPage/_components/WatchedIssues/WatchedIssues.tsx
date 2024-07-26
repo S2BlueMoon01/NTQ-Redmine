@@ -21,16 +21,12 @@ const WatchedIssues: React.FC = () => {
   const fetchIssuesWatcher = async () => {
     try {
       const response = await issuesApi.listIssues({ watcher_id: "me" });
-      const listIssues =
-        response.data?.issues &&
-        response.data?.issues.map((issue) => {
-          return {
-            "#": issue.id,
-            subject: issue.subject,
-            tracker: issue.tracker.name,
-            project: issue.project.name,
-          };
-        });
+      const listIssues = response.data?.issues?.map((issue) => ({
+        "#": issue.id,
+        subject: issue.subject,
+        tracker: issue.tracker.name,
+        project: issue.project.name,
+      }));
       setListIssuesWatcher(listIssues);
       setIsLoading(false);
     } catch (error) {
@@ -54,10 +50,10 @@ const WatchedIssues: React.FC = () => {
   return (
     <div>
       <div className="flex justify-between items-center ">
-        <Link className="text-ocean-blue font-semibold	hover:underline " to="/issues">
-          Watched issues ({listIssuesWatcher && listIssuesWatcher.length > 0 ? listIssuesWatcher.length : 0})
+        <Link className="text-ocean-blue font-semibold hover:underline" to="/issues">
+          Watched issues ({listIssuesWatcher.length})
         </Link>
-        {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={() => handleClose()} src={CloseImg} alt="closeButton" />}
+        {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={handleClose} src={CloseImg} alt="closeButton" />}
       </div>
       <Table className="bg-slate-500 min-w-full mt-3" loading={isLoading} columnNames={columnNames} dataTable={listIssuesWatcher} />
     </div>

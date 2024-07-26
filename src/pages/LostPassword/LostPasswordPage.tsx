@@ -3,19 +3,23 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import ErrorImg from "~/assets/images/error-img.png";
 import { Button } from "~/components/Button/Button";
 
+type FormData = {
+  email: string;
+};
+
 const LostPasswordPage = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<{ email: string }>();
+  } = useForm<FormData>();
 
-  const [errorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const onSubmit: SubmitHandler<{ email: string }> = (data) => {
+  const onSubmit: SubmitHandler<FormData> = (data) => {
     console.log(data);
     // Call API
-    // If don't find email
+    // If email not found, setErrorMessage("Email not found");
   };
 
   return (
@@ -59,7 +63,7 @@ const LostPasswordPage = () => {
               },
               maxLength: {
                 value: 50,
-                message: "Email must be at least 50 characters long.",
+                message: "Email must be at most 50 characters long.",
               },
             })}
           />

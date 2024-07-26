@@ -59,6 +59,21 @@ const BoardSectionList = ({ isDragDropEnabled = false }: { isDragDropEnabled?: b
     setBoardSections(savedSections);
   }, []);
 
+  const renderBoardSection = (boardId: string) => {
+    const blocks = boardSections[boardId];
+    if (!blocks || blocks.length === 0) {
+      return null;
+    }
+
+    return (
+      <div className="w-full flex flex-col gap-4 p-4 rounded-md shadow-md border-dashed border border-gray-200">
+        {blocks.map((block) => (
+          <BlockItem key={block.id} block={block} />
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="mx-auto pb-4">
       {isDragDropEnabled ? (
@@ -73,34 +88,10 @@ const BoardSectionList = ({ isDragDropEnabled = false }: { isDragDropEnabled?: b
         </DragDropContext>
       ) : (
         <div className="flex flex-col w-full gap-4">
-          {boardSections["Board-1"]?.length > 0 && (
-            <div className="w-full flex flex-col gap-4 p-4 rounded-md shadow-md border-dashed border border-gray-200">
-              {boardSections["Board-1"].map((block) => (
-                <div key={block.id}>
-                  <BlockItem block={block} />
-                </div>
-              ))}
-            </div>
-          )}
+          {renderBoardSection("Board-1")}
           <div className="grid grid-cols-2 gap-4 overflow-hidden">
-            {boardSections["Board-2"]?.length > 0 && (
-              <div className="w-full flex flex-col gap-4 p-4 rounded-md shadow-md border-dashed border border-gray-200">
-                {boardSections["Board-2"].map((block) => (
-                  <div key={block.id}>
-                    <BlockItem block={block} />
-                  </div>
-                ))}
-              </div>
-            )}
-            {boardSections["Board-3"]?.length > 0 && (
-              <div className="w-full flex flex-col gap-4 p-4 rounded-md shadow-md border-dashed border border-gray-200">
-                {boardSections["Board-3"].map((block) => (
-                  <div key={block.id}>
-                    <BlockItem block={block} />
-                  </div>
-                ))}
-              </div>
-            )}
+            {renderBoardSection("Board-2")}
+            {renderBoardSection("Board-3")}
           </div>
         </div>
       )}
