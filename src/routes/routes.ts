@@ -7,7 +7,6 @@ import MyPage from "~/pages/MyPage/MyPage";
 import TimeEntryCreate from "~/pages/TimeEntryCreate";
 import NotFound from "~/pages/NotFound";
 import TimeEntry from "~/pages/TimeEntry";
-import ProjectLayout from "~/layouts/ProjectLayout";
 import OverView from "~/pages/OverView";
 import Activity from "~/pages/Activity";
 import Roadmap from "~/pages/Roadmap";
