@@ -80,7 +80,6 @@ export function getWeekNumber(d: Date): number[] {
   return [d.getUTCFullYear(), weekNo];
 }
 
-
 /**
  * Checks the status of a date based on the given start date, due date, and day.
  * @param startDate - The start date (optional).

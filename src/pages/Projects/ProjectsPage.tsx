@@ -19,9 +19,9 @@ const ProjectsPage = () => {
       const response = await projectsApi.getAllProjects();
       const listProjects = response?.data?.projects;
       setListProject(listProjects);
-      setLoading(false);
     } catch (error) {
       console.error(error);
+    } finally {
       setLoading(false);
     }
   };
@@ -30,6 +30,7 @@ const ProjectsPage = () => {
     setLoading(true);
     fetchProject();
   }, []);
+
   return (
     <div className="flex min-h-84">
       <div className="flex flex-col gap-2.5 bg-white w-9/12 px-3 mt-3 pb-8 border border-solid ">
@@ -42,17 +43,15 @@ const ProjectsPage = () => {
         </div>
         <div className="flex flex-col gap-1.5 text-sm">
           {listProject.length ? (
-            listProject.map((project) => {
-              return (
-                <div key={project.id}>
-                  <Link className="text-ocean-blue font-semibold flex gap-1 items-center" to={`/projects/${project?.id}/overview`}>
-                    {project.id === 323 && <img className="w-fit h-fit" src={StarImg} alt="My project" />}
-                    {project?.name}
-                  </Link>
-                  <p className="text-xs">{project?.description}</p>
-                </div>
-              );
-            })
+            listProject.map((project) => (
+              <div key={project.id}>
+                <Link className="text-ocean-blue font-semibold flex gap-1 items-center" to={`/projects/${project?.id}/overview`}>
+                  {project.id === 323 && <img className="w-fit h-fit" src={StarImg} alt="My project" />}
+                  {project?.name}
+                </Link>
+                <p className="text-xs">{project?.description}</p>
+              </div>
+            ))
           ) : (
             <SyncLoader className="ml-4" loading={loading} color="#169" size={5} />
           )}
@@ -71,7 +70,7 @@ const ProjectsPage = () => {
         </div>
       </div>
 
-      <div className=" p-8 flex flex-col gap-3 w-3/12 bg-[#eee] pr-3 pb-8">
+      <div className="p-8 flex flex-col gap-3 w-3/12 bg-[#eee] pr-3 pb-8">
         <h2 className="text-sm text-mouse-gray">Projects</h2>
         <div className="flex gap-1 items-center ">
           <input id="view-closed" type="checkbox" />

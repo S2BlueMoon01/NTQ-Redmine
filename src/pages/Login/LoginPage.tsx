@@ -19,7 +19,6 @@ const LoginPage = () => {
   };
 
   return (
-
     <div className="flex justify-center align-center">
       <div className="min-w-400 min-h-42 mt-15 border-2 border-solid border-[#fdbf3b] p-3 bg-light-yellow">
         <form onSubmit={handleSubmit(submit)} className="flex gap-x-2 mt-1.5">
