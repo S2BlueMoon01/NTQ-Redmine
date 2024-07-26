@@ -1,7 +1,5 @@
 import React from "react";
 import { BeatLoader } from "react-spinners";
-import DeleteImg from "~/assets/images/delete-img.png";
-import EditImg from "~/assets/images/edit-img.png";
 import Dialog from "~/pages/MyPage/_components/Dialog";
 
 interface PropsComponent {
@@ -42,7 +40,10 @@ const TableIssues: React.FC<PropsComponent> = ({ className, columnNames = [], da
             {columnNames.map((columnName) => {
               const id = row["#"];
               return (
-                <td key={columnName} className="text-center whitespace-nowrap px-3">
+                <td
+                  key={columnName}
+                  className={columnName === "tracker" ? "text-center whitespace-nowrap px-3" : "hover:underline text-center whitespace-nowrap px-3"}
+                >
                   {row[columnName] !== undefined &&
                     (typeof id === "number" ? <Dialog issueId={id} content={row[columnName] as string} /> : row[columnName])}
                 </td>

@@ -24,17 +24,11 @@ export default {
         21: "90px",
         half: "50%",
       },
-
-      padding: {
-        1.5: "6px",
-        2.5: "10px",
-      },
       fontSize: {
         10: "10px",
         16: "16px",
       },
       margin: {
-        1.5: "6px",
         15: "60px",
       },
     },

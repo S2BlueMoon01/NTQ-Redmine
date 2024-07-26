@@ -1,63 +1,63 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { cn } from "~/utils/utils";
 
-const Navbar = () => {
+const Navbar = ({ idProject }: { idProject?: string | undefined }) => {
   const [listValueNavbar, setListValueNavbar] = useState([
     {
       name: "Overview",
-      path: "#/",
+      path: "/overview",
       selected: false,
       isExternal: true,
     },
     {
       name: "Activity",
-      path: "#/activity",
+      path: "/activity",
       selected: false,
     },
     {
       name: "Roadmap",
-      path: "#/roadmap",
+      path: "/roadmap",
       selected: false,
     },
     {
       name: "Issues",
-      path: "#/issues",
+      path: "/issues",
       selected: false,
     },
     {
       name: "New issue",
-      path: "#/issues/new",
+      path: "/issues/new",
       selected: false,
     },
     {
       name: "Gantt",
-      path: "#/issues/gantt",
+      path: "/issues/gantt",
       selected: false,
     },
     {
       name: "Calendar",
-      path: "#/issues/calendar",
+      path: "/issues/calendar",
       selected: false,
     },
     {
       name: "Documents",
-      path: "#/documents",
+      path: "/documents",
       selected: false,
     },
     {
       name: "Wiki",
-      path: "#/wiki",
+      path: "/wiki",
       selected: false,
     },
     {
       name: "Files",
-      path: "#/files",
+      path: "/files",
       selected: false,
     },
     {
       name: "Settings",
-      path: "#/settings",
+      path: "/settings",
       selected: false,
     },
   ]);
@@ -78,7 +78,7 @@ const Navbar = () => {
               className={cn(`bg-[#507AAA] hover:underline py-1 px-2.5 ${item.selected ? "text-mouse-gray bg-[#eee]" : ""} `)}
               onClick={() => handleClickNavbar(item.name)}
             >
-              <Link rel={item?.isExternal ? "noopener noreferrer" : ""} className="hover:underline " to={item.path}>
+              <Link rel={item?.isExternal ? "noopener noreferrer" : ""} className="hover:underline " to={`/projects/${idProject}${item.path}`}>
                 {item.name}
               </Link>
             </li>
