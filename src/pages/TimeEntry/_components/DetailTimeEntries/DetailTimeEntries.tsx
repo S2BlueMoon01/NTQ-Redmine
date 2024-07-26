@@ -4,8 +4,6 @@ import { BeatLoader } from "react-spinners";
 import timeEntriesApi from "~/apis/timeEntries.api";
 import moment from "moment";
 import issuesApi from "~/apis/issue.api";
-// import issuesApi from "~/apis/issue.api";
-// import { TimeEntries } from "~/types/timeEntries.type";
 
 interface ListDataTable {
   id: number;

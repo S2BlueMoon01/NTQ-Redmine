@@ -35,7 +35,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="p-2.5 pt-1">
+    <div className="p-2.5 pt-1 bg-white min-h-84 px-3 mt-3 pb-8">
       <h2 className="text-xl font-semibold pt-0.5 pr-3 mb-3 text-mouse-gray">Home</h2>
 
       <div className="flex">

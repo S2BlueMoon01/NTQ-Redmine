@@ -23,10 +23,15 @@ const listMenuLeft = [
 
 const listMenuRight = ["WorkTime", "My account", "Sign out"];
 
-const Header = () => {
+interface PropComponent {
+  nameHeader?: string;
+  isShowNavbar?: boolean;
+  idProject?: string | undefined;
+}
+
+const Header: React.FC<PropComponent> = ({ nameHeader = "NTQ Redmine", isShowNavbar = false, idProject }) => {
   // const isLogin = localStorage.getItem("accessToken");
   const isLogin = true;
-  const isProjectPage = true;
 
   return (
     <header>
@@ -64,7 +69,7 @@ const Header = () => {
 
       <div className="relative min-h-21 bg-blue-gray pt-1 pr-2 pb-5 pl-2">
         <div className="flex justify-between">
-          <h1 className="text-2xl font-bold text-white font-sans">NTQ Redmine</h1>
+          <h1 className="text-2xl font-bold text-white font-sans">{nameHeader}</h1>
           {isLogin && (
             <div className="flex gap-2 text-xs">
               <div className="flex max-h-6">
@@ -90,9 +95,9 @@ const Header = () => {
             </div>
           )}
         </div>
-        {isProjectPage && (
+        {isShowNavbar && (
           <div className="absolute bottom-0 left-0.5">
-            <Navbar />
+            <Navbar idProject={idProject} />
           </div>
         )}
       </div>
