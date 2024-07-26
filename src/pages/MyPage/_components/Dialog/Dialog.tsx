@@ -8,11 +8,16 @@ import "./Dialog.css";
 import Loading from "~/components/Loading";
 import { convertDateFormat, getSecondsDifference } from "~/utils/utils";
 
-const Dialog: React.FC<{ issueId: number; content: string }> = ({ issueId = 122712, content = "" }) => {
+interface DialogProps {
+  issueId?: number;
+  content?: string;
+}
+
+const Dialog: React.FC<DialogProps> = ({ issueId = 122712, content = "" }) => {
   const [isVisible, setIsVisible] = useState(false);
   const itemRef = useRef<HTMLDivElement>(null);
 
-  const [issue, setIssue] = useState<Issue>();
+  const [issue, setIssue] = useState<Issue | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleClickOutside = () => {

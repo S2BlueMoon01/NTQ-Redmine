@@ -1,11 +1,11 @@
 td {
-  border: 1px solid #eeeeee;
+  border: 1px solid #eee;
   padding: 3px 2px;
   box-sizing: border-box;
 }
 
 th {
-  background-color: #eeeeee;
+  background-color: #eee;
   color: #505050;
   font-size: 12px;
   padding: 4px;
@@ -18,7 +18,7 @@ td:first-child {
 }
 
 td:first-child {
-  background: #eeeeee;
+  background: #eee;
 }
 
 th:not(:first-child),

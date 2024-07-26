@@ -5,13 +5,15 @@ export const URL_REGISTER = "register";
 export const URL_LOGOUT = "logout";
 
 const authApi = {
-  registerAccount(body: { email: string; password: string }) {
+  registerAccount: (email: string, password: string) => {
+    const body = { email, password };
     return http.post(URL_REGISTER, body);
   },
-  login(body: { email: string; password: string }) {
+  login: (email: string, password: string) => {
+    const body = { email, password };
     return http.post(URL_LOGIN, body);
   },
-  logout() {
+  logout: () => {
     return http.post(URL_LOGOUT);
   },
 };

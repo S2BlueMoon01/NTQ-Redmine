@@ -5,7 +5,7 @@ import HomePage from "~/pages/Home/HomePage";
 import ProjectsPage from "~/pages/Projects/ProjectsPage";
 import MyPage from "~/pages/MyPage/MyPage";
 import TimeEntryCreate from "~/pages/TimeEntryCreate";
-import NotFoundPage from "~/pages/NotFoundPage";
+import NotFound from "~/pages/NotFound";
 import TimeEntry from "~/pages/TimeEntry";
 import ProjectLayout from "~/layouts/ProjectLayout";
 import OverView from "~/pages/OverView";
@@ -30,6 +30,7 @@ const privateRoutes = [
   { path: "/time_entries", component: TimeEntry, layout: DefaultLayout },
   { path: "/", component: HomePage, layout: DefaultLayout },
   { path: "/projects", component: ProjectsPage, layout: DefaultLayout },
+
   { path: "/projects/:id/overview", component: OverView, layout: DefaultLayout },
   { path: "/projects/:id/activity", component: Activity, layout: DefaultLayout },
   { path: "/projects/:id/roadmap", component: Roadmap, layout: DefaultLayout },
@@ -41,6 +42,6 @@ const privateRoutes = [
   { path: "/projects/:id/wiki", component: Wiki, layout: DefaultLayout },
   { path: "/projects/:id/files", component: FilesPage, layout: DefaultLayout },
   { path: "/projects/:id/settings", component: Settings, layout: DefaultLayout },
-  { path: "*", component: NotFoundPage, layout: DefaultLayout },
+  { path: "*", component: NotFound },
 ];
 export { privateRoutes, publicRoutes };

@@ -1,7 +1,12 @@
 import { Issue } from "~/types/issue.type";
 import { checkDateStatus } from "~/utils/utils";
 
-const Card = ({ issue, day }: { issue: Issue; day: string }) => {
+interface CardProps {
+  issue: Issue;
+  day: string;
+}
+
+const Card: React.FC<CardProps> = ({ issue, day }) => {
   const urlIcon = checkDateStatus({ startDate: issue.start_date, dueDate: issue.due_date, day });
 
   return (

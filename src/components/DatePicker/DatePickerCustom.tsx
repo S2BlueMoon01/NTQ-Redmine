@@ -18,6 +18,10 @@ const DatePickerCustom: React.FC<DatePickerCustomProps> = ({ classNameDatePicker
     setSelectedDate(date);
   };
 
+  const toggleCalendar = () => {
+    setIsOpen((isOpen) => !isOpen);
+  };
+
   return (
     <div className={cn("flex items-center", className)}>
       <DatePicker
@@ -43,14 +47,7 @@ const DatePickerCustom: React.FC<DatePickerCustomProps> = ({ classNameDatePicker
           </div>
         </div>
       </DatePicker>
-      <img
-        src={Calendar}
-        alt="Calendar"
-        className="cursor-pointer ml-1"
-        onClick={() => {
-          setIsOpen((isOpen) => !isOpen);
-        }}
-      />
+      <img src={Calendar} alt="Calendar" className="cursor-pointer ml-1" onClick={toggleCalendar} />
     </div>
   );
 };

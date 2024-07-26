@@ -6,8 +6,15 @@ import DatePickerCustom from "~/components/DatePicker";
 import Input from "~/components/Input";
 import Select from "~/components/Select";
 
+interface FilterItem {
+  title: string;
+  sortBy?: { value: string; label: string }[];
+  type: "select" | "date" | "input";
+  filerOptions?: { value: string; label: string }[];
+}
+
 const Filter = () => {
-  const fakeData = [
+  const fakeData: FilterItem[] = [
     {
       title: "Status",
       sortBy: [
@@ -46,15 +53,11 @@ const Filter = () => {
   const [size, setSize] = useState<number>(0);
 
   const handleAddSize = () => {
-    if (size === 0) {
-      setSize(5);
-    } else {
-      setSize(0);
-    }
+    setSize((prevSize) => (prevSize === 0 ? 5 : 0));
   };
 
   const handleClickDragDown = () => {
-    setIsDragDown((isDragDown) => !isDragDown);
+    setIsDragDown((prevIsDragDown) => !prevIsDragDown);
   };
 
   return (
@@ -65,7 +68,6 @@ const Filter = () => {
           <div className="text-gray-700">
             <img src={isDragDown ? ArrowExpanded : ArrowCollapsed} alt="icon expend" />
           </div>
-
           <span className="text-[10.8px] text-gray-rain">Filters</span>
         </div>
       </div>
@@ -76,25 +78,23 @@ const Filter = () => {
               <div key={item.title} className="flex items-center">
                 <div className="flex items-center gap-2 w-72">
                   <input type="checkbox" className="" />
-                  <label htmlFor="assignee-role" className=" text-[10.8px]">
+                  <label htmlFor="assignee-role" className="text-[10.8px]">
                     {item.title}
                   </label>
                 </div>
                 <div className="w-80">
-                  <Select className="bg-[#efefef] border text-[12px]">
-                    {item.sortBy.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </Select>
+                  {item.type === "select" && (
+                    <Select className="bg-[#efefef] border text-[12px]">
+                      {item.sortBy?.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </Select>
+                  )}
                 </div>
                 <div className="flex items-center">
-                  {item.type === "input" && (
-                    <>
-                      <Input type="text" className="border" />
-                    </>
-                  )}
+                  {item.type === "input" && <Input type="text" className="border" />}
                   {item.type === "select" && (
                     <>
                       <Select className="bg-transparent border h-full bg-[#efefef] pl-0" size={size}>
@@ -107,11 +107,7 @@ const Filter = () => {
                       <img src={TogglePlus} alt="Toggle Plus" className="cursor-pointer" onClick={handleAddSize} />
                     </>
                   )}
-                  {item.type === "date" && (
-                    <>
-                      <DatePickerCustom className="pl-1" />
-                    </>
-                  )}
+                  {item.type === "date" && <DatePickerCustom className="pl-1" />}
                 </div>
               </div>
             ))}
