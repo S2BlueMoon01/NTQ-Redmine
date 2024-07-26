@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import issuesApi from "~/apis/issue.api";
 import CloseImg from "~/assets/images/close-img.png";
-import Table from "~/components/Table";
 import { optionBlockMyPage } from "~/constants/constants";
 import { useGlobalStore } from "~/store/globalStore";
+import TableIssues from "~/components/TableIssues";
 import { IssueTable } from "~/types/issue.type";
 import { removeBlockFromBoardSections } from "~/utils/utils";
 
@@ -57,7 +57,7 @@ const ReportedIssues: React.FC = () => {
         </Link>
         {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={handleClose} src={CloseImg} alt="closeButton" />}
       </div>
-      <Table className="bg-slate-500 min-w-full mt-3" loading={isLoading} columnNames={columnNames} dataTable={listReportedIssues} />
+      <TableIssues className="bg-slate-500 min-w-full mt-3" loading={isLoading} columnNames={columnNames} dataTable={listReportedIssues} />
     </div>
   );
 };

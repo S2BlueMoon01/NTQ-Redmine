@@ -6,6 +6,7 @@ import ProjectsPage from "~/pages/Projects/ProjectsPage";
 import MyPage from "~/pages/MyPage/MyPage";
 import TimeEntryCreate from "~/pages/TimeEntryCreate";
 import NotFound from "~/pages/NotFound";
+import TimeEntry from "~/pages/TimeEntry";
 
 const publicRoutes = [
   { path: "/login", component: LoginPage, layout: DefaultLayout },
@@ -14,6 +15,7 @@ const publicRoutes = [
 const privateRoutes = [
   { path: "/my-page", component: MyPage, layout: DefaultLayout },
   { path: "/time_entries/new", component: TimeEntryCreate, layout: DefaultLayout },
+  { path: "/time_entries", component: TimeEntry, layout: DefaultLayout },
   { path: "/", component: HomePage, layout: DefaultLayout },
   { path: "/projects", component: ProjectsPage, layout: DefaultLayout },
   { path: "*", component: NotFound },

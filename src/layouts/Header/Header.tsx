@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Navbar from "~/pages/Projects/_components/Navbar";
 
 const listMenuLeft = [
   {
@@ -25,6 +26,7 @@ const listMenuRight = ["WorkTime", "My account", "Sign out"];
 const Header = () => {
   // const isLogin = localStorage.getItem("accessToken");
   const isLogin = true;
+  const isProjectPage = true;
 
   return (
     <header>
@@ -60,30 +62,37 @@ const Header = () => {
         )}
       </div>
 
-      <div className=" flex justify-between min-h-21  bg-blue-gray pt-1 pr-2 pb-5 pl-2">
-        <h1 className="text-2xl font-bold text-white font-sans">NTQ Redmine</h1>
-        {isLogin && (
-          <div className="flex gap-2 text-xs">
-            <div className="flex max-h-6">
-              <label className="text-white pr-2 text-sm" htmlFor="search">
-                Search:
-              </label>
-              <input
-                className=" px-1 outline-none w-full max-w-44 leading-6  text-mouse-gray"
-                spellCheck={false}
-                type="text"
-                name="search"
-                id="search"
-              />
-            </div>
+      <div className="relative min-h-21 bg-blue-gray pt-1 pr-2 pb-5 pl-2">
+        <div className="flex justify-between">
+          <h1 className="text-2xl font-bold text-white font-sans">NTQ Redmine</h1>
+          {isLogin && (
+            <div className="flex gap-2 text-xs">
+              <div className="flex max-h-6">
+                <label className="text-white pr-2 text-sm" htmlFor="search">
+                  Search:
+                </label>
+                <input
+                  className=" px-1 outline-none w-full max-w-44 leading-6  text-mouse-gray"
+                  spellCheck={false}
+                  type="text"
+                  name="search"
+                  id="search"
+                />
+              </div>
 
-            <select className="outline-none max-h-6 font-light leading-6  text-mouse-gray w-full max-w-44" defaultValue="">
-              <option value="" disabled>
-                Jump to a project...
-              </option>
-              <option value="redmine">Redmine</option>
-              <option value="fresher">[Fresher]_ ReactJS Fresher</option>
-            </select>
+              <select className="outline-none max-h-6 font-light leading-6  text-mouse-gray w-full max-w-44" defaultValue="">
+                <option value="" disabled>
+                  Jump to a project...
+                </option>
+                <option value="redmine">Redmine</option>
+                <option value="fresher">[Fresher]_ ReactJS Fresher</option>
+              </select>
+            </div>
+          )}
+        </div>
+        {isProjectPage && (
+          <div className="absolute bottom-0 left-0.5">
+            <Navbar />
           </div>
         )}
       </div>

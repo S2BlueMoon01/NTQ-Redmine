@@ -7,6 +7,7 @@ import DiamondIcon from "~/assets/images/bullet_diamond.png";
 import { optionBlockMyPage } from "~/constants/constants";
 import HttpStatusCode from "~/constants/httpStatusCode.enum";
 import { GroupedIssueByDay, Issue } from "~/types/issue.type";
+import { GroupedTimeEntries, TimeEntriesTable } from "~/types/timeEntries.type";
 import { Block, BoardSections, ErrorResponse } from "~/types/utils.type";
 import { BoardSections as BoardSectionsType } from "~/types/utils.type";
 
@@ -311,4 +312,18 @@ export const isValidBoardSections = (obj: any): obj is BoardSections => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (key) => key in obj && Array.isArray(obj[key]) && obj[key].every((item: any) => typeof item.id === "string" && typeof item.title === "string"),
   );
+};
+
+export const groupTimeEntriesByDate = (entries: TimeEntriesTable[]): GroupedTimeEntries[] => {
+  const groupedEntries = entries.reduce<{ [key: string]: GroupedTimeEntries }>((acc, entry) => {
+    const date = entry.date;
+    if (!acc[date]) {
+      acc[date] = { date, entries: [], totalHours: 0 };
+    }
+    acc[date].entries.push(entry);
+    acc[date].totalHours += entry.hours;
+    return acc;
+  }, {});
+
+  return Object.values(groupedEntries);
 };

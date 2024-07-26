@@ -62,7 +62,7 @@ const Filter = () => {
 
   return (
     <>
-      <div className="relative pb-2">
+      <div className="relative pb-2 mt-2">
         <hr />
         <div className="flex items-center px-1 absolute top-[-8px] left-3 bg-[#fff] cursor-pointer" onClick={handleClickDragDown}>
           <div className="text-gray-700">
@@ -72,7 +72,7 @@ const Filter = () => {
         </div>
       </div>
       {isDragDown && (
-        <div className="flex justify-between pr-3">
+        <div className="flex justify-between px-3">
           <div className="gap-2 min-w-16 w-[70%]">
             {fakeData.map((item) => (
               <div key={item.title} className="flex items-center">
