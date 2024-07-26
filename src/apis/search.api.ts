@@ -10,43 +10,59 @@ export interface SearchResult {
   datetime: string;
 }
 
+interface SearchOptions {
+  offset?: number;
+  limit?: number;
+  scope?: "all" | "my_project" | "subprojects";
+  all_words?: boolean;
+  titles_only?: boolean;
+  issues?: boolean;
+  news?: boolean;
+  documents?: boolean;
+  changesets?: boolean;
+  wiki_pages?: boolean;
+  messages?: boolean;
+  projects?: boolean;
+  open_issues?: boolean;
+  attachments?: "0" | "1" | "only";
+}
+
 const searchApi = {
-  search(
-    query: string,
-    options?: {
-      offset?: number;
-      limit?: number;
-      scope?: "all" | "my_project" | "subprojects";
-      all_words?: boolean;
-      titles_only?: boolean;
-      issues?: boolean;
-      news?: boolean;
-      documents?: boolean;
-      changesets?: boolean;
-      wiki_pages?: boolean;
-      messages?: boolean;
-      projects?: boolean;
-      open_issues?: boolean;
-      attachments?: "0" | "1" | "only";
-    },
-  ) {
+  search(query: string, options?: SearchOptions) {
     let params = `q=${encodeURIComponent(query)}`;
 
     if (options) {
-      if (options.offset !== undefined) params += `&offset=${options.offset}`;
-      if (options.limit !== undefined) params += `&limit=${options.limit}`;
-      if (options.scope) params += `&scope=${options.scope}`;
-      if (options.all_words !== undefined) params += `&all_words=${options.all_words}`;
-      if (options.titles_only !== undefined) params += `&titles_only=${options.titles_only}`;
-      if (options.issues !== undefined) params += `&issues=${options.issues ? 1 : 0}`;
-      if (options.news !== undefined) params += `&news=${options.news ? 1 : 0}`;
-      if (options.documents !== undefined) params += `&documents=${options.documents ? 1 : 0}`;
-      if (options.changesets !== undefined) params += `&changesets=${options.changesets ? 1 : 0}`;
-      if (options.wiki_pages !== undefined) params += `&wiki_pages=${options.wiki_pages ? 1 : 0}`;
-      if (options.messages !== undefined) params += `&messages=${options.messages ? 1 : 0}`;
-      if (options.projects !== undefined) params += `&projects=${options.projects ? 1 : 0}`;
-      if (options.open_issues !== undefined) params += `&open_issues=${options.open_issues ? 1 : 0}`;
-      if (options.attachments) params += `&attachments=${options.attachments}`;
+      const {
+        offset,
+        limit,
+        scope,
+        all_words,
+        titles_only,
+        issues,
+        news,
+        documents,
+        changesets,
+        wiki_pages,
+        messages,
+        projects,
+        open_issues,
+        attachments,
+      } = options;
+
+      if (offset !== undefined) params += `&offset=${offset}`;
+      if (limit !== undefined) params += `&limit=${limit}`;
+      if (scope) params += `&scope=${scope}`;
+      if (all_words !== undefined) params += `&all_words=${all_words}`;
+      if (titles_only !== undefined) params += `&titles_only=${titles_only}`;
+      if (issues !== undefined) params += `&issues=${issues ? 1 : 0}`;
+      if (news !== undefined) params += `&news=${news ? 1 : 0}`;
+      if (documents !== undefined) params += `&documents=${documents ? 1 : 0}`;
+      if (changesets !== undefined) params += `&changesets=${changesets ? 1 : 0}`;
+      if (wiki_pages !== undefined) params += `&wiki_pages=${wiki_pages ? 1 : 0}`;
+      if (messages !== undefined) params += `&messages=${messages ? 1 : 0}`;
+      if (projects !== undefined) params += `&projects=${projects ? 1 : 0}`;
+      if (open_issues !== undefined) params += `&open_issues=${open_issues ? 1 : 0}`;
+      if (attachments) params += `&attachments=${attachments}`;
     }
 
     return http.get<ListDataResponse<SearchResult[], "">>(`/search.json?${params}`);

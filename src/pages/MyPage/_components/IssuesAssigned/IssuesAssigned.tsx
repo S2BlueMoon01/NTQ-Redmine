@@ -22,17 +22,13 @@ const IssuesAssigned: React.FC = () => {
   const fetchIssuesAssigned = async () => {
     try {
       const response = await issuesApi.listIssues({ assigned_to_id: "me" });
-      const listIssues =
-        response.data?.issues &&
-        response.data?.issues.map((issue) => {
-          return {
-            "#": issue.id,
-            subject: issue.subject,
-            tracker: issue.tracker.name,
-            project: issue.project.name,
-          };
-        });
-      setListIssuesAssigned(listIssues);
+      const listIssues = response.data?.issues?.map((issue) => ({
+        "#": issue.id,
+        subject: issue.subject,
+        tracker: issue.tracker.name,
+        project: issue.project.name,
+      }));
+      setListIssuesAssigned(listIssues || []);
       setIsLoading(false);
     } catch (error) {
       console.error(error);
@@ -42,9 +38,7 @@ const IssuesAssigned: React.FC = () => {
 
   const handleClose = () => {
     const blockId = optionBlockMyPage.find((block) => block.title === "Issues assigned to me")?.id || "";
-    removeBlockFromBoardSections({
-      blockId: blockId,
-    });
+    removeBlockFromBoardSections({ blockId });
     removeBlock(blockId);
   };
 
@@ -55,10 +49,10 @@ const IssuesAssigned: React.FC = () => {
   return (
     <div>
       <div className="flex justify-between items-center">
-        <Link className="text-ocean-blue font-semibold	hover:underline " to="/issues">
-          Issues assigned to me ({listIssuesAssigned.length > 0 ? listIssuesAssigned.length : 0})
+        <Link className="text-ocean-blue font-semibold hover:underline" to="/issues">
+          Issues assigned to me ({listIssuesAssigned.length})
         </Link>
-        {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={() => handleClose()} src={CloseImg} alt="closeButton" />}
+        {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={handleClose} src={CloseImg} alt="closeButton" />}
       </div>
       <TableIssues className="bg-slate-500 min-w-full mt-3" loading={isLoading} columnNames={columnNames} dataTable={listIssuesAssigned} />
     </div>

@@ -25,8 +25,9 @@ const Calendar: React.FC = () => {
       setLoading(true);
       const response = await issuesApi.listIssues();
       setListIssues(response.data.issues);
-      setLoading(false);
     } catch (error) {
+      // Handle error
+    } finally {
       setLoading(false);
     }
   };
@@ -52,7 +53,7 @@ const Calendar: React.FC = () => {
       <SyncLoader loading={loading} color="#169" size={5} />
       <div className="flex justify-between items-center ">
         <h2 className="text-base text-mouse-gray font-bold">Calendar</h2>
-        {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={() => handleClose()} src={CloseImg} alt="closeButton" />}
+        {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={handleClose} src={CloseImg} alt="closeButton" />}
       </div>
       <table className="w-full border-collapse table-fixed">
         <thead>
@@ -71,29 +72,23 @@ const Calendar: React.FC = () => {
           <tr>
             <td className="text-xs w-[22px] p-1 text-mouse-gray ">{week}</td>
             {mainArrays.map((item) => {
+              const day = Object.keys(item)[0];
+              const isCurrentDay = getDay() === day;
               return (
-                <td
-                  key={Object.keys(item).toString()}
-                  className={`${getDay() === Object.keys(item).toString() ? "bg-light-yellow" : ""} hover:bg-light-yellow relative pt-8 text-xs`}
-                >
-                  <div className={`${getDay() === Object.keys(item).toString() ? "font-bold" : ""} text-right text-[#505050] absolute top-1 right-1`}>
-                    {Object.keys(item).toString()}
-                  </div>
-                  {item[Object.keys(item)[0]].map((issue) => (
+                <td key={day} className={`${isCurrentDay ? "bg-light-yellow" : ""} hover:bg-light-yellow relative pt-8 text-xs`}>
+                  <div className={`${isCurrentDay ? "font-bold" : ""} text-right text-[#505050] absolute top-1 right-1`}>{day}</div>
+                  {item[day].map((issue) => (
                     <div key={issue.id} className="py-1">
                       <div className="flex flex-wrap p-1.5 w-full text-[10.8px] text-mouse-gray bg-light-yellow border relative card">
                         {issue.project.name}-
                         <span>
-                          <img
-                            src={checkDateStatus({ startDate: issue.start_date, dueDate: issue.due_date, day: Object.keys(item).toString() })}
-                            alt="ArrowRightIcon"
-                          />
+                          <img src={checkDateStatus({ startDate: issue.start_date, dueDate: issue.due_date, day })} alt="ArrowRightIcon" />
                         </span>
                         <a href="#!" className="text-ocean-blue ">
                           {issue.tracker.name} #{issue.id}:
                         </a>
                         {issue.subject}
-                        <Card issue={issue} day={Object.keys(item).toString()} />
+                        <Card issue={issue} day={day} />
                       </div>
                     </div>
                   ))}
