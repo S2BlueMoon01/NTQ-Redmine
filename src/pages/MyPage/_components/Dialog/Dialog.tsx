@@ -9,11 +9,13 @@ import Loading from "~/components/Loading";
 import { convertDateFormat, getSecondsDifference } from "~/utils/utils";
 
 interface DialogProps {
-  issueId?: number;
+  issueId: number;
   content?: string;
+  ZIndex?: number;
+  handleClick: (index: number) => void;
 }
 
-const Dialog: React.FC<DialogProps> = ({ issueId = 122712, content = "" }) => {
+const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleClick }) => {
   const [isVisible, setIsVisible] = useState(false);
   const itemRef = useRef<HTMLDivElement>(null);
 
@@ -47,8 +49,8 @@ const Dialog: React.FC<DialogProps> = ({ issueId = 122712, content = "" }) => {
       </div>
       {loading && <Loading />}
       {isVisible && (
-        <Draggable>
-          <div className="pt-5 pl-5 absolute z-20 " ref={itemRef}>
+        <Draggable onStart={() => handleClick(issueId)}>
+          <div className={`pt-5 pl-5 absolute`} style={{ zIndex: ZIndex }} ref={itemRef}>
             <SyncLoader loading={loading} color="#169" size={5} />
             <div className="p-[2px] w-[645px] h-[630px] border-1 rounded-md border-[#e5e7eb] bg-[#eeeeee]">
               <div className="bg-[#fff] z-20 h-[571px] overflow-y-auto">
