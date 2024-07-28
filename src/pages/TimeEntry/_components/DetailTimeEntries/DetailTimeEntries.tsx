@@ -74,7 +74,6 @@ const DetailTimeEntries: React.FC<DetailTimeEntriesProps> = ({ columnNames = col
             issues: dataIssuesTable,
           };
         });
-      console.log(listDataTable);
       setListDataTable(listDataTable);
       setIsLoading(false);
     } catch (error) {

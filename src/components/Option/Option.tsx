@@ -79,6 +79,7 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
   ]);
 
   const [middleArray, setMiddleArray] = useState<string[]>([]);
+  const [currentColumn, setCurrentColumn] = useState<string>("");
 
   const [selectedColumns, setSelectedColumns] = useState(["project", "date", "user", "activity", "issues", "comment", "hours"]);
 
@@ -86,8 +87,12 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
     setIsDragDown((isDragDown) => !isDragDown);
   };
 
-  const handleClickItem = (nameRow: string, nameColum: string) => {
-    if (nameColum === "available") {
+  const handleCurrentColumn = (name: string) => {
+    setCurrentColumn(name);
+  };
+
+  const handleClickItem = (nameRow: string) => {
+    if (currentColumn === "available") {
       const row = availableColumns.find((option) => {
         return option === nameRow;
       });
@@ -98,7 +103,7 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
         setSelectedColumns(newSelect);
         onChangeOptions(newSelect);
       }
-    } else if (nameColum === "selected") {
+    } else if (currentColumn === "selected") {
       const row = selectedColumns.find((option) => {
         return option === nameRow;
       });
@@ -124,7 +129,7 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
   };
 
   const moveLeft = () => {
-    if (middleArray.length > 0) {
+    if (middleArray.length > 0 && currentColumn === "available") {
       const newSelectedColumns = [...selectedColumns, ...middleArray];
       const newAvailableColumns = availableColumns.filter((item) => !middleArray.includes(item));
       setAvailableColumns(newAvailableColumns);
@@ -135,7 +140,7 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
   };
 
   const moveRight = () => {
-    if (middleArray.length > 0) {
+    if (middleArray.length > 0 && currentColumn === "selected") {
       const newAvailableColumns = [...availableColumns, ...middleArray];
       const newSelectedColumns = selectedColumns.filter((item) => !middleArray.includes(item));
       setAvailableColumns(newAvailableColumns);
@@ -146,61 +151,69 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
   };
 
   const moveUp = () => {
-    const copySelectedColumns = selectedColumns;
-    middleArray.map((item) => {
-      const index = copySelectedColumns.indexOf(item);
-      if (index !== 0) {
-        const move = copySelectedColumns.splice(index, 1)[0];
-        copySelectedColumns.splice(index - 1, 0, move);
-        setSelectedColumns(copySelectedColumns);
-        onChangeOptions(copySelectedColumns);
-      }
-    });
-    setMiddleArray([]);
+    if (currentColumn === "selected") {
+      const copySelectedColumns = selectedColumns;
+      middleArray.map((item) => {
+        const index = copySelectedColumns.indexOf(item);
+        if (index !== 0) {
+          const move = copySelectedColumns.splice(index, 1)[0];
+          copySelectedColumns.splice(index - 1, 0, move);
+          setSelectedColumns(copySelectedColumns);
+          onChangeOptions(copySelectedColumns);
+        }
+      });
+      setMiddleArray([]);
+    }
   };
 
   const moveDown = () => {
-    const copySelectedColumns = selectedColumns;
-    middleArray.map((item) => {
-      const index = copySelectedColumns.indexOf(item);
-      if (index !== selectedColumns.length - 1) {
-        const move = copySelectedColumns.splice(index, 1)[0];
-        copySelectedColumns.splice(index + 1, 0, move);
-        setSelectedColumns(copySelectedColumns);
-        onChangeOptions(copySelectedColumns);
-      }
-    });
-    setMiddleArray([]);
+    if (currentColumn === "selected") {
+      const copySelectedColumns = selectedColumns;
+      middleArray.map((item) => {
+        const index = copySelectedColumns.indexOf(item);
+        if (index !== selectedColumns.length - 1) {
+          const move = copySelectedColumns.splice(index, 1)[0];
+          copySelectedColumns.splice(index + 1, 0, move);
+          setSelectedColumns(copySelectedColumns);
+          onChangeOptions(copySelectedColumns);
+        }
+      });
+      setMiddleArray([]);
+    }
   };
 
   const moveTop = () => {
-    const copySelectedColumns = selectedColumns;
-    middleArray.reverse();
+    if (currentColumn === "selected") {
+      const copySelectedColumns = selectedColumns;
+      middleArray.reverse();
 
-    middleArray.map((item) => {
-      const index = copySelectedColumns.indexOf(item);
-      if (index !== 0) {
-        const move = copySelectedColumns.splice(index, 1)[0];
-        copySelectedColumns.unshift(move);
-        setSelectedColumns(copySelectedColumns);
-        onChangeOptions(copySelectedColumns);
-      }
-    });
-    setMiddleArray([]);
+      middleArray.map((item) => {
+        const index = copySelectedColumns.indexOf(item);
+        if (index !== 0) {
+          const move = copySelectedColumns.splice(index, 1)[0];
+          copySelectedColumns.unshift(move);
+          setSelectedColumns(copySelectedColumns);
+          onChangeOptions(copySelectedColumns);
+        }
+      });
+      setMiddleArray([]);
+    }
   };
 
   const moveBottom = () => {
-    const copySelectedColumns = selectedColumns;
-    middleArray.map((item) => {
-      const index = copySelectedColumns.indexOf(item);
-      if (index !== selectedColumns.length - 1) {
-        const move = copySelectedColumns.splice(index, 1)[0];
-        copySelectedColumns.push(move);
-        setSelectedColumns(copySelectedColumns);
-        onChangeOptions(copySelectedColumns);
-      }
-    });
-    setMiddleArray([]);
+    if (currentColumn === "selected") {
+      const copySelectedColumns = selectedColumns;
+      middleArray.map((item) => {
+        const index = copySelectedColumns.indexOf(item);
+        if (index !== selectedColumns.length - 1) {
+          const move = copySelectedColumns.splice(index, 1)[0];
+          copySelectedColumns.push(move);
+          setSelectedColumns(copySelectedColumns);
+          onChangeOptions(copySelectedColumns);
+        }
+      });
+      setMiddleArray([]);
+    }
   };
 
   return (
@@ -221,13 +234,14 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
           <span className="text-gray-rain text-[10.8px] mr-1">Columns</span>
           <div className="flex flex-col">
             <div className="text-gray-rain text-[10.8px] inline-block">Available Columns</div>
-            <Select size={10} className="h-full w-[150px] text-[13.3px] m-0" multiple onChange={(e) => handleMultiSelect(e)}>
+            <Select size={10} className="h-full w-[150px] text-[13.3px] m-0" defaultValue={[]} multiple={true} onChange={(e) => handleMultiSelect(e)}>
               {availableColumns.map((option) => (
                 <option
                   key={option}
                   value={option}
                   className="h-[18px] pb-[1px] pl-0.5 capitalize"
-                  onDoubleClick={() => handleClickItem(option, "available")}
+                  onDoubleClick={() => handleClickItem(option)}
+                  onClick={() => handleCurrentColumn("available")}
                 >
                   {option}
                 </option>
@@ -244,13 +258,14 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
           </div>
           <div className="flex flex-col ml-1">
             <div className="text-gray-rain text-[10.8px] inline-block">Selected Columns</div>
-            <Select size={10} className="h-full w-[150px] text-[13.3px] m-0" multiple onChange={(e) => handleMultiSelect(e)}>
+            <Select size={10} className="h-full w-[150px] text-[13.3px] m-0" multiple={true} defaultValue={[]} onChange={(e) => handleMultiSelect(e)}>
               {selectedColumns.map((option) => (
                 <option
                   key={option}
                   value={option}
                   className="h-[18px] pb-[1px] pl-0.5 capitalize"
-                  onDoubleClick={() => handleClickItem(option, "selected")}
+                  onDoubleClick={() => handleClickItem(option)}
+                  onClick={() => handleCurrentColumn("selected")}
                 >
                   {option}
                 </option>

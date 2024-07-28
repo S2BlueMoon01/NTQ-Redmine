@@ -3,7 +3,7 @@ import "./Select.css";
 import { cn } from "~/utils/utils";
 
 type SelectProps = {
-  defaultValue?: string;
+  defaultValue?: string | string[];
   className?: string;
   children: ReactNode;
   size?: number;
