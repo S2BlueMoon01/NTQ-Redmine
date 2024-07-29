@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { cn } from "~/utils/utils";
 
-const Navbar = ({ idProject }: { idProject?: string | undefined }) => {
+const Navbar = ({ idProject, nameHeader }: { idProject?: string | undefined; nameHeader?: string }) => {
   const [listValueNavbar, setListValueNavbar] = useState([
     {
       name: "Overview",
@@ -63,9 +63,7 @@ const Navbar = ({ idProject }: { idProject?: string | undefined }) => {
   ]);
 
   const handleClickNavbar = (itemName: string) => {
-    console.log("itemName", itemName);
     setListValueNavbar((prevState) => prevState.map((item) => (item.name === itemName ? { ...item, selected: true } : { ...item, selected: false })));
-    console.log("listValueNavbar", listValueNavbar);
   };
 
   return (
@@ -73,15 +71,15 @@ const Navbar = ({ idProject }: { idProject?: string | undefined }) => {
       <ul className="flex gap-[1px] cursor-pointer pl-1 text-[#fff] text-xs font-bold">
         {listValueNavbar.length > 0 &&
           listValueNavbar.map((item) => (
-            <li
+            <Link
               key={item.name}
-              className={cn(`bg-[#507AAA] hover:underline py-1 px-2.5 ${item.selected ? "text-mouse-gray bg-[#eee]" : ""} `)}
+              className={cn(`bg-[#507AAA] hover:underline py-1 px-2.5 ${item.selected ? "text-mouse-gray bg-[#eee]" : ""} hover:underline`)}
               onClick={() => handleClickNavbar(item.name)}
+              rel={item?.isExternal ? "noopener noreferrer" : ""}
+              to={`/projects/${idProject}/${nameHeader}${item.path}`}
             >
-              <Link rel={item?.isExternal ? "noopener noreferrer" : ""} className="hover:underline " to={`/projects/${idProject}${item.path}`}>
-                {item.name}
-              </Link>
-            </li>
+              {item.name}
+            </Link>
           ))}
       </ul>
     </div>

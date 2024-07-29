@@ -45,7 +45,10 @@ const ProjectsPage = () => {
           {listProject.length ? (
             listProject.map((project) => (
               <div key={project.id}>
-                <Link className="text-ocean-blue font-semibold flex gap-1 items-center" to={`/projects/${project?.id}/overview`}>
+                <Link
+                  className="text-ocean-blue font-semibold flex gap-1 items-center hover:underline"
+                  to={`/projects/${project?.id}/${project.name}/overview`}
+                >
                   {project.id === 323 && <img className="w-fit h-fit" src={StarImg} alt="My project" />}
                   {project?.name}
                 </Link>

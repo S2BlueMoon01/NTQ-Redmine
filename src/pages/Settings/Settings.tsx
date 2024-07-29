@@ -1,5 +1,5 @@
-const Activity = () => {
-  return <div>Activity</div>;
+const Settings = () => {
+  return <div>Settings</div>;
 };
 
-export default Activity;
+export default Settings;
