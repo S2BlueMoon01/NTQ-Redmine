@@ -228,12 +228,21 @@ export function getSecondsDifference(isoDateString: string | undefined): string 
 }
 
 /**
- * Retrieves the board sections from local storage.
- * @returns A record object containing board sections, or null if the data is invalid.
+ * Retrieves the board sections from the local storage.
+ *
+ * @returns A record containing the board sections, or null if the data is invalid or not found.
  */
 export const getBoardSectionsFromLS = (): Record<string, Block[]> | null => {
   const data = localStorage.getItem("boardSections");
-  const boardSections = JSON.parse(data || "{}");
+  let boardSections: Record<string, Block[]> | null = null;
+
+  try {
+    boardSections = JSON.parse(data || "{}");
+  } catch (error) {
+    console.error("Error parsing JSON from localStorage:", error);
+    return null;
+  }
+
   const isValid = isValidBoardSections(boardSections);
   return isValid ? boardSections : null;
 };
