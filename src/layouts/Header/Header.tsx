@@ -28,28 +28,29 @@ const listMenuRight = ["WorkTime", "My account", "Sign out"];
 interface PropComponent {
   isShowNavbar?: boolean;
   idProject?: string | undefined;
+  nameHeader?: string;
 }
 
-const Header: React.FC<PropComponent> = ({ isShowNavbar = false, idProject }) => {
+const Header: React.FC<PropComponent> = ({ isShowNavbar = false, idProject, nameHeader = "NTQ Redmine" }) => {
   // const isLogin = localStorage.getItem("accessToken");
-  const [nameHeader, setNameHeader] = useState<string>("");
+  // const [nameHeader, setNameHeader] = useState<string>("");
   const isLogin = true;
 
-  const fetchIdProject = async () => {
-    try {
-      if (idProject && idProject !== "undefined") {
-        const response = await projectsApi.getProjectById({ id: Number(idProject) });
-        setNameHeader(response?.data?.project?.name);
-      } else {
-        setNameHeader("NTQ Redmine");
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  useEffect(() => {
-    fetchIdProject();
-  }, [idProject]);
+  // const fetchIdProject = async () => {
+  //   try {
+  //     if (idProject && idProject !== "undefined") {
+  //       const response = await projectsApi.getProjectById({ id: Number(idProject) });
+  //       setNameHeader(response?.data?.project?.name);
+  //     } else {
+  //       setNameHeader("NTQ Redmine");
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchIdProject();
+  // }, [idProject]);
 
   return (
     <header>
@@ -115,7 +116,7 @@ const Header: React.FC<PropComponent> = ({ isShowNavbar = false, idProject }) =>
         </div>
         {isShowNavbar && (
           <div className="absolute bottom-0 left-0.5">
-            <Navbar idProject={idProject} />
+            <Navbar idProject={idProject} nameHeader={nameHeader} />
           </div>
         )}
       </div>
