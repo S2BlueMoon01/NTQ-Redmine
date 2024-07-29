@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import issuesApi from "~/apis/issue.api";
 import CloseImg from "~/assets/images/close-img.png";
@@ -7,35 +7,36 @@ import { useGlobalStore } from "~/store/globalStore";
 import TableIssues from "~/components/TableIssues";
 import { IssueTable } from "~/types/issue.type";
 import { removeBlockFromBoardSections } from "~/utils/utils";
+import { useQuery } from "@tanstack/react-query";
+import config from "~/constants/config";
 
 const columnNames = ["#", "project", "tracker", "subject"];
+
+const fetchReportedIssues = async (): Promise<IssueTable[]> => {
+  const response = await issuesApi.listIssues();
+  return (
+    response.data?.issues
+      ?.filter((issue) => issue.author?.id === 2805)
+      ?.map((issue) => ({
+        "#": issue.id,
+        subject: issue.subject,
+        tracker: issue.tracker.name,
+        project: issue.project.name,
+      })) || []
+  );
+};
 
 const ReportedIssues: React.FC = () => {
   const { isEditMyPage, removeBlock } = useGlobalStore((state) => ({
     isEditMyPage: state.isEditMyPage,
     removeBlock: state.removeBlock,
   }));
-  const [listReportedIssues, setListReportedIssues] = useState<IssueTable[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
-  const fetchReportedIssues = async () => {
-    try {
-      const response = await issuesApi.listIssues();
-      const reportedIssues = response.data?.issues
-        ?.filter((issue) => issue.author?.id === 2805)
-        ?.map((issue) => ({
-          "#": issue.id,
-          subject: issue.subject,
-          tracker: issue.tracker.name,
-          project: issue.project.name,
-        }));
-      setListReportedIssues(reportedIssues || []);
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-    }
-  };
+  const { data: listReportedIssues = [], isLoading } = useQuery({
+    queryKey: ["reportedIssues"],
+    queryFn: fetchReportedIssues,
+    staleTime: config.staleTime,
+  });
 
   const handleClose = () => {
     const blockId = optionBlockMyPage.find((block) => block.title === "Reported issues")?.id || "";
@@ -44,10 +45,6 @@ const ReportedIssues: React.FC = () => {
     });
     removeBlock(blockId);
   };
-
-  useEffect(() => {
-    fetchReportedIssues();
-  }, []);
 
   return (
     <div>
