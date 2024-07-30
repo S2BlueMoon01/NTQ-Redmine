@@ -14,6 +14,7 @@ const issuesApi = {
     issue_id?: string;
     project_id?: number;
     subproject_id?: number;
+    fixed_version_id?: number | string;
     tracker_id?: number;
     status_id?: string;
     assigned_to_id?: string | number;
