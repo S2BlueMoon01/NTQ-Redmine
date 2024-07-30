@@ -10,10 +10,9 @@ import BlockItem from "./_components/BlockItem";
 import Board from "./_components/Board";
 
 const BoardSectionList = ({ isDragDropEnabled = false }: { isDragDropEnabled?: boolean }) => {
-  const { boardSections, setBoardSections, isEditMyPage } = useGlobalStore((state) => ({
+  const { boardSections, setBoardSections } = useGlobalStore((state) => ({
     boardSections: state.boardSections,
     setBoardSections: state.setBoardSections,
-    isEditMyPage: state.isEditMyPage,
   }));
 
   const handleDragEnd = (result: DropResult) => {
