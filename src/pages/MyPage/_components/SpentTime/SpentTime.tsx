@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import timeEntriesApi from "~/apis/timeEntries.api";
 import CloseImg from "~/assets/images/close-img.png";
@@ -9,8 +9,24 @@ import { useGlobalStore } from "~/store/globalStore";
 import { TimeEntriesTable } from "~/types/timeEntries.type";
 import { removeBlockFromBoardSections } from "~/utils/utils";
 import TableSpentTime from "../TableSpentTime";
+import { useQuery } from "@tanstack/react-query";
+import config from "~/constants/config";
 
 const columnNames = ["Activity", "Project", "Comment", "Hours", "Action"];
+
+const fetchTimeEntries = async (): Promise<TimeEntriesTable[]> => {
+  const response = await timeEntriesApi.listTimeEntries({ user_id: "me" });
+  return (
+    response.data?.time_entries?.map((time_entries) => ({
+      id: time_entries.id,
+      activity: time_entries.activity.name,
+      comment: time_entries.comments,
+      hours: time_entries.hours,
+      project: time_entries.project.name,
+      date: moment(time_entries.created_on).format("MM/DD/YYYY"),
+    })) || []
+  );
+};
 
 const SpentTime: React.FC = () => {
   const { isEditMyPage, removeBlock } = useGlobalStore((state) => ({
@@ -18,8 +34,12 @@ const SpentTime: React.FC = () => {
     removeBlock: state.removeBlock,
   }));
 
-  const [listTimeEntries, setListTimeEntries] = useState<TimeEntriesTable[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: listTimeEntries = [], isLoading } = useQuery({
+    queryKey: ["timeEntries"],
+    queryFn: fetchTimeEntries,
+    staleTime: config.staleTime,
+  });
+
   const totalHours = listTimeEntries.reduce((acc, current) => acc + current.hours, 0).toFixed(2);
 
   const handleClose = () => {
@@ -29,29 +49,6 @@ const SpentTime: React.FC = () => {
     });
     removeBlock(blockId);
   };
-
-  const fetchTimeEntries = async () => {
-    try {
-      const response = await timeEntriesApi.listTimeEntries({ user_id: "me" });
-      const listTime = response.data?.time_entries?.map((time_entries) => ({
-        id: time_entries.id,
-        activity: time_entries.activity.name,
-        comment: time_entries.comments,
-        hours: time_entries.hours,
-        project: time_entries.project.name,
-        date: moment(time_entries.created_on).format("MM/DD/YYYY"),
-      }));
-      setListTimeEntries(listTime);
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchTimeEntries();
-  }, []);
 
   return (
     <div className="flex flex-col gap-3">
