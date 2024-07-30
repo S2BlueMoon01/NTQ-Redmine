@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BeatLoader } from "react-spinners";
 import Dialog from "~/pages/MyPage/_components/Dialog";
 
@@ -11,6 +11,12 @@ interface PropsComponent {
 }
 
 const TableIssues: React.FC<PropsComponent> = ({ className, columnNames = [], dataTable = [], loading = true }) => {
+  const [activeItem, setActiveItem] = useState<number>(1);
+
+  const handleMouseDown = (index: number) => {
+    setActiveItem(index);
+  };
+
   return (
     <table className={`table-auto text-xs text-mouse-gray ${className}`}>
       <thead className="bg-gray-200   ">
@@ -45,7 +51,11 @@ const TableIssues: React.FC<PropsComponent> = ({ className, columnNames = [], da
                   className={columnName === "tracker" ? "text-center whitespace-nowrap px-3" : "hover:underline text-center whitespace-nowrap px-3"}
                 >
                   {row[columnName] !== undefined &&
-                    (typeof id === "number" ? <Dialog issueId={id} content={row[columnName] as string} /> : row[columnName])}
+                    (typeof id === "number" ? (
+                      <Dialog issueId={id} content={row[columnName] as string} handleClick={handleMouseDown} ZIndex={activeItem === id ? 40 : 30} />
+                    ) : (
+                      row[columnName]
+                    ))}
                 </td>
               );
             })}

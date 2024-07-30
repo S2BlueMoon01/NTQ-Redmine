@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Filter from "../MyPage/_components/Filter";
 import { Link } from "react-router-dom";
 import IconAdd from "~/assets/images/icon-add.png";
@@ -6,9 +6,20 @@ import ApplyImg from "~/assets/images/apply-img.png";
 import ReLoadImg from "~/assets/images/reload-img.png";
 import DetailTimeEntries from "./_components/DetailTimeEntries";
 import ReportTimeEntries from "./_components/ReportTimeEntries";
+import Option from "~/components/Option";
 
 const TimeEntry = () => {
   const [tabActive, setTabActive] = useState<boolean>(true);
+  const [columnName, setColumnName] = useState<string[]>(["project", "date", "user", "issues", "activity", "comment", "hours"]);
+  const [midColumnName, setMidColumnName] = useState<string[]>(["project", "date", "user", "issues", "activity", "comment", "hours"]);
+
+  const handleApply = () => {
+    setColumnName(midColumnName);
+  };
+
+  const onChangeOptions = (optionArray: string[]) => {
+    setMidColumnName(optionArray);
+  };
 
   return (
     <div className="flex flex-col gap-3 pt-2">
@@ -22,9 +33,9 @@ const TimeEntry = () => {
       </div>
       <h2 className="text-base text-mouse-gray font-bold">Spent time</h2>
       <Filter />
-      <Filter />
+      <Option onChangeOptions={onChangeOptions} />
       <div className="flex text-xs gap-2 ">
-        <button className="flex gap-1 hover:underline">
+        <button className="flex gap-1 hover:underline" onClick={handleApply}>
           <img src={ApplyImg} alt="apply" /> Apply
         </button>
         <button className="flex gap-1 hover:underline">
@@ -46,7 +57,7 @@ const TimeEntry = () => {
           Report
         </li>
       </ul>
-      {tabActive ? <DetailTimeEntries /> : <ReportTimeEntries />}
+      {tabActive ? <DetailTimeEntries columnNames={columnName} /> : <ReportTimeEntries />}
     </div>
   );
 };

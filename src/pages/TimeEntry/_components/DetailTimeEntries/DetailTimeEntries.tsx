@@ -17,9 +17,13 @@ interface ListDataTable {
   [key: string]: string | number | JSX.Element | undefined;
 }
 
-const columnNames = ["project", "date", "user", "issues", "activity", "comment", "hours"];
+const columnNamesSample = ["project", "date", "user", "issues", "activity", "comment", "hours", "", "Name"];
 
-const DetailTimeEntries = () => {
+interface DetailTimeEntriesProps {
+  columnNames: string[];
+}
+
+const DetailTimeEntries: React.FC<DetailTimeEntriesProps> = ({ columnNames = columnNamesSample }) => {
   const [checkList, setCheckList] = useState<number[]>([]);
   const [isAllChecked, setIsAllChecked] = useState<boolean>(false);
   const [listDataTableTime, setListDataTable] = useState<ListDataTable[]>([]);
@@ -70,7 +74,6 @@ const DetailTimeEntries = () => {
             issues: dataIssuesTable,
           };
         });
-      console.log(listDataTable);
       setListDataTable(listDataTable);
       setIsLoading(false);
     } catch (error) {
