@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ArrowCollapsed from "~/assets/images/arrow_collapsed.png";
 import ArrowExpanded from "~/assets/images/arrow_expanded.png";
 import Button from "~/components/Button";
-import { useGlobalStore } from "~/store/globalStore";
 import { CheckBoxRoadMap } from "~/types/utils.type";
 import { Version } from "~/types/version.type";
 
@@ -13,6 +12,8 @@ interface SideBarProps {
 }
 
 const SideBar: React.FC<SideBarProps> = ({ listVersionOfProject, handleApply }) => {
+  const storedData = localStorage.getItem("isCheckedBoxRoadmap");
+  const storedDataVersion = localStorage.getItem("IsCheckBoxShowVersion");
   const [isCheckBoxShowVersion, setIsCheckBoxShowVersion] = useState<boolean>(false);
   const [isShowComplete, setIsShowComplete] = useState<boolean>(false);
   const [isCheckedBoxRoadmap, setIsCheckedBoxRoadmap] = useState<CheckBoxRoadMap>({
@@ -32,7 +33,16 @@ const SideBar: React.FC<SideBarProps> = ({ listVersionOfProject, handleApply }) 
   const handleClickApply = () => {
     handleApply(isCheckedBoxRoadmap);
     setIsCheckBoxShowVersion(isCheckedBoxRoadmap.showComplete);
+    localStorage.setItem("isCheckedBoxRoadmap", JSON.stringify(isCheckedBoxRoadmap));
+    localStorage.setItem("IsCheckBoxShowVersion", JSON.stringify(isCheckedBoxRoadmap.showComplete));
   };
+
+  useEffect(() => {
+    if (storedData && storedDataVersion) {
+      setIsCheckedBoxRoadmap(JSON.parse(storedData));
+      setIsCheckBoxShowVersion(JSON.parse(storedDataVersion));
+    }
+  }, []);
 
   return (
     <div className="p-8 flex flex-col gap-3 w-3/12 bg-[#eee] pr-3 pb-8">

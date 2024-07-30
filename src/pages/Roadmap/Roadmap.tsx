@@ -5,17 +5,17 @@ import useScrollToTop from "~/hooks/useScrollToTop";
 import ProgressBar from "./_components/ProgressBar";
 import React, { useEffect, useState } from "react";
 import versionsApi from "~/apis/versions.api";
-import { Version } from "~/types/version.type";
 import moment from "moment";
 import { SyncLoader } from "react-spinners";
 import issuesApi from "~/apis/issue.api";
-import { Issue } from "~/types/issue.type";
 import SideBar from "./_components/SideBar";
 import { CheckBoxRoadMap } from "~/types/utils.type";
+import config from "~/constants/config";
+import { useQuery } from "@tanstack/react-query";
+import { Issue } from "~/types/issue.type";
+import Dialog from "../MyPage/_components/Dialog";
 
 const Roadmap = () => {
-  const [listVersionOfProject, setListVersionOfProject] = useState<Version[]>([]);
-  const [listIssuesOfVersion, setListIssuesOfVersion] = useState<Issue[]>([]);
   const [isCheckedBoxRoadmap, setIsCheckedBoxRoadmap] = useState<CheckBoxRoadMap>({
     task: true,
     bug: false,
@@ -23,54 +23,69 @@ const Roadmap = () => {
   });
   const { id } = useParams();
   const currentDate = moment();
+  const [activeItem, setActiveItem] = useState<number>(1);
+
   useScrollToTop();
 
   const fetchIssuesOfVersion = async () => {
-    try {
-      const responseIssues = await issuesApi.listIssues({ project_id: Number(id), fixed_version_id: "*" });
-      if (responseIssues?.data?.issues.length) {
-        setListIssuesOfVersion(responseIssues?.data?.issues);
-      }
-    } catch (e) {
-      console.log(e);
+    const responseIssues = await issuesApi.listIssues({ project_id: Number(id), fixed_version_id: "*" });
+    if (responseIssues?.data?.issues.length) {
+      return responseIssues?.data?.issues;
     }
+    return [];
   };
 
-  const fetchVersionOfProject = async () => {
-    try {
-      const responseVersion = await versionsApi.getAllVersionOfProject({ idProject: Number(id) });
-      const listData =
-        responseVersion.data.versions &&
-        responseVersion.data.versions.map((version) => {
-          const issuesOfVersion = listIssuesOfVersion.filter((issue) => issue?.fixed_version?.id === version.id);
-          const createdDate = moment(version.due_date, "YYYY-MM-DD");
-          const difference = currentDate.diff(createdDate, "days");
-          return {
-            ...version,
-            daysLate: difference,
-            issues: issuesOfVersion,
-          };
-        });
-      setListVersionOfProject(listData);
-    } catch (e) {
-      console.log(e);
-    }
+  const { data: listIssuesOfVersion = [] } = useQuery({
+    queryKey: ["issuesVersion"],
+    queryFn: fetchIssuesOfVersion,
+    staleTime: config.staleTime,
+  });
+
+  const fetchVersionOfProject = async (issues: Issue[]) => {
+    const responseVersion = await versionsApi.getAllVersionOfProject({ idProject: Number(id) });
+    const listData =
+      responseVersion.data.versions &&
+      responseVersion.data.versions.map((version) => {
+        const issuesOfVersion = issues.filter((issue) => issue?.fixed_version?.id === version.id);
+        const createdDate = moment(version.due_date, "YYYY-MM-DD");
+        const difference = currentDate.diff(createdDate, "days");
+        return {
+          ...version,
+          daysLate: difference,
+          issues: issuesOfVersion,
+        };
+      });
+    return listData;
   };
 
-  const handleApply = (data: CheckBoxRoadMap) => {
-    setIsCheckedBoxRoadmap(data);
-  };
-  console.log(isCheckedBoxRoadmap);
-
-  useEffect(() => {
-    fetchIssuesOfVersion();
-  }, []);
+  const { data: listVersionOfProject = [], refetch: refetchVersions } = useQuery({
+    queryKey: ["versionProjects"],
+    queryFn: () => fetchVersionOfProject(listIssuesOfVersion),
+    staleTime: config.staleTime,
+    enabled: false,
+  });
 
   useEffect(() => {
     if (listIssuesOfVersion.length > 0) {
-      fetchVersionOfProject();
+      refetchVersions();
     }
   }, [listIssuesOfVersion]);
+
+  useEffect(() => {
+    const storedData = localStorage.getItem("isCheckedBoxRoadmap");
+    if (storedData) {
+      setIsCheckedBoxRoadmap(JSON.parse(storedData));
+    }
+  }, []);
+
+  const handleApply = (data: CheckBoxRoadMap) => {
+    setIsCheckedBoxRoadmap(data);
+    localStorage.setItem("isCheckedBoxRoadmap", JSON.stringify(data));
+  };
+
+  const handleMouseDown = (index: number) => {
+    setActiveItem(index);
+  };
 
   return (
     <div className="flex min-h-84">
@@ -85,7 +100,7 @@ const Roadmap = () => {
           {listVersionOfProject.length ? (
             listVersionOfProject.map((version) => {
               if (version.status === "closed" && !isCheckedBoxRoadmap.showComplete) {
-                return <></>;
+                return null;
               }
               return (
                 <React.Fragment key={version.id}>
@@ -111,11 +126,16 @@ const Roadmap = () => {
                       version.issues.map((issue) => {
                         const shouldDisplayTask = isCheckedBoxRoadmap.task && issue.tracker.name === "Task";
                         const shouldDisplayBug = isCheckedBoxRoadmap.bug && issue.tracker.name === "Bug";
+                        const content = (
+                          <div className="flex cursor-pointer gap-1 text-xs border border-gray-200 p-1 hover:bg-light-yellow mr-1" onClick={() => {}}>
+                            <p className="text-ocean-blue hover:underline">{`${issue.tracker.name} #${issue.id}:`}</p> {issue.subject}
+                          </div>
+                        );
                         if (shouldDisplayTask || shouldDisplayBug) {
                           return (
-                            <div key={issue.id} className="flex gap-1 text-xs border border-gray-200 p-1 hover:bg-light-yellow mr-1">
-                              <p className="text-ocean-blue hover:underline">{`${issue.tracker.name} #${issue.id}:`}</p> {issue.subject}
-                            </div>
+                            <React.Fragment key={issue.id}>
+                              <Dialog content={content} issueId={issue.id} handleClick={handleMouseDown} ZIndex={activeItem === issue.id ? 40 : 30} />
+                            </React.Fragment>
                           );
                         }
                         return null;

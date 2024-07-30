@@ -1,35 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import projectsApi from "~/apis/projects.api";
 import useScrollToTop from "~/hooks/useScrollToTop";
-import { DataProject } from "~/types/project.type";
 import StarImg from "~/assets/images/star-img.png";
 import WifiImg from "~/assets/images/wifi-img.png";
 import Button from "~/components/Button";
 import { SyncLoader } from "react-spinners";
+import { useQuery } from "@tanstack/react-query";
+import config from "~/constants/config";
 
 const ProjectsPage = () => {
-  const [listProject, setListProject] = useState<DataProject[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
   useScrollToTop();
 
   const fetchProject = async () => {
-    try {
-      const response = await projectsApi.getAllProjects();
-      const listProjects = response?.data?.projects;
-      setListProject(listProjects);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    const response = await projectsApi.getAllProjects();
+    return response?.data?.projects;
   };
 
-  useEffect(() => {
-    setLoading(true);
-    fetchProject();
-  }, []);
+  const { data: listProject = [], isLoading } = useQuery({
+    queryKey: ["projects"],
+    queryFn: fetchProject,
+    staleTime: config.staleTime,
+  });
 
   return (
     <div className="flex min-h-84">
@@ -56,7 +48,7 @@ const ProjectsPage = () => {
               </React.Fragment>
             ))
           ) : (
-            <SyncLoader className="ml-4" loading={loading} color="#169" size={5} />
+            <SyncLoader className="ml-4" loading={isLoading} color="#169" size={5} />
           )}
         </div>
         <div>
