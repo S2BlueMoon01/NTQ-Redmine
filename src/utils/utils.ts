@@ -337,16 +337,23 @@ export const isValidBoardSections = (obj: any): obj is BoardSections => {
   );
 };
 
+/**
+ * Groups an array of time entries by date and calculates the total hours for each date.
+ *
+ * @param entries - An array of time entries.
+ * @returns An array of grouped time entries, where each entry contains the date, an array of entries for that date, and the total hours for that date.
+ */
 export const groupTimeEntriesByDate = (entries: TimeEntriesTable[]): GroupedTimeEntries[] => {
-  const groupedEntries = entries.reduce<{ [key: string]: GroupedTimeEntries }>((acc, entry) => {
+  const groupedEntries: { [key: string]: GroupedTimeEntries } = {};
+
+  entries.forEach((entry) => {
     const date = entry.date;
-    if (!acc[date]) {
-      acc[date] = { date, entries: [], totalHours: 0 };
+    if (!groupedEntries[date]) {
+      groupedEntries[date] = { date, entries: [], totalHours: 0 };
     }
-    acc[date].entries.push(entry);
-    acc[date].totalHours += entry.hours;
-    return acc;
-  }, {});
+    groupedEntries[date].entries.push(entry);
+    groupedEntries[date].totalHours += entry.hours;
+  });
 
   return Object.values(groupedEntries);
 };
