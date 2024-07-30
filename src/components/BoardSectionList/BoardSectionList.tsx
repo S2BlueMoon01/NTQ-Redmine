@@ -10,9 +10,10 @@ import BlockItem from "./_components/BlockItem";
 import Board from "./_components/Board";
 
 const BoardSectionList = ({ isDragDropEnabled = false }: { isDragDropEnabled?: boolean }) => {
-  const { boardSections, setBoardSections } = useGlobalStore((state) => ({
+  const { boardSections, setBoardSections, isEditMyPage } = useGlobalStore((state) => ({
     boardSections: state.boardSections,
     setBoardSections: state.setBoardSections,
+    isEditMyPage: state.isEditMyPage,
   }));
 
   const handleDragEnd = (result: DropResult) => {
@@ -66,7 +67,7 @@ const BoardSectionList = ({ isDragDropEnabled = false }: { isDragDropEnabled?: b
     }
 
     return (
-      <div className="w-full flex flex-col gap-4 p-4 rounded-md shadow-md border-dashed border border-gray-200">
+      <div className="w-full flex flex-col gap-4 rounded-md">
         {blocks.map((block) => (
           <BlockItem key={block.id} block={block} />
         ))}
@@ -78,7 +79,7 @@ const BoardSectionList = ({ isDragDropEnabled = false }: { isDragDropEnabled?: b
     <div className="mx-auto pb-4">
       {isDragDropEnabled ? (
         <DragDropContext onDragEnd={handleDragEnd}>
-          <div className="flex flex-col w-full gap-4">
+          <div className={"flex flex-col w-full gap-4"}>
             <Board boardId="Board-1" blocks={boardSections["Board-1"]} />
             <div className="grid grid-cols-2 gap-4 overflow-hidden">
               <Board boardId="Board-2" blocks={boardSections["Board-2"]} />
