@@ -48,6 +48,12 @@ export interface Issue {
   custom_fields?: CustomField[];
   created_on?: string;
   updated_on?: string;
+  fixed_version?: FixVersion;
+}
+
+interface FixVersion {
+  id: number;
+  name: string;
 }
 
 export interface IssueStatus {

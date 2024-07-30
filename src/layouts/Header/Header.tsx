@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import projectsApi from "~/apis/projects.api";
 import Navbar from "~/pages/Projects/_components/Navbar";
 
 const listMenuLeft = [
@@ -33,24 +31,7 @@ interface PropComponent {
 
 const Header: React.FC<PropComponent> = ({ isShowNavbar = false, idProject, nameHeader = "NTQ Redmine" }) => {
   // const isLogin = localStorage.getItem("accessToken");
-  // const [nameHeader, setNameHeader] = useState<string>("");
   const isLogin = true;
-
-  // const fetchIdProject = async () => {
-  //   try {
-  //     if (idProject && idProject !== "undefined") {
-  //       const response = await projectsApi.getProjectById({ id: Number(idProject) });
-  //       setNameHeader(response?.data?.project?.name);
-  //     } else {
-  //       setNameHeader("NTQ Redmine");
-  //     }
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-  // useEffect(() => {
-  //   fetchIdProject();
-  // }, [idProject]);
 
   return (
     <header>

@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { SyncLoader } from "react-spinners";
 import projectsApi from "~/apis/projects.api";
-import useScrollToTop from "~/hooks/useScrollToTop";
-import { DataProject } from "~/types/project.type";
 import StarImg from "~/assets/images/star-img.png";
 import WifiImg from "~/assets/images/wifi-img.png";
 import Button from "~/components/Button";
-import { SyncLoader } from "react-spinners";
+import useScrollToTop from "~/hooks/useScrollToTop";
+import { DataProject } from "~/types/project.type";
 
 const ProjectsPage = () => {
   const [listProject, setListProject] = useState<DataProject[]>([]);
@@ -44,7 +44,7 @@ const ProjectsPage = () => {
         <div className="flex flex-col gap-1.5 text-sm">
           {listProject.length ? (
             listProject.map((project) => (
-              <div key={project.id}>
+              <React.Fragment key={project.id}>
                 <Link
                   className="text-ocean-blue font-semibold flex gap-1 items-center hover:underline"
                   to={`/projects/${project?.id}/${project.name}/overview`}
@@ -53,7 +53,7 @@ const ProjectsPage = () => {
                   {project?.name}
                 </Link>
                 <p className="text-xs">{project?.description}</p>
-              </div>
+              </React.Fragment>
             ))
           ) : (
             <SyncLoader className="ml-4" loading={loading} color="#169" size={5} />

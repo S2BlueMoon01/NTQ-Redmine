@@ -7,15 +7,15 @@ import projectMembershipsApi from "~/apis/projectMemberships.api";
 import { SyncLoader } from "react-spinners";
 import { useParams } from "react-router-dom";
 
-type Member = {
+interface Member {
   id: number;
   name: string;
   role: string;
-};
+}
 
-type Accumulator = {
+interface Accumulator {
   [role: string]: Member[];
-};
+}
 
 const Overview = () => {
   const [loading, setLoading] = useState<boolean>(false);
