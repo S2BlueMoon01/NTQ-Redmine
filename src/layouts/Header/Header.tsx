@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import projectsApi from "~/apis/projects.api";
 import Navbar from "~/pages/Projects/_components/Navbar";
 
 const listMenuLeft = [

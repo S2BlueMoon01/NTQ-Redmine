@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import ArrowCollapsed from "~/assets/images/arrow_collapsed.png";
 import ArrowExpanded from "~/assets/images/arrow_expanded.png";
 import Button from "~/components/Button";
-import { useGlobalStore } from "~/store/globalStore";
 import { CheckBoxRoadMap } from "~/types/utils.type";
 import { Version } from "~/types/version.type";
 

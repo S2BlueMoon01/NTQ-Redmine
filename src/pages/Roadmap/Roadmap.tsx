@@ -39,18 +39,16 @@ const Roadmap = () => {
   const fetchVersionOfProject = async () => {
     try {
       const responseVersion = await versionsApi.getAllVersionOfProject({ idProject: Number(id) });
-      const listData =
-        responseVersion.data.versions &&
-        responseVersion.data.versions.map((version) => {
-          const issuesOfVersion = listIssuesOfVersion.filter((issue) => issue?.fixed_version?.id === version.id);
-          const createdDate = moment(version.due_date, "YYYY-MM-DD");
-          const difference = currentDate.diff(createdDate, "days");
-          return {
-            ...version,
-            daysLate: difference,
-            issues: issuesOfVersion,
-          };
-        });
+      const listData = responseVersion.data.versions?.map((version) => {
+        const issuesOfVersion = listIssuesOfVersion.filter((issue) => issue?.fixed_version?.id === version.id);
+        const createdDate = moment(version.due_date, "YYYY-MM-DD");
+        const difference = currentDate.diff(createdDate, "days");
+        return {
+          ...version,
+          daysLate: difference,
+          issues: issuesOfVersion,
+        };
+      });
       setListVersionOfProject(listData);
     } catch (e) {
       console.log(e);
@@ -60,7 +58,6 @@ const Roadmap = () => {
   const handleApply = (data: CheckBoxRoadMap) => {
     setIsCheckedBoxRoadmap(data);
   };
-  console.log(isCheckedBoxRoadmap);
 
   useEffect(() => {
     fetchIssuesOfVersion();
@@ -77,7 +74,7 @@ const Roadmap = () => {
       <div className="flex flex-col gap-2.5 bg-white w-9/12 px-3 mt-3 pb-8 border border-solid ">
         <div className="flex justify-between items-center p-1.5">
           <h2 className="text-xl text-mouse-gray font-semibold">Roadmap</h2>
-          <Link className="flex	min-w-20 hover:underline" to="/time_entries/new">
+          <Link className="flex min-w-20 hover:underline" to="/time_entries/new">
             <img className="mr-1 w-fit h-fit" src={IconAdd} alt="Add" /> <p className="text-xs">New version</p>
           </Link>
         </div>
@@ -85,25 +82,23 @@ const Roadmap = () => {
           {listVersionOfProject.length ? (
             listVersionOfProject.map((version) => {
               if (version.status === "closed" && !isCheckedBoxRoadmap.showComplete) {
-                return <></>;
+                return null;
               }
               return (
                 <React.Fragment key={version.id}>
-                  <Link className="flex gap-1	min-w-20 hover:underline items-center" to="" title="ds">
+                  <Link className="flex gap-1 min-w-20 hover:underline items-center" to="" title="ds">
                     <img className="mr-1 w-fit h-fit" src={PackageImg} alt="package" />
                     <p className="text-base text-ocean-blue font-semibold">{version.name}</p>
                   </Link>
                   <p className="text-sm text-gray-700 flex gap-1">
-                    {version.daysLate} days late <p className="text-xs">({version.due_date})</p>
+                    {version.daysLate} days late <span className="text-xs">({version.due_date})</span>
                   </p>
                   <p className="text-xs">{version.description}</p>
                   {version?.issues?.length ? (
                     <div className="w-1/2">
                       <ProgressBar issues={version.issues} />
                     </div>
-                  ) : (
-                    <></>
-                  )}
+                  ) : null}
 
                   <div>
                     <p className="text-xs mb-1">Related issues</p>

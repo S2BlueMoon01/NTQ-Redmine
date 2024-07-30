@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { SyncLoader } from "react-spinners";
 import projectsApi from "~/apis/projects.api";
-import useScrollToTop from "~/hooks/useScrollToTop";
-import { DataProject } from "~/types/project.type";
 import StarImg from "~/assets/images/star-img.png";
 import WifiImg from "~/assets/images/wifi-img.png";
 import Button from "~/components/Button";
-import { SyncLoader } from "react-spinners";
+import useScrollToTop from "~/hooks/useScrollToTop";
+import { DataProject } from "~/types/project.type";
 
 const ProjectsPage = () => {
   const [listProject, setListProject] = useState<DataProject[]>([]);
