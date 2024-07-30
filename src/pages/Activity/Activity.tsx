@@ -214,7 +214,7 @@ const Activity = () => {
     <div className="pt-2.5 flex">
       <div className="bg-[#fff] w-3/4 min-h-[70vh] px-3 pt-2 border-[#bbbbbb] border">
         <div className="text-xl font-semibold pt-0.5 pr-3 text-mouse-gray">Activity</div>
-        <div className="">
+        <>
           <span className="text-gray-rain text-[10.8px] italic inline-block mb-4">{`From ${convertDateFormat(dateStart)} to ${convertDateFormat(dateEnd)}`}</span>
           {isLoading ? (
             <SyncLoader color="#169" size={5} />
@@ -255,7 +255,7 @@ const Activity = () => {
               ))}
             </div>
           )}
-        </div>
+        </>
         <div className="py-4">
           <div className="flex text-xs justify-between">
             <a href="#!" className="link" onClick={handlePrevious}>
