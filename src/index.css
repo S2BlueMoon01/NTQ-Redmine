@@ -18,6 +18,16 @@ html {
   background-color: #eeeeee;
 }
 
+.link {
+  color: #116699;
+  font-size: 13.2px;
+}
+
+.link:hover {
+  color: #c61a1a;
+  text-decoration: underline;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -14,6 +14,8 @@ const timeEntriesApi = {
     spent_on?: number;
     created_on?: string;
     updated_on?: string;
+    from?: string;
+    to?: string;
   }) {
     const params = data;
     return http.get<ListDataResponse<TimeEntries[], "time_entries">>(`${URL_TIME_ENTRIES}.json`, { params });

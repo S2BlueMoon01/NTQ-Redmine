@@ -1,5 +1,301 @@
+import Document from "~/assets/images/ticket.png";
+import SpentTime from "~/assets/images/time.png";
+import Atom from "~/assets/images/wifi-img.png";
+import Edit from "~/assets/images/wiki_edit.png";
+import Button from "~/components/Button";
+import issuesApi from "~/apis/issue.api";
+import wikiApi from "~/apis/wiki.api";
+import timeEntriesApi from "~/apis/timeEntries.api";
+import { SyncLoader } from "react-spinners";
+import { Wiki } from "~/types/wiki.type";
+import { TimeEntries } from "~/types/timeEntries.type";
+import { convertDateFormat } from "~/utils/utils";
+import { useParams } from "react-router-dom";
+
+import { useState, useEffect } from "react";
+import { Issue } from "~/types/issue.type";
+
+type DataGeneral = {
+  title: string;
+  type: string;
+  description?: string;
+  author: {
+    id: number;
+    name: string;
+  };
+  created_on: string;
+};
+
 const Activity = () => {
-  return <div>Activity</div>;
+  const { id } = useParams();
+
+  const [dateEnd, setDateEnd] = useState<string>(new Date().toISOString().split("T")[0]);
+  const [dateStart, setDateStart] = useState<string>(new Date(new Date(dateEnd).setDate(new Date().getDate() - 29)).toISOString().split("T")[0]);
+  const [isDisplayNext, setIsDisplayNext] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [listData, setListData] = useState<Record<string, DataGeneral[]>>({});
+
+  const [activity, setActivity] = useState([
+    { name: "issues", label: "Issues", checked: true },
+    { name: "changesets", label: "Changesets", checked: true },
+    { name: "documents", label: "Documents", checked: true },
+    { name: "files", label: "Files", checked: true },
+    { name: "wikiEdits", label: "Wiki edits", checked: true },
+    { name: "spentTime", label: "Spent time", checked: false },
+  ]);
+
+  const handlePrevious = () => {
+    const newDateStart = new Date(dateStart);
+    newDateStart.setDate(newDateStart.getDate() - 30);
+    setDateStart(newDateStart.toISOString().split("T")[0]);
+    const newDateEnd = new Date(dateEnd);
+    if (newDateEnd < new Date()) {
+      setIsDisplayNext(true);
+    }
+    newDateEnd.setDate(newDateEnd.getDate() - 30);
+    setDateEnd(newDateEnd.toISOString().split("T")[0]);
+  };
+
+  const handleNext = () => {
+    const newDateStart = new Date(dateStart);
+    newDateStart.setDate(newDateStart.getDate() + 30);
+    setDateStart(newDateStart.toISOString().split("T")[0]);
+    const newDateEnd = new Date(dateEnd);
+    newDateEnd.setDate(newDateEnd.getDate() + 30);
+    const today = new Date();
+    if (today <= newDateEnd) {
+      setIsDisplayNext(false);
+      setDateEnd(today.toISOString().split("T")[0]);
+    } else {
+      setDateEnd(newDateEnd.toISOString().split("T")[0]);
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      let arrayItem: DataGeneral[] = [];
+      //Issue
+      const responseIssue = await issuesApi.listIssues({ project_id: Number(id), created_on: `><${dateStart}|${dateEnd}` });
+      const issueConvert = convertListIssue(responseIssue.data.issues);
+      if (activity[0].checked) {
+        arrayItem = [...arrayItem, ...issueConvert];
+      }
+
+      //Wiki
+      const responseWikis = await wikiApi.getAllWikiProject({ project_id: Number(id) });
+      const wikiData = await wikiApi.getWikiProject({ project_id: Number(id), name: responseWikis.data.wiki_pages[0].title });
+      const wikiDataConvert = convertListWiki([wikiData.data.wiki_page]);
+      if (activity[4].checked) {
+        arrayItem = [...arrayItem, ...wikiDataConvert];
+      }
+      //TimeEntries
+      const responseTimeEntries = await timeEntriesApi.listTimeEntries({ project_id: Number(id), from: dateStart, to: dateEnd });
+      const timeEntriesConvert = convertListTimeEntries(responseTimeEntries.data.time_entries, responseIssue.data.issues);
+      if (activity[5].checked) {
+        arrayItem = [...arrayItem, ...timeEntriesConvert];
+      }
+
+      const listData = arrangeListByDate(arrayItem);
+      setListData(listData);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+    }
+  };
+
+  const handleIconOfData = (type: string) => {
+    switch (type) {
+      case "spentTime":
+        return SpentTime;
+      case "issue":
+        return Document;
+      case "wiki":
+        return Edit;
+    }
+  };
+
+  const handleFormatTime = (time: string): string => {
+    const date = new Date(time);
+    const options: Intl.DateTimeFormatOptions = {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+      timeZone: "Asia/Ho_Chi_Minh",
+    };
+    const timeString = date.toLocaleString("en-US", options);
+    return timeString;
+  };
+
+  const handleFormatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      timeZone: "Asia/Ho_Chi_Minh",
+    };
+    return date.toLocaleDateString("en-US", options);
+  };
+
+  const handleChange = (index: number) => {
+    const newActivity = [...activity];
+    newActivity[index].checked = !newActivity[index].checked;
+    setActivity(newActivity);
+  };
+
+  const convertListIssue = (listItem: Issue[]): DataGeneral[] => {
+    const newList = listItem.map((item) => ({
+      title: `${item.tracker.name} #${item.id} (${item.status.name}): ${item.subject}`,
+      type: "issue",
+      description: item.description,
+      author: {
+        id: item.author.id,
+        name: item.author.name,
+      },
+      created_on: item.created_on,
+    }));
+
+    return newList;
+  };
+
+  const convertListWiki = (listItem: Wiki[]): DataGeneral[] => {
+    const newList = listItem.map((item) => ({
+      title: `${item.title} edit: ${item.title} (#${item.version})`,
+      type: "wiki",
+      description: "",
+      author: {
+        id: +item.author.id,
+        name: item.author.name,
+      },
+      created_on: item.created_on,
+    }));
+
+    return newList;
+  };
+
+  const convertListTimeEntries = (listItem: TimeEntries[], anotherListItem: Issue[]): DataGeneral[] => {
+    const newList = listItem.map((item) => {
+      const issues = anotherListItem.find((issue: Issue) => issue?.id === item?.issue?.id);
+      return {
+        title: issues
+          ? `${item.hours} hours (${issues?.tracker.name} #${item.issue.id}(${issues?.status.name}): ${issues?.subject} )`
+          : `${item.hours} hours (Project: ${item.project.name}) `,
+        type: "spentTime",
+        description: item.comments,
+        author: {
+          id: +item.user.id,
+          name: item.user.name,
+        },
+        created_on: item.created_on,
+      };
+    });
+
+    return newList;
+  };
+
+  const arrangeListByDate = (listItem: DataGeneral[]): Record<string, DataGeneral[]> => {
+    const newList = listItem.reduce((acc: Record<string, DataGeneral[]>, item) => {
+      const date = handleFormatDate(item.created_on);
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(item);
+      return acc;
+    }, {});
+    return newList;
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [dateEnd, dateStart]);
+
+  return (
+    <div className="pt-2.5 flex">
+      <div className="bg-[#fff] w-3/4 min-h-[70vh] px-3 pt-2 border-[#bbbbbb] border">
+        <div className="text-xl font-semibold pt-0.5 pr-3 text-mouse-gray">Activity</div>
+        <>
+          <span className="text-gray-rain text-[10.8px] italic inline-block mb-4">{`From ${convertDateFormat(dateStart)} to ${convertDateFormat(dateEnd)}`}</span>
+          {isLoading ? (
+            <SyncLoader color="#169" size={5} />
+          ) : (
+            <div className="">
+              {Object.keys(listData).map((date) => (
+                <div key={date}>
+                  <h3 className="text-mouse-gray text-base font-bold mb-3">{date}</h3>
+                  {listData[date].map((issue: any) => (
+                    <div className="flex gap-3 ml-6 mb-3" key={issue.title}>
+                      <div className="flex gap-1">
+                        <img src={handleIconOfData(issue.type)} alt="" className="w-4 h-4" />
+                        <img
+                          src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
+                          alt=""
+                          className="object-cover w-[30px] h-[30px] border p-[2px] border-[#d5d5d5]"
+                        />
+                      </div>
+                      <div className="">
+                        <div className="flex items-center leading-4 gap-1">
+                          <span className="text-[9.6px] text-[#777777]">{handleFormatTime(issue.created_on)}</span>
+                          <span className="">
+                            <a href="" className="link text-xs">
+                              {issue.title}
+                            </a>
+                          </span>
+                        </div>
+                        <div className="text-[10.8px] text-[#808080] italic leading-3">{issue?.description}</div>
+                        <div className="leading-3">
+                          <a href="" className="link text-[10.8px]">
+                            {issue.author.name}
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+        <div className="py-4">
+          <div className="flex text-xs justify-between">
+            <a href="#!" className="link" onClick={handlePrevious}>
+              « Previous
+            </a>
+            {isDisplayNext && (
+              <a href="#!" className="link" onClick={handleNext}>
+                Next »
+              </a>
+            )}
+          </div>
+          <div className="flex items-center justify-end pt-2 text-[10.8px] leading-3 gap-1 text-[#666666]">
+            <span>Also available in:</span>
+            <img src={Atom} alt="" />
+            <a href="" className="link  text-[10.8px]">
+              Atom
+            </a>
+          </div>
+        </div>
+      </div>
+      <div className="pt-4 pl-2">
+        <h3 className="text-[#666] text-sm font-bold">Activity</h3>
+
+        <div className="flex flex-col my-2 pl-3">
+          {activity.map((item, index) => (
+            <label key={item.name} className="flex items-center gap-1">
+              <input type="checkbox" checked={item.checked} onChange={() => handleChange(index)} />
+              <a href="" className="link">
+                {item.label}
+              </a>
+            </label>
+          ))}
+        </div>
+
+        <Button className="" onClick={fetchData}>
+          Apply
+        </Button>
+      </div>
+    </div>
+  );
 };
 
 export default Activity;

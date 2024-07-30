@@ -34,6 +34,14 @@ const projectsApi = {
   deleteProject(data: { id: number }) {
     return http.delete(`${URL_PROJECTS}/${data.id}.json`);
   },
+
+  getListWikiProject(data: { id: number }) {
+    return http.delete(`${URL_PROJECTS}/${data.id}/wiki/index.json`);
+  },
+
+  getWikiProject(data: { id: number; name: string }) {
+    return http.delete(`${URL_PROJECTS}/${data.id}/wiki/${name}.json`);
+  },
 };
 
 export default projectsApi;

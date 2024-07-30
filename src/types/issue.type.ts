@@ -46,7 +46,7 @@ export interface Issue {
   estimated_hours?: number;
   spent_hours?: number;
   custom_fields?: CustomField[];
-  created_on?: string;
+  created_on: string;
   updated_on?: string;
   fixed_version?: FixVersion;
 }
