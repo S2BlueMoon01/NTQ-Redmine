@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import { SyncLoader } from "react-spinners";
 import projectsApi from "~/apis/projects.api";
-import useScrollToTop from "~/hooks/useScrollToTop";
 import StarImg from "~/assets/images/star-img.png";
 import WifiImg from "~/assets/images/wifi-img.png";
 import Button from "~/components/Button";
-import { useQuery } from "@tanstack/react-query";
 import config from "~/constants/config";
+import useScrollToTop from "~/hooks/useScrollToTop";
 
 const ProjectsPage = () => {
   useScrollToTop();
