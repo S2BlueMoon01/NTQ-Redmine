@@ -41,9 +41,9 @@ export interface Issue {
   subject?: string;
   description: string;
   start_date?: string;
-  done_ratio?: number;
+  done_ratio: number;
   due_date?: string;
-  estimated_hours?: number;
+  estimated_hours: number;
   spent_hours?: number;
   custom_fields?: CustomField[];
   created_on: string;

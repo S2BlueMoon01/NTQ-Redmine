@@ -1,39 +1,29 @@
+import { useQuery } from "@tanstack/react-query";
 import moment from "moment";
-import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { SyncLoader } from "react-spinners";
 import projectsApi from "~/apis/projects.api";
 import LatestProject from "~/assets/images/latest-projects.png";
+import config from "~/constants/config";
 import useScrollToTop from "~/hooks/useScrollToTop";
 import { DataProject } from "~/types/project.type";
 
 const HomePage = () => {
-  const [listProject, setListProject] = useState<DataProject[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
   useScrollToTop();
 
   const fetchProject = async () => {
-    try {
-      const response = await projectsApi.getAllProjects();
-      const listProjects = response?.data?.projects?.map((project: DataProject) => ({
-        ...project,
-        created_on: moment(project.created_on).format("MM/DD/YYYY hh:mm A"),
-      }));
-
-      setListProject(listProjects || []);
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-      setLoading(false);
-    }
+    const response = await projectsApi.getAllProjects();
+    return response?.data?.projects?.map((project: DataProject) => ({
+      ...project,
+      created_on: moment(project.created_on).format("MM/DD/YYYY hh:mm A"),
+    }));
   };
-
-  useEffect(() => {
-    setLoading(true);
-    fetchProject();
-  }, []);
+  const { data: listProject = [], isLoading } = useQuery({
+    queryKey: ["projects"],
+    queryFn: fetchProject,
+    staleTime: config.staleTime,
+  });
 
   return (
     <>
@@ -53,7 +43,7 @@ const HomePage = () => {
             </div>
             <div className="pl-10 my-3">
               <ul className="text-mouse-gray text-xs list-disc">
-                <SyncLoader loading={loading} color="#169" size={5} />
+                <SyncLoader loading={isLoading} color="#169" size={5} />
                 {listProject.map((item) => (
                   <li key={item.id}>
                     <Link className="text-ocean-blue hover:underline" to={`/projects/${item.identifier}`}>

@@ -10,7 +10,7 @@ import { convertDateFormat, getSecondsDifference } from "~/utils/utils";
 
 interface DialogProps {
   issueId: number;
-  content?: string;
+  content?: string | JSX.Element;
   ZIndex?: number;
   handleClick: (index: number) => void;
 }
@@ -18,7 +18,6 @@ interface DialogProps {
 const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleClick }) => {
   const [isVisible, setIsVisible] = useState(false);
   const itemRef = useRef<HTMLDivElement>(null);
-
   const [issue, setIssue] = useState<Issue | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -31,9 +30,10 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
       setLoading(true);
       const response = await issuesApi.getIssueById({ id: issueId });
       setIssue(response.data.issue);
-      setLoading(false);
       setIsVisible(true);
     } catch (error) {
+      console.log(error);
+    } finally {
       setLoading(false);
     }
   };

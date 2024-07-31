@@ -13,16 +13,14 @@ import config from "~/constants/config";
 const columnNames = ["#", "project", "tracker", "subject"];
 
 const fetchReportedIssues = async (): Promise<IssueTable[]> => {
-  const response = await issuesApi.listIssues();
+  const response = await issuesApi.listIssues({ author_id: "me" });
   return (
-    response.data?.issues
-      ?.filter((issue) => issue.author?.id === 2805)
-      ?.map((issue) => ({
-        "#": issue.id,
-        subject: issue.subject,
-        tracker: issue.tracker.name,
-        project: issue.project.name,
-      })) || []
+    response.data?.issues?.map((issue) => ({
+      "#": issue.id,
+      subject: issue.subject,
+      tracker: issue.tracker.name,
+      project: issue.project.name,
+    })) || []
   );
 };
 

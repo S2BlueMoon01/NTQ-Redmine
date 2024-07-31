@@ -5,19 +5,23 @@ type ProgressProps = {
 };
 
 const ProgressBar: React.FC<ProgressProps> = ({ issues }) => {
-  const totalIssues = issues.length;
   const closedIssues = issues.filter((issue) => issue.status.name === "Closed").length;
   const newIssues = issues.filter((issue) => issue.status.name === "New").length;
-  const percentageClosed = (closedIssues / totalIssues) * 100;
-  const percentageOpen = (newIssues / totalIssues) * 100;
+  const totalHours = issues.reduce((acc, issue) => {
+    return acc + issue.estimated_hours;
+  }, 0);
+  const hours = issues.reduce((acc, issue) => {
+    return acc + issue.estimated_hours * issue.done_ratio;
+  }, 0);
+  const percentageClosed = hours / totalHours;
+
   return (
     <>
       <div className="flex items-center">
         <div className="w-full bg-gray-200 h-6 flex items-center ">
-          <div className="bg-green-200 h-6 " style={{ width: `${percentageOpen}%` }} />
-          <div className="bg-gray-200 h-6" style={{ width: `${percentageClosed}%` }} />
+          <div className="bg-green-200 h-6 " style={{ width: `${percentageClosed}%` }} />
         </div>
-        <span className=" left-2/4 ml-2 text-sm text-gray-600">{`${(percentageClosed + percentageOpen).toFixed(0)}%`}</span>
+        <span className=" left-2/4 ml-2 text-xs text-gray-600">{`${percentageClosed.toFixed(0)}%`}</span>
       </div>
 
       <div className="text-xs mt-2">
