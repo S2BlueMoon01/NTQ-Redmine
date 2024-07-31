@@ -18,6 +18,7 @@ import DocumentsPage from "~/pages/Documents";
 import Wiki from "~/pages/Wiki";
 import FilesPage from "~/pages/Files";
 import Settings from "~/pages/Settings";
+import NewVersion from "~/pages/Roadmap/_components/NewVersion";
 
 const publicRoutes = [
   { path: "/login", component: LoginPage, layout: DefaultLayout },
@@ -33,6 +34,7 @@ const privateRoutes = [
   { path: "/projects/:id/:name/overview", component: OverView, layout: DefaultLayout },
   { path: "/projects/:id/:name/activity", component: Activity, layout: DefaultLayout },
   { path: "/projects/:id/:name/roadmap", component: Roadmap, layout: DefaultLayout },
+  { path: "/projects/:id/:name/roadmap/newVersion", component: NewVersion, layout: DefaultLayout },
   { path: "/projects/:id/:name/issues", component: Issues, layout: DefaultLayout },
   { path: "/projects/:id/:name/issues/new", component: IssuesCreate, layout: DefaultLayout },
   { path: "/projects/:id/:name/issues/gantt", component: Gantt, layout: DefaultLayout },
