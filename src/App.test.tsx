@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, waitFor } from "@testing-library/react";
+// import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import App from "./App";
 

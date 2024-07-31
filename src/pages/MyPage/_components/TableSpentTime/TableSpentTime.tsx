@@ -59,8 +59,8 @@ const TableSpentTime: React.FC<PropsComponent> = ({ className, columnNames = [],
                   <td className={styleTd}>{entry.hours.toFixed(2)}</td>
                   <td className={styleTd}>
                     <div className="flex text-center text-sm justify-center">
-                      <img className="mr-1 cursor-pointer" src={EditImg} onClick={() => alert("Edit")} />
-                      <img className="mr-1 cursor-pointer" src={DeleteImg} onClick={() => alert("Delete")} />
+                      <img alt="edit" className="mr-1 cursor-pointer" src={EditImg} onClick={() => alert("Edit")} />
+                      <img alt="delete" className="mr-1 cursor-pointer" src={DeleteImg} onClick={() => alert("Delete")} />
                     </div>
                   </td>
                 </tr>

@@ -14,7 +14,7 @@ const LostPasswordPage = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, _setErrorMessage] = useState("");
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     console.log(data);
