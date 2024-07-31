@@ -3,6 +3,9 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        trebuchet: ["Trebuchet MS", "Verdana", "sans-serif"],
+      },
       colors: {
         "gray-rain": "#484848",
         "ocean-blue": "#169",

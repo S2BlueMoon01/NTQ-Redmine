@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import IconAdd from "~/assets/images/icon-add.png";
 import IconBack from "~/assets/images/icon-back.png";
 import BoardSectionList from "~/components/BoardSectionList";
@@ -45,8 +46,12 @@ const MyPage = () => {
 
   return (
     <>
-      <div className="p-2.5 pt-1 flex items-center justify-between">
-        <h2 className="text-xl font-semibold pt-0.5 pr-3 mb-3 text-mouse-gray">My page</h2>
+      <Helmet>
+        <title>My page - NTQ Redmine</title>
+        <meta name="description" content="Redmine" />
+      </Helmet>
+      <div className="pt-1 flex items-center justify-between">
+        <h2 className="text-xl font-bold pt-0.5 pr-3 mb-3 text-mouse-gray ">My page</h2>
         {isEditMyPage ? (
           <div className="text-xs text-mouse-gray flex items-center">
             <label htmlFor="blockSelect">My page block:</label>
