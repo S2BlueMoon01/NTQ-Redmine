@@ -11,9 +11,9 @@ import { Wiki } from "~/types/wiki.type";
 import { TimeEntries } from "~/types/timeEntries.type";
 import { convertDateFormat } from "~/utils/utils";
 import { useParams } from "react-router-dom";
-
 import { useState, useEffect } from "react";
 import { Issue } from "~/types/issue.type";
+import { Helmet } from "react-helmet-async";
 
 type DataGeneral = {
   title: string;
@@ -27,7 +27,7 @@ type DataGeneral = {
 };
 
 const Activity = () => {
-  const { id } = useParams();
+  const { id, name } = useParams();
 
   const [dateEnd, setDateEnd] = useState<string>(new Date().toISOString().split("T")[0]);
   const [dateStart, setDateStart] = useState<string>(new Date(new Date(dateEnd).setDate(new Date().getDate() - 29)).toISOString().split("T")[0]);
@@ -211,90 +211,96 @@ const Activity = () => {
   }, [dateEnd, dateStart]);
 
   return (
-    <div className="pt-2.5 flex">
-      <div className="bg-[#fff] w-3/4 min-h-[70vh] px-3 pt-2 border-[#bbbbbb] border">
-        <div className="text-xl font-semibold pt-0.5 pr-3 text-mouse-gray">Activity</div>
-        <>
-          <span className="text-gray-rain text-[10.8px] italic inline-block mb-4">{`From ${convertDateFormat(dateStart)} to ${convertDateFormat(dateEnd)}`}</span>
-          {isLoading ? (
-            <SyncLoader color="#169" size={5} />
-          ) : (
-            <div className="">
-              {Object.keys(listData).map((date) => (
-                <div key={date}>
-                  <h3 className="text-mouse-gray text-base font-bold mb-3">{date}</h3>
-                  {listData[date].map((issue: any) => (
-                    <div className="flex gap-3 ml-6 mb-3" key={issue.title}>
-                      <div className="flex gap-1">
-                        <img src={handleIconOfData(issue.type)} alt="" className="w-4 h-4" />
-                        <img
-                          src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
-                          alt=""
-                          className="object-cover w-[30px] h-[30px] border p-[2px] border-[#d5d5d5]"
-                        />
-                      </div>
-                      <div className="">
-                        <div className="flex items-center leading-4 gap-1">
-                          <span className="text-[9.6px] text-[#777777]">{handleFormatTime(issue.created_on)}</span>
-                          <span className="">
-                            <a href="" className="link text-xs">
-                              {issue.title}
+    <>
+      <Helmet>
+        <title>{`Activity - ${name} - NTQ Redmine`}</title>
+        <meta name="description" content="Redmine" />
+      </Helmet>
+      <div className="pt-2.5 flex">
+        <div className="bg-[#fff] w-3/4 min-h-[70vh] px-3 pt-2 border-[#bbbbbb] border">
+          <div className="text-xl font-semibold pt-0.5 pr-3 text-mouse-gray">Activity</div>
+          <>
+            <span className="text-gray-rain text-[10.8px] italic inline-block mb-4">{`From ${convertDateFormat(dateStart)} to ${convertDateFormat(dateEnd)}`}</span>
+            {isLoading ? (
+              <SyncLoader color="#169" size={5} />
+            ) : (
+              <div className="">
+                {Object.keys(listData).map((date) => (
+                  <div key={date}>
+                    <h3 className="text-mouse-gray text-base font-bold mb-3">{date}</h3>
+                    {listData[date].map((issue: any) => (
+                      <div className="flex gap-3 ml-6 mb-3" key={issue.title}>
+                        <div className="flex gap-1">
+                          <img src={handleIconOfData(issue.type)} alt="" className="w-4 h-4" />
+                          <img
+                            src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
+                            alt=""
+                            className="object-cover w-[30px] h-[30px] border p-[2px] border-[#d5d5d5]"
+                          />
+                        </div>
+                        <div className="">
+                          <div className="flex items-center leading-4 gap-1">
+                            <span className="text-[9.6px] text-[#777777]">{handleFormatTime(issue.created_on)}</span>
+                            <span className="">
+                              <a href="" className="link text-xs">
+                                {issue.title}
+                              </a>
+                            </span>
+                          </div>
+                          <div className="text-[10.8px] text-[#808080] italic leading-3">{issue?.description}</div>
+                          <div className="leading-3">
+                            <a href="" className="link text-[10.8px]">
+                              {issue.author.name}
                             </a>
-                          </span>
-                        </div>
-                        <div className="text-[10.8px] text-[#808080] italic leading-3">{issue?.description}</div>
-                        <div className="leading-3">
-                          <a href="" className="link text-[10.8px]">
-                            {issue.author.name}
-                          </a>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          )}
-        </>
-        <div className="py-4">
-          <div className="flex text-xs justify-between">
-            <a href="#!" className="link" onClick={handlePrevious}>
-              « Previous
-            </a>
-            {isDisplayNext && (
-              <a href="#!" className="link" onClick={handleNext}>
-                Next »
-              </a>
+                    ))}
+                  </div>
+                ))}
+              </div>
             )}
-          </div>
-          <div className="flex items-center justify-end pt-2 text-[10.8px] leading-3 gap-1 text-[#666666]">
-            <span>Also available in:</span>
-            <img src={Atom} alt="" />
-            <a href="" className="link  text-[10.8px]">
-              Atom
-            </a>
-          </div>
-        </div>
-      </div>
-      <div className="pt-4 pl-2">
-        <h3 className="text-[#666] text-sm font-bold">Activity</h3>
-
-        <div className="flex flex-col my-2 pl-3">
-          {activity.map((item, index) => (
-            <label key={item.name} className="flex items-center gap-1">
-              <input type="checkbox" checked={item.checked} onChange={() => handleChange(index)} />
-              <a href="" className="link">
-                {item.label}
+          </>
+          <div className="py-4">
+            <div className="flex text-xs justify-between">
+              <a href="#!" className="link" onClick={handlePrevious}>
+                « Previous
               </a>
-            </label>
-          ))}
+              {isDisplayNext && (
+                <a href="#!" className="link" onClick={handleNext}>
+                  Next »
+                </a>
+              )}
+            </div>
+            <div className="flex items-center justify-end pt-2 text-[10.8px] leading-3 gap-1 text-[#666666]">
+              <span>Also available in:</span>
+              <img src={Atom} alt="" />
+              <a href="" className="link  text-[10.8px]">
+                Atom
+              </a>
+            </div>
+          </div>
         </div>
+        <div className="pt-4 pl-2">
+          <h3 className="text-[#666] text-sm font-bold">Activity</h3>
 
-        <Button className="" onClick={fetchData}>
-          Apply
-        </Button>
+          <div className="flex flex-col my-2 pl-3">
+            {activity.map((item, index) => (
+              <label key={item.name} className="flex items-center gap-1">
+                <input type="checkbox" checked={item.checked} onChange={() => handleChange(index)} />
+                <a href="" className="link">
+                  {item.label}
+                </a>
+              </label>
+            ))}
+          </div>
+
+          <Button className="" onClick={fetchData}>
+            Apply
+          </Button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
