@@ -1,16 +1,16 @@
+import { useQuery } from "@tanstack/react-query";
 import moment from "moment";
 import React from "react";
 import { Link } from "react-router-dom";
 import timeEntriesApi from "~/apis/timeEntries.api";
 import CloseImg from "~/assets/images/close-img.png";
 import IconAdd from "~/assets/images/icon-add.png";
+import config from "~/constants/config";
 import { optionBlockMyPage } from "~/constants/constants";
 import { useGlobalStore } from "~/store/globalStore";
 import { TimeEntriesTable } from "~/types/timeEntries.type";
 import { removeBlockFromBoardSections } from "~/utils/utils";
 import TableSpentTime from "../TableSpentTime";
-import { useQuery } from "@tanstack/react-query";
-import config from "~/constants/config";
 
 const columnNames = ["Activity", "Project", "Comment", "Hours", "Action"];
 

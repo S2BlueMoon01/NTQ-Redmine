@@ -1,3 +1,5 @@
+import Documents from "~/pages/Documents";
+import LatestNews from "~/pages/LatestNews";
 import Calendar from "~/pages/MyPage/_components/Calendar";
 import IssuesAssigned from "~/pages/MyPage/_components/IssuesAssigned";
 import ReportedIssues from "~/pages/MyPage/_components/ReportedIssues";
@@ -23,9 +25,9 @@ const BlockItem = ({ block }: BlockItemProps) => {
       case "Spent time":
         return <SpentTime />;
       case "Latest news":
-        return <p>Latest news</p>;
+        return <LatestNews />;
       case "Documents":
-        return <p>Documents</p>;
+        return <Documents />;
       default:
         return <div>{block.title}</div>;
     }

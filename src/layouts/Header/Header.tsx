@@ -41,9 +41,11 @@ const Header: React.FC<PropComponent> = ({ isShowNavbar = false, idProject, name
             <ul className="flex gap-3 cursor-pointer pl-1">
               {listMenuLeft.length > 0 &&
                 listMenuLeft.map((item) => (
-                  <Link rel={item?.isExternal ? "noopener noreferrer" : ""} className="hover:underline" key={item.name} to={item.path}>
-                    {item.name}
-                  </Link>
+                  <li key={item.name}>
+                    <Link rel={item?.isExternal ? "noopener noreferrer" : ""} className="hover:underline" to={item.path}>
+                      {item.name}
+                    </Link>
+                  </li>
                 ))}
             </ul>
 
