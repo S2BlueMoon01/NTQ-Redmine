@@ -30,7 +30,7 @@ const BlockItem = ({ block }: BlockItemProps) => {
         return <div>{block.title}</div>;
     }
   };
-  return <div className="bg-white p-4 rounded shadow select-none">{renderBlock()}</div>;
+  return <div className="bg-white rounded select-none">{renderBlock()}</div>;
 };
 
 export default BlockItem;

@@ -76,7 +76,7 @@ export function getWeekNumber(d: Date): number[] {
   d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
   d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
   const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-  const weekNo = Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+  const weekNo = Math.ceil(((d.getTime() - yearStart.getTime()) / (60 * 60 * 24 * 1000) + 1) / 7);
   return [d.getUTCFullYear(), weekNo];
 }
 
@@ -127,20 +127,28 @@ export function checkDateStatus({ startDate, dueDate, day }: { startDate: string
  * @param weekNumber - The week number.
  * @returns An array of strings representing the dates in the format "YYYY-MM-DD".
  */
-export function getWeekDates(weekNumber: number): string[] {
+export function getWeekDates(weekNumber: number, year: number = new Date().getFullYear()): string[] {
   const dates: string[] = [];
-  const year = new Date().getFullYear();
 
+  // Determine the first day of the year and the first Monday of the year
   const firstDayOfYear = new Date(year, 0, 1);
-  const firstMondayOfYear = firstDayOfYear;
+  let firstMondayOfYear = new Date(firstDayOfYear);
 
+  // Adjust to the first Monday of the year
   while (firstMondayOfYear.getDay() !== 1) {
     firstMondayOfYear.setDate(firstMondayOfYear.getDate() + 1);
   }
 
+  // Calculate the start date of the week based on the week number
   const startOfWeek = new Date(firstMondayOfYear);
   startOfWeek.setDate(firstMondayOfYear.getDate() + (weekNumber - 1) * 7);
 
+  // Ensure that the week number is not 0 and does not exceed the number of weeks in the year
+  if (weekNumber <= 0) {
+    return [];
+  }
+
+  // Generate an array of dates for the week
   for (let i = 0; i < 7; i++) {
     const currentDate = new Date(startOfWeek);
     currentDate.setDate(startOfWeek.getDate() + i);
@@ -192,6 +200,12 @@ export function getDay(): string {
  */
 export function convertDateFormat(dateString: string): string {
   const [year, month, day] = dateString.split("-");
+
+  // Validate input format
+  if (!year || !month || !day || year.length !== 4 || month.length !== 2 || day.length !== 2) {
+    return "Invalid Date";
+  }
+
   return `${month}/${day}/${year}`;
 }
 
@@ -201,31 +215,55 @@ export function convertDateFormat(dateString: string): string {
  * @returns A string representing the time difference in a human-readable format.
  */
 export function getSecondsDifference(isoDateString: string | undefined): string {
-  let timeAgo = "";
-
   if (typeof isoDateString === "undefined") {
-    return timeAgo;
-  } else {
-    const inputDate = new Date(isoDateString);
-    const currentDate = new Date();
-    const differenceInMilliseconds = currentDate.getTime() - inputDate.getTime();
-    const differenceInSeconds = Math.floor(differenceInMilliseconds / 1000);
-    if (differenceInSeconds < 60) {
-      timeAgo = "less than a minute";
-    } else if (60 < differenceInSeconds && differenceInSeconds < 3600) {
-      timeAgo = `${Math.round(differenceInSeconds / 60)} minutes`;
-    } else if (3600 < differenceInSeconds && differenceInSeconds < 86400) {
-      timeAgo = `${Math.round(differenceInSeconds / 3600)} hours`;
-    } else if (86400 < differenceInSeconds && differenceInSeconds < 2592000) {
-      timeAgo = `${Math.round(differenceInSeconds / 86400)} days`;
-    } else if (2592000 < differenceInSeconds && differenceInSeconds < 31104000) {
-      timeAgo = `${Math.round(differenceInSeconds / 2592000)} months`;
-    } else if (31104000 < differenceInSeconds) {
-      timeAgo = `${Math.round(differenceInSeconds / 31104000)} years`;
-    }
+    return "";
   }
-  return timeAgo;
+
+  const inputDate = new Date(isoDateString);
+
+  // Check if the date is invalid
+  if (isNaN(inputDate.getTime())) {
+    return "Invalid date";
+  }
+
+  const currentDate = new Date();
+  const differenceInMilliseconds = currentDate.getTime() - inputDate.getTime();
+  const differenceInSeconds = Math.floor(differenceInMilliseconds / 1000);
+
+  if (differenceInSeconds < 60) {
+    return "less than a minute";
+  } else if (differenceInSeconds < 3600) {
+    return `${Math.round(differenceInSeconds / 60)} minute${Math.round(differenceInSeconds / 60) > 1 ? "s" : ""}`;
+  } else if (differenceInSeconds < 86400) {
+    return `${Math.round(differenceInSeconds / 3600)} hour${Math.round(differenceInSeconds / 3600) > 1 ? "s" : ""}`;
+  } else if (differenceInSeconds < 2592000) {
+    return `${Math.round(differenceInSeconds / 86400)} day${Math.round(differenceInSeconds / 86400) > 1 ? "s" : ""}`;
+  } else if (differenceInSeconds < 31104000) {
+    return `${Math.round(differenceInSeconds / 2592000)} month${Math.round(differenceInSeconds / 2592000) > 1 ? "s" : ""}`;
+  } else {
+    return `${Math.round(differenceInSeconds / 31104000)} year${Math.round(differenceInSeconds / 31104000) > 1 ? "s" : ""}`;
+  }
 }
+
+/**
+ * Retrieves data from the local storage and parses it as JSON.
+ *
+ * @param key The key of the data in local storage.
+ * @returns The parsed data, or null if the data is invalid or not found.
+ */
+export const getDataFromLS = (key: string): any | null => {
+  const data = localStorage.getItem(key);
+  let parsedData: any | null = null;
+
+  try {
+    parsedData = JSON.parse(data || "{}");
+  } catch (error) {
+    console.error("Error parsing JSON from localStorage:", error);
+    return null;
+  }
+
+  return parsedData;
+};
 
 /**
  * Retrieves the board sections from the local storage.
@@ -233,15 +271,7 @@ export function getSecondsDifference(isoDateString: string | undefined): string 
  * @returns A record containing the board sections, or null if the data is invalid or not found.
  */
 export const getBoardSectionsFromLS = (): Record<string, Block[]> | null => {
-  const data = localStorage.getItem("boardSections");
-  let boardSections: Record<string, Block[]> | null = null;
-
-  try {
-    boardSections = JSON.parse(data || "{}");
-  } catch (error) {
-    console.error("Error parsing JSON from localStorage:", error);
-    return null;
-  }
+  const boardSections = getDataFromLS("boardSections");
 
   const isValid = isValidBoardSections(boardSections);
   return isValid ? boardSections : null;
@@ -262,9 +292,13 @@ export const setBoardSectionsFromLS = (boardSections: BoardSectionsType) => {
  * @param {string} options.boardId - The ID of the board.
  */
 export const addBlockToBoardSections = ({ block, boardId }: { block: Block; boardId: string }) => {
-  const boardSections = getBoardSectionsFromLS();
+  const boardSections = getDataFromLS("boardSections") || {};
   const newBoardSections = { ...boardSections };
-  newBoardSections[boardId] = [block, ...newBoardSections[boardId]];
+  if (!newBoardSections[boardId]) {
+    newBoardSections[boardId] = [block];
+  } else {
+    newBoardSections[boardId] = [block, ...newBoardSections[boardId]];
+  }
   setBoardSectionsFromLS(newBoardSections);
 };
 
@@ -274,32 +308,12 @@ export const addBlockToBoardSections = ({ block, boardId }: { block: Block; boar
  * @param {string} params.blockId - The ID of the block to be removed.
  */
 export const removeBlockFromBoardSections = ({ blockId }: { blockId: string }) => {
-  const boardSections = getBoardSectionsFromLS();
+  const boardSections = getDataFromLS("boardSections") || {};
   const newBoardSections = { ...boardSections };
   Object.keys(newBoardSections).forEach((boardId) => {
-    newBoardSections[boardId] = newBoardSections[boardId].filter((block) => block.id !== blockId);
+    newBoardSections[boardId] = newBoardSections[boardId].filter((block: Block) => block.id !== blockId);
   });
   setBoardSectionsFromLS(newBoardSections);
-};
-
-/**
- * Retrieves the unselected blocks from the optionBlockMyPage array.
- * Unselected blocks are those that are not present in the localStorageData.
- *
- * @returns An array of unselected blocks.
- */
-export const getUnselectedBlocks = (): Block[] => {
-  const selectedIds = new Set<string>();
-  const localStorageData = getBoardSectionsFromLS();
-  if (localStorageData) {
-    Object.values(localStorageData).forEach((board: Block[]) => {
-      board.forEach((block) => {
-        selectedIds.add(block.id);
-      });
-    });
-  }
-
-  return optionBlockMyPage.filter((block) => !selectedIds.has(block.id));
 };
 
 /**
@@ -323,16 +337,23 @@ export const isValidBoardSections = (obj: any): obj is BoardSections => {
   );
 };
 
+/**
+ * Groups an array of time entries by date and calculates the total hours for each date.
+ *
+ * @param entries - An array of time entries.
+ * @returns An array of grouped time entries, where each entry contains the date, an array of entries for that date, and the total hours for that date.
+ */
 export const groupTimeEntriesByDate = (entries: TimeEntriesTable[]): GroupedTimeEntries[] => {
-  const groupedEntries = entries.reduce<{ [key: string]: GroupedTimeEntries }>((acc, entry) => {
+  const groupedEntries: { [key: string]: GroupedTimeEntries } = {};
+
+  entries.forEach((entry) => {
     const date = entry.date;
-    if (!acc[date]) {
-      acc[date] = { date, entries: [], totalHours: 0 };
+    if (!groupedEntries[date]) {
+      groupedEntries[date] = { date, entries: [], totalHours: 0 };
     }
-    acc[date].entries.push(entry);
-    acc[date].totalHours += entry.hours;
-    return acc;
-  }, {});
+    groupedEntries[date].entries.push(entry);
+    groupedEntries[date].totalHours += entry.hours;
+  });
 
   return Object.values(groupedEntries);
 };

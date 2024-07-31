@@ -30,4 +30,4 @@ dist-ssr
 coverage
 
 # Test
-*.test.ts
+# *.test.ts

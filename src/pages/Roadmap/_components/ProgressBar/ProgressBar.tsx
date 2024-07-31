@@ -13,9 +13,9 @@ const ProgressBar: React.FC<ProgressProps> = ({ issues }) => {
   const hours = issues.reduce((acc, issue) => {
     return acc + issue.estimated_hours * issue.done_ratio;
   }, 0);
-
   const percentageClosed = hours / totalHours;
-  return (
+
+    return (
     <>
       <div className="flex items-center">
         <div className="w-full bg-gray-200 h-6 flex items-center ">

@@ -2,6 +2,8 @@ import React from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { Block } from "~/types/utils.type";
 import BlockItem from "./BlockItem";
+import { cn } from "~/utils/utils";
+import { useGlobalStore } from "~/store/globalStore";
 
 interface BoardProps {
   boardId: string;
@@ -9,6 +11,10 @@ interface BoardProps {
 }
 
 const Board: React.FC<BoardProps> = ({ boardId, blocks }) => {
+  const { isEditMyPage } = useGlobalStore((state) => ({
+    isEditMyPage: state.isEditMyPage,
+  }));
+
   const renderBlocks = () => {
     return blocks.map((block, index) => (
       <Draggable key={block.id} draggableId={block.id} index={index}>
@@ -27,7 +33,7 @@ const Board: React.FC<BoardProps> = ({ boardId, blocks }) => {
         <div
           ref={provided.innerRef}
           {...provided.droppableProps}
-          className="w-full flex flex-col gap-4 p-4 rounded-md border-dashed border border-gray-200"
+          className={cn("w-full flex flex-col gap-4 py-2 min-h-8", isEditMyPage ? "border-dashed border border-gray-400" : "")}
         >
           {renderBlocks()}
           {provided.placeholder}

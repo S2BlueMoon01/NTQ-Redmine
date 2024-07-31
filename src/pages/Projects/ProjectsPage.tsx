@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { SyncLoader } from "react-spinners";
 import projectsApi from "~/apis/projects.api";
 import useScrollToTop from "~/hooks/useScrollToTop";
 import StarImg from "~/assets/images/star-img.png";

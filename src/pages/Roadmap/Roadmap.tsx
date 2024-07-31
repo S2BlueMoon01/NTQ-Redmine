@@ -87,12 +87,13 @@ const Roadmap = () => {
     setActiveItem(index);
   };
 
+
   return (
     <div className="flex min-h-84">
       <div className="flex flex-col gap-2.5 bg-white w-9/12 px-3 mt-3 pb-8 border border-solid ">
         <div className="flex justify-between items-center p-1.5">
           <h2 className="text-xl text-mouse-gray font-semibold">Roadmap</h2>
-          <Link className="flex	min-w-20 hover:underline" to="/time_entries/new">
+          <Link className="flex min-w-20 hover:underline" to="/time_entries/new">
             <img className="mr-1 w-fit h-fit" src={IconAdd} alt="Add" /> <p className="text-xs">New version</p>
           </Link>
         </div>
@@ -119,6 +120,7 @@ const Roadmap = () => {
                   ) : (
                     <></>
                   )}
+
 
                   <div>
                     <p className="text-xs mb-1">Related issues</p>

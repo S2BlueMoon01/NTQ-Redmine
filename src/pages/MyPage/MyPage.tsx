@@ -49,8 +49,9 @@ const MyPage = () => {
         <h2 className="text-xl font-semibold pt-0.5 pr-3 mb-3 text-mouse-gray">My page</h2>
         {isEditMyPage ? (
           <div className="text-xs text-mouse-gray flex items-center">
-            <label>My page block:</label>
+            <label htmlFor="blockSelect">My page block:</label>
             <select
+              id="blockSelect"
               className="border border-solid py-1 ml-1"
               value={blockSelect?.title || ""}
               onChange={(e) =>
