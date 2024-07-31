@@ -44,7 +44,6 @@ const SideBar: React.FC<SideBarProps> = ({ listVersionOfProject, handleApply }) 
     }
   }, []);
 
-
   return (
     <div className="p-8 flex flex-col gap-3 w-3/12 bg-[#eee] pr-3 pb-8">
       <h2 className="text-sm text-mouse-gray">Roadmap </h2>
