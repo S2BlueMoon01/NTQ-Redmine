@@ -6,7 +6,6 @@ import useScrollToTop from "~/hooks/useScrollToTop";
 import StarImg from "~/assets/images/star-img.png";
 import WifiImg from "~/assets/images/wifi-img.png";
 import Button from "~/components/Button";
-import { SyncLoader } from "react-spinners";
 import { useQuery } from "@tanstack/react-query";
 import config from "~/constants/config";
 
