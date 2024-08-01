@@ -8,24 +8,50 @@ import IconAdd from "~/assets/images/icon-add.png";
 import config from "~/constants/config";
 import { optionBlockMyPage } from "~/constants/constants";
 import { useGlobalStore } from "~/store/globalStore";
-import { TimeEntriesTable } from "~/types/timeEntries.type";
 import { removeBlockFromBoardSections } from "~/utils/utils";
 import TableSpentTime from "../TableSpentTime";
+import issuesApi from "~/apis/issue.api";
 
 const columnNames = ["Activity", "Project", "Comment", "Hours", "Action"];
 
-const fetchTimeEntries = async (): Promise<TimeEntriesTable[]> => {
-  const response = await timeEntriesApi.listTimeEntries({ user_id: "me" });
-  return (
-    response.data?.time_entries?.map((time_entries) => ({
-      id: time_entries.id,
-      activity: time_entries.activity.name,
-      comment: time_entries.comments,
-      hours: time_entries.hours,
-      project: time_entries.project.name,
-      date: moment(time_entries.created_on).format("MM/DD/YYYY"),
-    })) || []
-  );
+const fetchTimeEntries = async () => {
+  const responseTime = await timeEntriesApi.listTimeEntries({ user_id: "me" });
+  const responseIssues = await issuesApi.listIssues();
+
+  const listDataTable =
+    responseTime.data?.time_entries &&
+    responseTime.data?.time_entries
+      .filter((time) => {
+        const createdDate = moment(time.created_on);
+        const sevenDaysAgo = moment().subtract(7, "days");
+        return createdDate.isBetween(sevenDaysAgo, moment(), null, "[]");
+      })
+      .map((time) => {
+        const issues = responseIssues?.data?.issues.find((issue) => issue?.id === time?.issue?.id);
+        const project = issues ? (
+          <span>
+            {time.project.name}{" "}
+            <a href={`/tracker/${issues.id}`} className="text-ocean-blue hover:underline" target="_blank" rel="noopener noreferrer">
+              {issues.tracker.name} #{issues.id}
+            </a>{" "}
+            {issues.subject}
+          </span>
+        ) : (
+          ""
+        );
+        return {
+          id: time?.id,
+          project: project,
+          date: moment(time.created_on).format("MM/DD/YYYY"),
+          activity: time.activity.name,
+          comment: time.comments,
+          hours: time.hours,
+        };
+      });
+
+  return listDataTable;
+
+  return listDataTable;
 };
 
 const SpentTime: React.FC = () => {
