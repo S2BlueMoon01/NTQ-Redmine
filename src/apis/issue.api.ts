@@ -20,7 +20,7 @@ const issuesApi = {
     assigned_to_id?: string | number;
     author_id?: string | number;
     watcher_id?: string | number;
-    parent_id?: number;
+    parent_id?: number | string;
     cf_x?: string;
     created_on?: string;
     updated_on?: string;
