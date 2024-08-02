@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BeatLoader } from "react-spinners";
 import Dialog from "~/pages/MyPage/_components/Dialog";
 import ApplyImg from "~/assets/images/apply-img.png";
+import { useGlobalStore } from "~/store/globalStore";
 
 interface PropsComponent {
   className?: string;
@@ -12,20 +13,12 @@ interface PropsComponent {
 }
 
 const TableIssues: React.FC<PropsComponent> = ({ className, columnNames = [], dataTable = [], loading = true, isCheckbox = false }) => {
-  const [activeItem, setActiveItem] = useState<number>(1);
+  const { activeItemId, setActiveItemId } = useGlobalStore((state) => state);
   const [checkList, setCheckList] = useState<number[]>([]);
   const [isAllChecked, setIsAllChecked] = useState<boolean>(false);
 
   const handleMouseDown = (index: number) => {
-    setActiveItem(index);
-  };
-
-  const handleChecked = (index: number) => {
-    if (checkList.includes(index)) {
-      setCheckList((prev) => prev.filter((item) => item !== index));
-    } else {
-      setCheckList((prev) => [...prev, index]);
-    }
+    setActiveItemId(index);
   };
 
   const handleCheckboxChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +26,14 @@ const TableIssues: React.FC<PropsComponent> = ({ className, columnNames = [], da
       setCheckList((prev) => [...prev, index]);
     } else {
       setCheckList((prev) => prev.filter((item) => item !== index));
+    }
+  };
+
+  const handleChecked = (index: number) => {
+    if (checkList.includes(index)) {
+      setCheckList((prev) => prev.filter((item) => item !== index));
+    } else {
+      setCheckList((prev) => [...prev, index]);
     }
   };
 
@@ -101,7 +102,7 @@ const TableIssues: React.FC<PropsComponent> = ({ className, columnNames = [], da
                 >
                   {row[columnTable] !== undefined &&
                     (typeof id === "number" ? (
-                      <Dialog issueId={id} content={row[columnTable] as string} handleClick={handleMouseDown} ZIndex={activeItem === id ? 40 : 30} />
+                      <Dialog issueId={id} content={row[columnName] as string} handleClick={handleMouseDown} ZIndex={activeItemId === id ? 40 : 30} />
                     ) : (
                       row[columnTable]
                     ))}
