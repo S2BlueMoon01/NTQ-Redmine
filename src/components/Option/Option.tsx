@@ -258,7 +258,14 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
           </div>
           <div className="flex flex-col ml-1">
             <div className="text-gray-rain text-[10.8px] inline-block">Selected Columns</div>
-            <Select size={10} className="h-full w-[150px] text-[13.3px] m-0" multiple={true} defaultValue={[]} onChange={(e) => handleMultiSelect(e)}>
+            <Select
+              size={10}
+              className="h-full w-[150px] text-[13.3px] m-0"
+              multiple={true}
+              defaultValue={[]}
+              onFocus={(e) => handleMultiSelect(e)}
+              onChange={(e) => handleMultiSelect(e)}
+            >
               {selectedColumns.map((option) => (
                 <option
                   key={option}
