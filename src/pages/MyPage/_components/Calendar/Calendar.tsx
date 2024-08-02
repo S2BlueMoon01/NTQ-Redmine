@@ -45,7 +45,7 @@ const Calendar: React.FC = () => {
   return (
     <>
       <SyncLoader loading={isLoading} color="#169" size={5} />
-      <div className="flex justify-between items-center ">
+      <div className="flex justify-between items-center">
         <h2 className="text-base text-mouse-gray font-bold">Calendar</h2>
         {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={handleClose} src={CloseImg} alt="closeButton" />}
       </div>
