@@ -15,7 +15,7 @@ interface DialogProps {
   handleClick: (index: number) => void;
 }
 
-const Dialog1: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleClick }) => {
+const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleClick }) => {
   const [isVisible, setIsVisible] = useState(false);
   const { activeItemId, setActiveItemId } = useGlobalStore((state) => state);
 
@@ -296,4 +296,4 @@ const Dialog1: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleC
   );
 };
 
-export default Dialog1;
+export default Dialog;

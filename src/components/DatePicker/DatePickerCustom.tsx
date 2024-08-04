@@ -8,9 +8,10 @@ import "./DatePicker.css";
 type DatePickerCustomProps = {
   classNameDatePicker?: string;
   className?: string;
+  id?: string;
 };
 
-const DatePickerCustom: React.FC<DatePickerCustomProps> = ({ classNameDatePicker, className }) => {
+const DatePickerCustom: React.FC<DatePickerCustomProps> = ({ classNameDatePicker, id, className }) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [isOpen, setIsOpen] = useState(false);
 
@@ -25,6 +26,7 @@ const DatePickerCustom: React.FC<DatePickerCustomProps> = ({ classNameDatePicker
   return (
     <div className={cn("flex items-center", className)}>
       <DatePicker
+        id={id}
         selected={selectedDate}
         onChange={handleChange}
         dateFormat="yyyy-MM-dd"
