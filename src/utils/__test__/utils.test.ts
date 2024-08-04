@@ -308,6 +308,14 @@ describe("Utils", () => {
       const expected = ["2024-01-01", "2024-01-02", "2024-01-03", "2024-01-04", "2024-01-05", "2024-01-06", "2024-01-07"];
       expect(result).toEqual(expected);
     });
+
+    it("should handle the scenario where the first day of the year is not Monday", () => {
+      const year = 2023;
+      const weekNumber = 1;
+      const result = getWeekDates(weekNumber, year);
+      const expected = ["2023-01-02", "2023-01-03", "2023-01-04", "2023-01-05", "2023-01-06", "2023-01-07", "2023-01-08"];
+      expect(result).toEqual(expected);
+    });
   });
 
   // Mock data for testing
@@ -329,6 +337,7 @@ describe("Utils", () => {
       custom_fields: [],
       created_on: "2024-07-01",
       updated_on: "2024-07-01",
+      done_ratio: 0,
     },
     {
       id: 2,
@@ -347,6 +356,7 @@ describe("Utils", () => {
       custom_fields: [],
       created_on: "2024-07-02",
       updated_on: "2024-07-02",
+      done_ratio: 0,
     },
     {
       id: 3,
@@ -365,6 +375,7 @@ describe("Utils", () => {
       custom_fields: [],
       created_on: "2024-07-03",
       updated_on: "2024-07-03",
+      done_ratio: 0,
     },
   ];
 
@@ -440,12 +451,12 @@ describe("Utils", () => {
       vi.useRealTimers();
     });
 
-    it('should return "01" when the date is the 1st of the month', () => {
+    it('should return "1" when the date is the 1st of the month', () => {
       const mockDate = new Date(2024, 6, 1); // July 1, 2024
       vi.setSystemTime(mockDate);
 
       const result = getDay();
-      expect(result).toBe("01");
+      expect(result).toBe("1");
 
       vi.useRealTimers();
     });
@@ -465,7 +476,7 @@ describe("Utils", () => {
       vi.setSystemTime(mockDate);
 
       const result = getDay();
-      expect(result).toBe("09");
+      expect(result).toBe("9");
 
       vi.useRealTimers();
     });
