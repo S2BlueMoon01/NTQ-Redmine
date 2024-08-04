@@ -44,6 +44,14 @@ const MyPage = () => {
     setIsEditMyPage(false);
   };
 
+  const handleSelectBlock = (value: string) => {
+    if (value === "") return;
+    setBlockSelect({
+      id: unselectedBlocks.find((item) => item.title === value)?.id || Math.random().toString(),
+      title: value,
+    });
+  };
+
   return (
     <>
       <Helmet>
@@ -54,31 +62,33 @@ const MyPage = () => {
         <h2 className="text-xl font-bold pt-0.5 pr-3 mb-3 text-mouse-gray ">My page</h2>
         {isEditMyPage ? (
           <div className="text-xs text-mouse-gray flex items-center">
-            <label htmlFor="blockSelect">My page block:</label>
-            <select
-              id="blockSelect"
-              className="border border-solid py-1 ml-1"
-              value={blockSelect?.title || ""}
-              onChange={(e) =>
-                setBlockSelect({
-                  id: unselectedBlocks.find((item) => item.title === e.target.value)?.id || Math.random().toString(),
-                  title: e.target.value,
-                })
-              }
-            >
-              <option value="">Select an option</option>
-              {unselectedBlocks.length > 0 &&
-                unselectedBlocks.map((item) => (
-                  <option value={item.title} key={item.id}>
-                    {item.title}
-                  </option>
-                ))}
-            </select>
-            <button className="text-ocean-blue ml-2 hover:underline flex" onClick={() => handleAddBlock(blockSelect)}>
-              <img className="mr-1" src={IconAdd} alt="Add" /> Add
-            </button>
+            {unselectedBlocks.length > 0 && (
+              <>
+                <label htmlFor="blockSelect">My page block:</label>
+                <select
+                  id="blockSelect"
+                  data-testid="blockSelect"
+                  className="border border-solid py-1 ml-1"
+                  value={blockSelect?.title || ""}
+                  onChange={(e) => handleSelectBlock(e.target.value)}
+                >
+                  <option value=""></option>
+                  {unselectedBlocks.map((item) => (
+                    <option value={item.title} key={item.id}>
+                      {item.title}
+                    </option>
+                  ))}
+                </select>
+
+                <button className="text-ocean-blue ml-2 hover:underline flex" onClick={() => handleAddBlock(blockSelect)}>
+                  <img className="mr-1" src={IconAdd} alt="Add" />
+                  Add
+                </button>
+              </>
+            )}
             <button className="text-ocean-blue ml-2 hover:underline flex" onClick={handleClosePersonalize}>
-              <img className="mr-1" src={IconBack} alt="Back" /> Back
+              <img className="mr-1" src={IconBack} alt="Back" />
+              Back
             </button>
           </div>
         ) : (
