@@ -82,7 +82,7 @@ const Overview = () => {
             ) : (
               <ul className="text-xs list-disc text-[#505050] pl-10 my-3">
                 {Object.entries(issueTracker).map(([key, value]) => (
-                  <li className="leading-[18px]" key={key}>
+                  <li className="leading-4" key={key}>
                     <span>
                       <a href="#" className="text-ocean-blue mr-1 hover:text-[#c61a1a] hover:underline">
                         {`${key}:`}
@@ -111,7 +111,7 @@ const Overview = () => {
             </div>
           </div>
 
-          <div className="border p-2.5 bg-[#fcfcfc] w-[50%]">
+          <div className="border p-2.5 bg-[#fcfcfc] w-2/4">
             <div className="flex gap-1 text-mouse-gray font-bold text-base items-center">
               <img src={Group} alt="" />
               <span>Member</span>

@@ -42,7 +42,7 @@ const ProjectsPage = () => {
           <div className="flex flex-col gap-1.5 text-sm">
             {listProject.length ? (
               listProject.map((project) => (
-                <React.Fragment key={project.id}>
+                <span className="w-max" key={project.id}>
                   <Link
                     className="text-ocean-blue font-semibold flex gap-1 items-center hover:underline"
                     to={`/projects/${project?.id}/${project.name}/overview`}
@@ -51,7 +51,7 @@ const ProjectsPage = () => {
                     {project?.name}
                   </Link>
                   <p className="text-xs">{project?.description}</p>
-                </React.Fragment>
+                </span>
               ))
             ) : (
               <SyncLoader className="ml-4" loading={isLoading} color="#169" size={5} />

@@ -221,7 +221,7 @@ const Activity = () => {
         <div className="bg-[#fff] w-3/4 min-h-[70vh] px-3 pt-2 border-[#bbbbbb] border">
           <div className="text-xl font-semibold pt-0.5 pr-3 text-mouse-gray">Activity</div>
           <>
-            <span className="text-gray-rain text-[10.8px] italic inline-block mb-4">{`From ${convertDateFormat(dateStart)} to ${convertDateFormat(dateEnd)}`}</span>
+            <span className="text-gray-rain text-10 italic inline-block mb-4">{`From ${convertDateFormat(dateStart)} to ${convertDateFormat(dateEnd)}`}</span>
             {isLoading ? (
               <SyncLoader color="#169" size={5} />
             ) : isNoData ? (
@@ -238,21 +238,21 @@ const Activity = () => {
                           <img
                             src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
                             alt=""
-                            className="object-cover w-[30px] h-[30px] border p-[2px] border-[#d5d5d5]"
+                            className="object-cover w-8 h-8 border p-0.5 border-[#d5d5d5]"
                           />
                         </div>
                         <div className="">
                           <div className="flex items-center leading-4 gap-1">
-                            <span className="text-[9.6px] text-[#777777]">{handleFormatTime(issue.created_on)}</span>
+                            <span className="text-10 text-[#777777]">{handleFormatTime(issue.created_on)}</span>
                             <span className="">
                               <a href="#!" className="link text-xs">
                                 {issue.title}
                               </a>
                             </span>
                           </div>
-                          <div className="text-[10.8px] text-[#808080] italic leading-3">{issue?.description}</div>
+                          <div className="text-10 text-[#808080] italic leading-3">{issue?.description}</div>
                           <div className="leading-3">
-                            <a href="#!" className="link text-[10.8px]">
+                            <a href="#!" className="link text-10">
                               {issue.author.name}
                             </a>
                           </div>
@@ -275,10 +275,10 @@ const Activity = () => {
                 </a>
               )}
             </div>
-            <div className="flex items-center justify-end pt-2 text-[10.8px] leading-3 gap-1 text-[#666666]">
+            <div className="flex items-center justify-end pt-2 text-10 leading-3 gap-1 text-[#666666]">
               <span>Also available in:</span>
               <img src={Atom} alt="" />
-              <a href="#!" className="link  text-[10.8px]">
+              <a href="#!" className="link text-10">
                 Atom
               </a>
             </div>

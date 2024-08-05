@@ -63,7 +63,7 @@ const TableIssues: React.FC<PropsComponent> = ({ className, columnNames = [], da
           )}
           {columnNames.map((columnName, index) => (
             <th
-              className={`text-center capitalize  border border-solid border-gray-300 border-b-slate-600 text-gray-600 px-5 tracking-wider w-auto ${index === 1 || index === 3 ? "w-auto " : "w-auto"}`}
+              className={`text-center capitalize border border-solid border-gray-300 border-b-slate-600 text-gray-600 px-5 tracking-wider w-auto ${index === 1 || index === 3 ? "w-auto " : "w-auto"}`}
               key={columnName}
             >
               {columnName}
