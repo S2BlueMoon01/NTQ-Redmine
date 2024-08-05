@@ -86,7 +86,6 @@ const SpentTime = () => {
               ))}
             </Select>
             <Input id="issue" {...register("issue")} />
-
             <Input type="date" id="date" value={currentDate} min="2018-01-01" {...register("date")} />
             <Input id="hours" {...register("hours", { required: "Hours can't be blank" })} />
             <Input id="comment" {...register("comment")} />
@@ -113,10 +112,10 @@ const SpentTime = () => {
           </div>
         </div>
 
-        <Button type="submit" className="text-xs px-1.5 mr-1 leading-5 h-5 line border bg-[#f2f2f2] text-black">
+        <Button type="submit" className="text-xs px-1.5 mr-1 leading-5 h-5 line border bg-slate-50 text-black">
           Create
         </Button>
-        <Button type="submit" className="text-xs px-1.5 mr-1 leading-5 h-5 line border bg-[#f2f2f2] text-black">
+        <Button type="submit" className="text-xs px-1.5 mr-1 leading-5 h-5 line border bg-slate-50 text-black">
           Create and continue
         </Button>
       </form>

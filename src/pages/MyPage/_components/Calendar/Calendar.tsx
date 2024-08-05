@@ -1,16 +1,15 @@
-import React from "react";
-import "./Calendar.css";
-import Card from "~/pages/MyPage/_components/Card/Card";
-import { getWeekNumber, groupTasksByExactDate, getWeekDates, getDay, removeBlockFromBoardSections } from "~/utils/utils";
-import { Issue } from "~/types/issue.type";
-import { SyncLoader } from "react-spinners";
-import CloseImg from "~/assets/images/close-img.png";
-import { useGlobalStore } from "~/store/globalStore";
-import { optionBlockMyPage } from "~/constants/constants";
-import issuesApi from "~/apis/issue.api";
-import { checkDateStatus } from "~/utils/utils";
 import { useQuery } from "@tanstack/react-query";
+import React from "react";
+import { SyncLoader } from "react-spinners";
+import issuesApi from "~/apis/issue.api";
+import CloseImg from "~/assets/images/close-img.png";
 import config from "~/constants/config";
+import { optionBlockMyPage } from "~/constants/constants";
+import Card from "~/pages/MyPage/_components/Card/Card";
+import { useGlobalStore } from "~/store/globalStore";
+import { Issue } from "~/types/issue.type";
+import { checkDateStatus, getDay, getWeekDates, getWeekNumber, groupTasksByExactDate, removeBlockFromBoardSections } from "~/utils/utils";
+import "./Calendar.css";
 
 const fetchListIssue = async (): Promise<Issue[]> => {
   const response = await issuesApi.listIssues();
@@ -29,7 +28,6 @@ const Calendar: React.FC = () => {
     queryFn: fetchListIssue,
     staleTime: config.staleTime,
   });
-
   const daysOfWeek = getWeekDates(week);
 
   const mainArrays = groupTasksByExactDate(listIssues, daysOfWeek);
@@ -72,10 +70,10 @@ const Calendar: React.FC = () => {
               const isCurrentDay = getDay() === day;
               return (
                 <td key={day} className={`${isCurrentDay ? "bg-light-yellow" : ""} hover:bg-light-yellow relative pt-8 text-xs`}>
-                  <div className={`${isCurrentDay ? "font-bold" : ""} text-right text-[#505050] absolute top-1 right-1`}>{day}</div>
+                  <div className={`${isCurrentDay ? "font-bold" : ""} text-right text-mouse-gray absolute top-1 right-1`}>{day}</div>
                   {item[day].map((issue) => (
                     <div key={issue.id} className="py-1">
-                      <div className="flex flex-wrap p-1.5 w-full text-[10.8px] text-mouse-gray bg-light-yellow border relative card">
+                      <div className="flex flex-wrap p-1.5 w-full text-10 text-mouse-gray bg-light-yellow border relative card">
                         {issue.project.name}-
                         <span>
                           <img src={checkDateStatus({ startDate: issue.start_date, dueDate: issue.due_date, day })} alt="ArrowRightIcon" />

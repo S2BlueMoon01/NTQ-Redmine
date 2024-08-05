@@ -20,20 +20,20 @@ const LoginPage = () => {
 
   return (
     <div className="flex justify-center align-center">
-      <div className="min-w-400 min-h-42 mt-15 border-2 border-solid border-[#fdbf3b] p-3 bg-light-yellow">
+      <div className="min-w-400 min-h-42 mt-15 border-2 border-solid border-amber-400 p-3 bg-light-yellow">
         <form onSubmit={handleSubmit(submit)} className="flex gap-x-2 mt-1.5">
           <div className="flex flex-col gap-y-1 width text-right">
             <label htmlFor="login" className="text-xs text-gray-rain font-bold p-1.5">
               Login:
             </label>
             {errors.email && <p className="h-4"></p>}
-            <label htmlFor="password" className="text-xs text-gray-rain font-bold p-1.5 mt-[2px]">
+            <label htmlFor="password" className="text-xs text-gray-rain font-bold p-1.5 mt-0.5">
               Password:
             </label>
             <Link
               to={"/lost-password"}
               rel="noopener noreferrer"
-              className="text-ocean-blue text-xs p-[0.375rem] mt-7 hover:text-[#c61a1a] hover:underline whitespace-nowrap"
+              className="text-ocean-blue text-xs p-1.5 mt-7 hover:text-[#c61a1a] hover:underline whitespace-nowrap"
             >
               Lost password
             </Link>
@@ -55,7 +55,7 @@ const LoginPage = () => {
                 },
               })}
             />
-            {errors.email && <p className="text-xs text-[red] pl-2">{errors.email.message}</p>}
+            {errors.email && <p className="text-xs text-red-600 pl-2">{errors.email.message}</p>}
             <Input
               type="password"
               className="h-6 border m-1 text-sm pl-1"
@@ -72,13 +72,13 @@ const LoginPage = () => {
                 },
               })}
             />
-            {errors.password && <p className="text-xs text-[red] pl-2">{errors.password.message}</p>}
-            <div className="flex items-center gap-x-[6px] ml-2 mt-1.5">
+            {errors.password && <p className="text-xs text-red-600 pl-2">{errors.password.message}</p>}
+            <div className="flex items-center gap-x-1.5 ml-2 mt-1.5">
               <Input className="m-0" type="checkbox" {...register("isStayLogin")} />
               <span className="font-bold text-xs text-gray-rain">Stay logged in</span>
             </div>
             <div className="text-right">
-              <Button type="submit" className="text-xs px-1.5 mr-1 leading-5 h-5 line border bg-[#f2f2f2] text-black">
+              <Button type="submit" className="text-xs px-1.5 mr-1 leading-5 h-5 line border bg-slate-100 text-black">
                 Login »
               </Button>
             </div>

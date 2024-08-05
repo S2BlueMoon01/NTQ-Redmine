@@ -77,10 +77,8 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
     "service offering",
     "release ok",
   ]);
-
   const [middleArray, setMiddleArray] = useState<string[]>([]);
   const [currentColumn, setCurrentColumn] = useState<string>("");
-
   const [selectedColumns, setSelectedColumns] = useState(["project", "date", "user", "activity", "issues", "comment", "hours"]);
 
   const handleClickDragDown = () => {
@@ -218,28 +216,28 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
 
   return (
     <>
-      <div className="relative pb-2">
+      <div className="relative pb-3">
         <hr />
-        <div className="flex items-center px-1 absolute top-[-8px] left-3 bg-[#fff] cursor-pointer" onClick={handleClickDragDown}>
+        <div className="flex items-center px-1 absolute -top-2 left-3 bg-slate-100 cursor-pointer" onClick={handleClickDragDown}>
           <div className="text-gray-700">
             <img src={isDragDown ? ArrowExpanded : ArrowCollapsed} alt="icon expend" />
           </div>
 
-          <span className="text-[10.8px] text-gray-rain">Options</span>
+          <span className="text-10 text-gray-rain">Options</span>
         </div>
       </div>
 
       {isDragDown && (
         <div className="flex items-center mt-1 ml-4">
-          <span className="text-gray-rain text-[10.8px] mr-1">Columns</span>
+          <span className="text-gray-rain text-10 mr-1">Columns</span>
           <div className="flex flex-col">
-            <div className="text-gray-rain text-[10.8px] inline-block">Available Columns</div>
-            <Select size={10} className="h-full w-[150px] text-[13.3px] m-0" defaultValue={[]} multiple={true} onChange={(e) => handleMultiSelect(e)}>
+            <div className="text-gray-rain text-10 inline-block">Available Columns</div>
+            <Select size={10} className="h-full w-40 text-xs m-0" defaultValue={[]} multiple={true} onChange={(e) => handleMultiSelect(e)}>
               {availableColumns.map((option) => (
                 <option
                   key={option}
                   value={option}
-                  className="h-[18px] pb-[1px] pl-0.5 capitalize"
+                  className="h-[18px] pb-px pl-0.5 capitalize"
                   onDoubleClick={() => handleClickItem(option)}
                   onClick={() => handleCurrentColumn("available")}
                 >
@@ -248,7 +246,7 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
               ))}
             </Select>
           </div>
-          <div className="flex flex-col gap-[2px]">
+          <div className="flex flex-col gap-0.5">
             <Button className="w-8" onClick={moveLeft}>
               →
             </Button>
@@ -257,10 +255,10 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
             </Button>
           </div>
           <div className="flex flex-col ml-1">
-            <div className="text-gray-rain text-[10.8px] inline-block">Selected Columns</div>
+            <div className="text-gray-rain text-10 inline-block">Selected Columns</div>
             <Select
               size={10}
-              className="h-full w-[150px] text-[13.3px] m-0"
+              className="h-full w-40 text-xs m-0"
               multiple={true}
               defaultValue={[]}
               onFocus={(e) => handleMultiSelect(e)}
@@ -270,7 +268,7 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
                 <option
                   key={option}
                   value={option}
-                  className="h-[18px] pb-[1px] pl-0.5 capitalize"
+                  className="h-[18px] pb-px pl-0.5 capitalize"
                   onDoubleClick={() => handleClickItem(option)}
                   onClick={() => handleCurrentColumn("selected")}
                 >
@@ -279,7 +277,7 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
               ))}
             </Select>
           </div>
-          <div className="flex flex-col gap-[2px]">
+          <div className="flex flex-col gap-0.5">
             <Button className="w-8" onClick={moveTop}>
               ⇈
             </Button>

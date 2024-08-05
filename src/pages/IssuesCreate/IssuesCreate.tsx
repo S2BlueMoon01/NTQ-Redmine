@@ -295,7 +295,10 @@ const IssuesCreate = () => {
                     />
                   </div>
                   {filteredItems.length > 0 && (
-                    <div className="absolute top-[30px] left-[180px] border border-gray-300 bg-white z-10" style={{ width: "calc(100% - 225px)" }}>
+                    <div
+                      className="absolute top-[30px] left-[180px] border border-gray-300 bg-white z-10 max-h-48 overflow-y-auto"
+                      style={{ width: "calc(100% - 225px)" }}
+                    >
                       {filteredItems.map((item) => (
                         <div key={item.id} className="border-b border-[#eee] text-xs hover:bg-blue-300" onClick={() => handleItemClick(item.id)}>
                           {item.name}

@@ -68,12 +68,12 @@ const Navbar = ({ idProject, nameHeader }: { idProject?: string | undefined; nam
 
   return (
     <div>
-      <ul className="flex gap-[1px] cursor-pointer pl-1 text-[#fff] text-xs font-bold">
+      <ul className="flex gap-0.5 cursor-pointer pl-1 text-white text-xs font-bold">
         {listValueNavbar.length > 0 &&
           listValueNavbar.map((item) => (
             <Link
               key={item.name}
-              className={cn(`bg-[#507AAA] hover:underline py-1 px-2.5 ${item.selected ? "text-mouse-gray bg-[#eee]" : ""} hover:underline`)}
+              className={cn("bg-[#507AAA] hover:underline py-1 px-2.5", { "text-mouse-gray bg-[#eee]": item.selected })}
               onClick={() => handleClickNavbar(item.name)}
               rel={item?.isExternal ? "noopener noreferrer" : ""}
               to={`/projects/${idProject}/${nameHeader}${item.path}`}

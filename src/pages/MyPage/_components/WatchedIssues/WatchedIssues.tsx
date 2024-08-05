@@ -9,6 +9,7 @@ import { IssueTable } from "~/types/issue.type";
 import { removeBlockFromBoardSections } from "~/utils/utils";
 import { useQuery } from "@tanstack/react-query";
 import config from "~/constants/config";
+import moment from "moment";
 
 const columnNames = ["#", "project", "tracker", "subject"];
 
@@ -16,9 +17,20 @@ const fetchIssuesWatcher = async (): Promise<IssueTable[]> => {
   const response = await issuesApi.listIssues({ watcher_id: "me" });
   return response.data?.issues?.map((issue) => ({
     "#": issue.id,
-    subject: issue.subject,
-    tracker: issue.tracker.name,
     project: issue.project.name,
+    tracker: issue.tracker.name,
+    status: issue.status.name,
+    priority: issue.priority.name,
+    assignee: issue?.assigned_to?.name,
+    subject: issue.subject,
+    updated: moment(issue.updated_on).format("MM/DD/YYYY hh:mm A"),
+    author: issue.author.name,
+    targetVersion: issue?.fixed_version?.name,
+    startDate: moment(issue.start_date).format("MM/DD/YYYY"),
+    dueDate: moment(issue.due_date).format("MM/DD/YYYY"),
+    estimatedTime: issue.estimated_hours,
+    doneRatio: issue.done_ratio,
+    created_on: moment(issue.created_on).format("MM/DD/YYYY hh:mm A"),
   }));
 };
 
@@ -48,7 +60,15 @@ const WatchedIssues: React.FC = () => {
         <Link className="text-ocean-blue font-semibold hover:underline" to="/issues">
           Watched issues ({listIssuesWatcher.length})
         </Link>
-        {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={handleClose} src={CloseImg} alt="closeButton" />}
+        {isEditMyPage && (
+          <img
+            className="w-fit h-fit mr-3 cursor-pointer"
+            data-testid="btn-close-watched-issues"
+            onClick={handleClose}
+            src={CloseImg}
+            alt="closeButton"
+          />
+        )}
       </div>
       <TableIssues className="bg-slate-500 min-w-full mt-3" loading={isLoading} columnNames={columnNames} dataTable={listIssuesWatcher} />
     </div>

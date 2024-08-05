@@ -34,13 +34,14 @@ const Activity = () => {
   const [isDisplayNext, setIsDisplayNext] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [listData, setListData] = useState<Record<string, DataGeneral[]>>({});
+  const [isNoData, setIsNoData] = useState(false);
 
   const [activity, setActivity] = useState([
     { name: "issues", label: "Issues", checked: true },
     { name: "changesets", label: "Changesets", checked: true },
     { name: "documents", label: "Documents", checked: true },
     { name: "files", label: "Files", checked: true },
-    { name: "wikiEdits", label: "Wiki edits", checked: true },
+    { name: "wikiEdits", label: "Wiki edits", checked: false },
     { name: "spentTime", label: "Spent time", checked: false },
   ]);
 
@@ -63,7 +64,7 @@ const Activity = () => {
     const newDateEnd = new Date(dateEnd);
     newDateEnd.setDate(newDateEnd.getDate() + 30);
     const today = new Date();
-    if (today <= newDateEnd) {
+    if (today.getDate() === newDateEnd.getDate() && today.getMonth() === newDateEnd.getMonth() && today.getFullYear() === newDateEnd.getFullYear()) {
       setIsDisplayNext(false);
       setDateEnd(today.toISOString().split("T")[0]);
     } else {
@@ -95,7 +96,7 @@ const Activity = () => {
       if (activity[5].checked) {
         arrayItem = [...arrayItem, ...timeEntriesConvert];
       }
-
+      setIsNoData(!arrayItem.length);
       const listData = arrangeListByDate(arrayItem);
       setListData(listData);
       setIsLoading(false);
@@ -217,12 +218,14 @@ const Activity = () => {
         <meta name="description" content="Redmine" />
       </Helmet>
       <div className="pt-2.5 flex">
-        <div className="bg-[#fff] w-3/4 min-h-[70vh] px-3 pt-2 border-[#bbbbbb] border">
+        <div className="bg-white w-3/4 min-h-[70vh] px-3 pt-2 border-neutral-300 border">
           <div className="text-xl font-semibold pt-0.5 pr-3 text-mouse-gray">Activity</div>
           <>
-            <span className="text-gray-rain text-[10.8px] italic inline-block mb-4">{`From ${convertDateFormat(dateStart)} to ${convertDateFormat(dateEnd)}`}</span>
+            <span className="text-gray-rain text-10 italic inline-block mb-4">{`From ${convertDateFormat(dateStart)} to ${convertDateFormat(dateEnd)}`}</span>
             {isLoading ? (
               <SyncLoader color="#169" size={5} />
+            ) : isNoData ? (
+              <div className="border-2 border-[#fdbf3b] bg-[#ffebc1] text-[#b7793b] text-[13.2px] w-full py-1 text-center">No data to display</div>
             ) : (
               <div className="">
                 {Object.keys(listData).map((date) => (
@@ -235,21 +238,21 @@ const Activity = () => {
                           <img
                             src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
                             alt=""
-                            className="object-cover w-[30px] h-[30px] border p-[2px] border-[#d5d5d5]"
+                            className="object-cover w-8 h-8 border p-0.5 border-stone-300"
                           />
                         </div>
                         <div className="">
                           <div className="flex items-center leading-4 gap-1">
-                            <span className="text-[9.6px] text-[#777777]">{handleFormatTime(issue.created_on)}</span>
+                            <span className="text-10 text-mouse-gray">{handleFormatTime(issue.created_on)}</span>
                             <span className="">
-                              <a href="" className="link text-xs">
+                              <a href="#!" className="link text-xs">
                                 {issue.title}
                               </a>
                             </span>
                           </div>
-                          <div className="text-[10.8px] text-[#808080] italic leading-3">{issue?.description}</div>
+                          <div className="text-10 text-zinc-500 italic leading-3">{issue?.description}</div>
                           <div className="leading-3">
-                            <a href="" className="link text-[10.8px]">
+                            <a href="#!" className="link text-10">
                               {issue.author.name}
                             </a>
                           </div>
@@ -272,23 +275,23 @@ const Activity = () => {
                 </a>
               )}
             </div>
-            <div className="flex items-center justify-end pt-2 text-[10.8px] leading-3 gap-1 text-[#666666]">
+            <div className="flex items-center justify-end pt-2 text-10 leading-3 gap-1 text-mouse-gray">
               <span>Also available in:</span>
               <img src={Atom} alt="" />
-              <a href="" className="link  text-[10.8px]">
+              <a href="#!" className="link text-10">
                 Atom
               </a>
             </div>
           </div>
         </div>
         <div className="pt-4 pl-2">
-          <h3 className="text-[#666] text-sm font-bold">Activity</h3>
+          <h3 className="text-mouse-gray text-sm font-bold">Activity</h3>
 
           <div className="flex flex-col my-2 pl-3">
             {activity.map((item, index) => (
               <label key={item.name} className="flex items-center gap-1">
                 <input type="checkbox" checked={item.checked} onChange={() => handleChange(index)} />
-                <a href="" className="link">
+                <a href="#!" className="link">
                   {item.label}
                 </a>
               </label>
