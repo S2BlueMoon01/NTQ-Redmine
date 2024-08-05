@@ -113,7 +113,7 @@ const Filter = () => {
             ))}
           </div>
           <div>
-            <span className="text-[10.8px] text-gray-rain">Add filter </span>
+            <span className="text-10 text-gray-rain">Add filter </span>
             <Select className="border text-xs">
               <option value="Developer">Developer</option>
             </Select>

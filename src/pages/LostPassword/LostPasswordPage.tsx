@@ -26,7 +26,7 @@ const LostPasswordPage = () => {
     <>
       {errorMessage && (
         <div className="pt-2">
-          <div className="flex border-[#dd0000] items-center text-[13.2px] border-2 bg-[#ffe3e3] gap-3 p-[2px] mt-2 mb-3">
+          <div className="flex border-[#dd0000] items-center text-sm border-2 bg-[#ffe3e3] gap-3 p-0.5 mt-2 mb-3">
             <figure className="ml-2">
               <img src={ErrorImg} alt="error" />
             </figure>
@@ -36,7 +36,7 @@ const LostPasswordPage = () => {
       )}
       {errors.email && (
         <div className="pt-2">
-          <div className="flex border-[#dd0000] items-center text-[13.2px] border-2 bg-[#ffe3e3] gap-3 p-[2px] mt-2 mb-3">
+          <div className="flex border-[#dd0000] items-center text-sm border-2 bg-[#ffe3e3] gap-3 p-0.5 mt-2 mb-3">
             <figure className="ml-2">
               <img src={ErrorImg} alt="error" />
             </figure>
@@ -45,7 +45,7 @@ const LostPasswordPage = () => {
         </div>
       )}
       <h2 className="text-[#555] text-xl font-bold">Lost Password</h2>
-      <div className="border pl-[144px] bg-[#fcfcfc] p-3 mt-2">
+      <div className="border pl-36 bg-[#fcfcfc] p-3 mt-2">
         <form action="" className="flex items-center" onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="email" className="font-bold text-xs text-[#505050]">
             Email
@@ -54,7 +54,7 @@ const LostPasswordPage = () => {
           <input
             id="email"
             type="text"
-            className="border w-[345px] h-[23px] text-xs pl-1"
+            className="border w-[345px] h-6 text-xs pl-1"
             {...register("email", {
               required: "Email is required.",
               pattern: {
