@@ -15,13 +15,13 @@ interface IFormInput {
   sharing: string;
 }
 
-const optionsStatus = [
+const OPTIONS_STATUS = [
   { value: "open", label: "Open" },
   { value: "locked", label: "Locked" },
   { value: "closed", label: "Closed" },
 ];
 
-const optionsSharing = [
+const OPTIONS_SHARING = [
   { value: "notShared", label: "Not Shared" },
   { value: "sub", label: "With sub projects" },
   { value: "hierarchy", label: "With project hierarchy" },
@@ -69,7 +69,7 @@ const NewVersion = () => {
             <Input id="name" className="min-w-400" {...register("name", { required: "Name can't be blank" })} />
             <Input id="description" {...register("description")} />
             <Select id="status" className="max-w-28 text-xs" {...register("status")}>
-              {optionsStatus.map((option) => (
+              {OPTIONS_STATUS.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
@@ -78,7 +78,7 @@ const NewVersion = () => {
             <Input id="wiki" {...register("wiki")} />
             <Input type="date" id="date" className="max-w-32" value={currentDate} min="2018-01-01" {...register("date")} />
             <Select id="sharing" className="max-w-40 text-xs" {...register("sharing")}>
-              {optionsSharing.map((option) => (
+              {OPTIONS_SHARING.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>

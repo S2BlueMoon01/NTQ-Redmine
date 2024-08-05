@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import config from "~/constants/config";
 import moment from "moment";
 
-const columnNames = ["#", "project", "tracker", "subject"];
+const COLUMN_NAME = ["#", "project", "tracker", "subject"];
 
 const fetchIssuesAssigned = async (): Promise<IssueTable[]> => {
   const response = await issuesApi.listIssues({ assigned_to_id: "me" });
@@ -70,7 +70,7 @@ const IssuesAssigned: React.FC = () => {
           />
         )}
       </div>
-      <TableIssues className="bg-slate-500 min-w-full mt-3" loading={isLoading} columnNames={columnNames} dataTable={listIssuesAssigned} />
+      <TableIssues className="bg-slate-500 min-w-full mt-3" loading={isLoading} columnNames={COLUMN_NAME} dataTable={listIssuesAssigned} />
     </div>
   );
 };
