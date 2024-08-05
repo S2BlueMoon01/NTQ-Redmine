@@ -25,25 +25,25 @@ const LostPasswordPage = () => {
   return (
     <>
       {errorMessage && (
-        <div className="flex border-[#dd0000] items-center text-[13.2px] border-2 bg-[#ffe3e3] gap-3 p-0.5 pt-2 mt-2 mb-3">
+        <div className="flex border-red-600 items-center text-xs border-2 bg-red-100 gap-3 p-2 mt-2 mb-3">
           <figure className="ml-2">
             <img src={ErrorImg} alt="error" />
           </figure>
-          <span className="text-[#880000]">{errorMessage}</span>
+          <span className="text-red-900">{errorMessage}</span>
         </div>
       )}
       {errors.email && (
-        <div className="flex border-[#dd0000] items-center text-[13.2px] border-2 bg-[#ffe3e3] gap-3 p-0.5 pt-2 mt-2 mb-3">
+        <div className="flex border-red-600 items-center text-xs border-2 bg-red-100 gap-3 p-2 mt-2 mb-3">
           <figure className="ml-2">
             <img src={ErrorImg} alt="error" />
           </figure>
-          <span className="text-[#880000]">{errors.email.message}</span>
+          <span className="text-red-900">{errors.email.message}</span>
         </div>
       )}
-      <h2 className="text-mouse-gray text-xl font-bold">Lost Password</h2>
+      <h2 className="text-mouse-gray text-xl py-2 font-bold">Lost Password</h2>
       <div className="border pl-36 bg-slate-50 p-3 mt-2">
         <form action="" className="flex items-center" onSubmit={handleSubmit(onSubmit)}>
-          <label htmlFor="email" className="font-bold text-xs text-[#505050]">
+          <label htmlFor="email" className="font-bold text-xs text-mouse-gray">
             Email
             <span className="text-red-700 mx-1">*</span>
           </label>

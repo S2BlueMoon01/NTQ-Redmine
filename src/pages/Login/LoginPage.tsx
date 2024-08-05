@@ -33,7 +33,7 @@ const LoginPage = () => {
             <Link
               to={"/lost-password"}
               rel="noopener noreferrer"
-              className="text-ocean-blue text-xs p-1.5 mt-7 hover:text-[#c61a1a] hover:underline whitespace-nowrap"
+              className="text-ocean-blue text-xs p-1.5 mt-7 hover:text-red-600 hover:underline whitespace-nowrap"
             >
               Lost password
             </Link>
