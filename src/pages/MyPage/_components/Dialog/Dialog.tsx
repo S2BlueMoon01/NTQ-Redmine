@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import issuesApi from "~/apis/issue.api";
 import { Issue } from "~/types/issue.type";
 import { useGlobalStore } from "~/store/globalStore";
+import Select from "~/components/Select";
+import IconSearch from "~/assets/images/magnifier.png";
+import Button from "~/components/Button";
+
 import { Rnd } from "react-rnd";
 import "./Dialog.css";
 
@@ -15,12 +19,29 @@ interface DialogProps {
   handleClick: (index: number) => void;
 }
 
-const Dialog1: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleClick }) => {
+interface Options {
+  label: string;
+  value: string | number;
+}
+
+const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleClick }) => {
   const [isVisible, setIsVisible] = useState(false);
   const { activeItemId, setActiveItemId } = useGlobalStore((state) => state);
 
   const [issue, setIssue] = useState<Issue | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [displayRelatedIssue, setDisplayRelatedIssue] = useState<boolean>(false);
+  const [isActive, setIsActive] = useState(false);
+  const [relatedIssueOptions, _setRelatedIssueOptions] = useState<Options[]>([
+    { label: "Related to", value: "relates" },
+    { label: "Duplicates", value: "duplicates" },
+    { label: "Duplicated by", value: "duplicated" },
+    { label: "Blocks", value: "blocks" },
+    { label: "Precedes", value: "precedes" },
+    { label: "Follows", value: "follows" },
+    { label: "Copied to", value: "copied_to" },
+    { label: "Copied from", value: "copied_from" },
+  ]);
 
   const handleClickOutside = () => {
     setIsVisible(false);
@@ -40,6 +61,10 @@ const Dialog1: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleC
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleClickRelatedIssue = () => {
+    setDisplayRelatedIssue((displayRelatedIssue) => !displayRelatedIssue);
   };
 
   return (
@@ -74,7 +99,7 @@ const Dialog1: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleC
               Quick View - #{issue?.id} {issue?.subject}
             </span>
             <button
-              className="w-5 h-5 icon_close bg-[#f6f6f6] px-2 rounded-sm border-[1px] border-[#ccc] hover:border-[#628db6] "
+              className="w-5 h-5 icon_close bg-[#f6f6f6] px-2 rounded-sm border-[1px] border-[#ccc] hover:border-[#628db6]"
               onClick={handleClickOutside}
               title="Close"
             ></button>
@@ -160,7 +185,7 @@ const Dialog1: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleC
                     <div className="gap-1 inline-flex align-top w-[55%] min-w-14">
                       <div className="whitespace-nowrap flex flex-wrap pt-1">
                         <div className="w-[100px] h-5 overflow-hidden bg-[#eeeeee] inline-block align-top">
-                          <div className="loading-progress bg-[#b8e0b6] h-full " style={{ width: `${issue?.done_ratio}px` }}></div>
+                          <div className="loading-progress bg-[#b8e0b6] h-full" style={{ width: `${issue?.done_ratio}px` }}></div>
                         </div>
                         <span className="text-xs inline-block align-top pl-2">{issue?.done_ratio}%</span>
                       </div>
@@ -226,19 +251,46 @@ const Dialog1: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleC
                 <label htmlFor="" className="py-2 inline-block text-[13.2px] text-[#333] font-bold">
                   Subtasks
                 </label>
-                <a href="" className="link">
+                <a href="#!" className="link">
                   Add
                 </a>
               </div>
 
               <hr className="my-1" />
-              <div className="flex items-center justify-between">
-                <label htmlFor="" className="py-2 inline-block text-[13.2px] text-[#333] font-bold">
-                  Related issues
-                </label>
-                <a href="" className="link">
-                  Add
-                </a>
+              <div className="flex flex-col">
+                <div className="flex items-center justify-between">
+                  <label htmlFor="" className="py-2 inline-block text-[13.2px] text-[#333] font-bold">
+                    Related issues
+                  </label>
+                  <a href="#!" className="link" onClick={handleClickRelatedIssue}>
+                    Add
+                  </a>
+                </div>
+                {displayRelatedIssue && (
+                  <div className="flex gap-1 text-xs font-light items-center">
+                    <Select className="text-xs">
+                      {relatedIssueOptions.map((issue) => {
+                        return <option value={issue.value}>{issue.label}</option>;
+                      })}
+                    </Select>
+                    <span className="">Issue #</span>
+                    <div className={`flex items-center border ml-1 w-32 ${isActive ? "border-[black] rounded-sm" : ""}`}>
+                      <img src={IconSearch} alt="IconSearch" className="px-1" />
+                      <input
+                        id="ParentTask"
+                        type="text"
+                        className="outline-none w-full text-xs py-1"
+                        onFocus={() => setIsActive(true)}
+                        onBlur={() => setIsActive(false)}
+                      />
+                    </div>
+                    <Button type="button">Add</Button>
+                    <a href="#!" className="link" onClick={handleClickRelatedIssue}>
+                      Cancel
+                    </a>
+                    <></>
+                  </div>
+                )}
               </div>
             </div>
             <div className="text-left px-3 py-1 text-mouse-gray">
@@ -296,4 +348,4 @@ const Dialog1: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleC
   );
 };
 
-export default Dialog1;
+export default Dialog;
