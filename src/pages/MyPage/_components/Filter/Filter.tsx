@@ -64,7 +64,7 @@ const Filter = () => {
     <>
       <div className="relative pb-2 my-2">
         <hr />
-        <div className="flex items-center px-1 absolute -top-2 left-3 bg-[#fff] cursor-pointer" onClick={handleClickDragDown}>
+        <div className="flex items-center px-1 absolute -top-2 left-3 bg-white cursor-pointer" onClick={handleClickDragDown}>
           <div className="text-gray-700">
             <img src={isDragDown ? ArrowExpanded : ArrowCollapsed} alt="icon expend" />
           </div>

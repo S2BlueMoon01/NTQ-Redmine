@@ -112,10 +112,10 @@ const SpentTime = () => {
           </div>
         </div>
 
-        <Button type="submit" className="text-xs px-1.5 mr-1 leading-5 h-5 line border bg-[#f2f2f2] text-black">
+        <Button type="submit" className="text-xs px-1.5 mr-1 leading-5 h-5 line border bg-slate-50 text-black">
           Create
         </Button>
-        <Button type="submit" className="text-xs px-1.5 mr-1 leading-5 h-5 line border bg-[#f2f2f2] text-black">
+        <Button type="submit" className="text-xs px-1.5 mr-1 leading-5 h-5 line border bg-slate-50 text-black">
           Create and continue
         </Button>
       </form>

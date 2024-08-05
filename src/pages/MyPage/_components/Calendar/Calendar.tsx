@@ -71,10 +71,10 @@ const Calendar: React.FC = () => {
               const isCurrentDay = getDay() === day;
               return (
                 <td key={day} className={`${isCurrentDay ? "bg-light-yellow" : ""} hover:bg-light-yellow relative pt-8 text-xs`}>
-                  <div className={`${isCurrentDay ? "font-bold" : ""} text-right text-[#505050] absolute top-1 right-1`}>{day}</div>
+                  <div className={`${isCurrentDay ? "font-bold" : ""} text-right text-mouse-gray absolute top-1 right-1`}>{day}</div>
                   {item[day].map((issue) => (
                     <div key={issue.id} className="py-1">
-                      <div className="flex flex-wrap p-1.5 w-full text-[10.8px] text-mouse-gray bg-light-yellow border relative card">
+                      <div className="flex flex-wrap p-1.5 w-full text-10 text-mouse-gray bg-light-yellow border relative card">
                         {issue.project.name}-
                         <span>
                           <img src={checkDateStatus({ startDate: issue.start_date, dueDate: issue.due_date, day })} alt="ArrowRightIcon" />

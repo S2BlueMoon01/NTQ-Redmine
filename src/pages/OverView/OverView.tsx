@@ -80,11 +80,11 @@ const Overview = () => {
             {loading ? (
               <SyncLoader className="ml-4" color="#169" size={4} />
             ) : (
-              <ul className="text-xs list-disc text-[#505050] pl-10 my-3">
+              <ul className="text-xs list-disc text-mouse-gray pl-10 my-3">
                 {Object.entries(issueTracker).map(([key, value]) => (
                   <li className="leading-4" key={key}>
                     <span>
-                      <a href="#" className="text-ocean-blue mr-1 hover:text-[#c61a1a] hover:underline">
+                      <a href="#" className="text-ocean-blue mr-1 hover:text-red-600 hover:underline">
                         {`${key}:`}
                       </a>
                       {`${value} open / ${value}`}
@@ -94,24 +94,24 @@ const Overview = () => {
               </ul>
             )}
 
-            <div className="text-xs text-[#505050] my-3">
+            <div className="text-xs text-mouse-gray my-3">
               <span>
-                <a href="#" className="text-ocean-blue hover:text-[#c61a1a] hover:underline">
+                <a href="#" className="text-ocean-blue hover:text-red-600 hover:underline">
                   View all issues
                 </a>
                 {" | "}
-                <a href="#" className="text-ocean-blue hover:text-[#c61a1a] hover:underline">
+                <a href="#" className="text-ocean-blue hover:text-red-600 hover:underline">
                   Calendar
                 </a>
                 {" | "}
-                <a href="#" className="text-ocean-blue hover:text-[#c61a1a] hover:underline">
+                <a href="#" className="text-ocean-blue hover:text-red-600 hover:underline">
                   Gantt
                 </a>
               </span>
             </div>
           </div>
 
-          <div className="border p-2.5 bg-[#fcfcfc] w-2/4">
+          <div className="border p-2.5 bg-white w-2/4">
             <div className="flex gap-1 text-mouse-gray font-bold text-base items-center">
               <img src={Group} alt="" />
               <span>Member</span>
@@ -119,7 +119,7 @@ const Overview = () => {
             {loading ? (
               <SyncLoader className="ml-7" color="#169" size={4} />
             ) : (
-              <div className="text-xs text-[#505050] my-4">
+              <div className="text-xs text-mouse-gray my-4">
                 {Object.entries(
                   members.reduce<Accumulator>((acc, item) => {
                     if (!acc[item.role]) {
@@ -132,7 +132,7 @@ const Overview = () => {
                   <div key={key}>
                     <span>{key} :</span>
                     {value.map((item, index) => (
-                      <a href="#" className="text-ocean-blue hover:text-[#c61a1a] hover:underline" key={item.id}>
+                      <a href="#" className="text-ocean-blue hover:text-red-600 hover:underline" key={item.id}>
                         {`${item.name}${index !== value.length - 1 ? "," : ""}`}
                       </a>
                     ))}
