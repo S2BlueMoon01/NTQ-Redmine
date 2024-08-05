@@ -1,16 +1,19 @@
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import "./Calendar.css";
 import Card from "~/pages/MyPage/_components/Card/Card";
 import { getWeekNumber, groupTasksByExactDate, getWeekDates, getDay, removeBlockFromBoardSections } from "~/utils/utils";
 import { Issue } from "~/types/issue.type";
 import { SyncLoader } from "react-spinners";
-import CloseImg from "~/assets/images/close-img.png";
-import { useGlobalStore } from "~/store/globalStore";
-import { optionBlockMyPage } from "~/constants/constants";
 import issuesApi from "~/apis/issue.api";
-import { checkDateStatus } from "~/utils/utils";
-import { useQuery } from "@tanstack/react-query";
+import CloseImg from "~/assets/images/close-img.png";
 import config from "~/constants/config";
+import { optionBlockMyPage } from "~/constants/constants";
+import Card from "~/pages/MyPage/_components/Card/Card";
+import { useGlobalStore } from "~/store/globalStore";
+import { Issue } from "~/types/issue.type";
+import { checkDateStatus, getDay, getWeekDates, getWeekNumber, groupTasksByExactDate, removeBlockFromBoardSections } from "~/utils/utils";
+import "./Calendar.css";
 
 const fetchListIssue = async (): Promise<Issue[]> => {
   const response = await issuesApi.listIssues();
