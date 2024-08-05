@@ -77,7 +77,6 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
     "service offering",
     "release ok",
   ]);
-
   const [middleArray, setMiddleArray] = useState<string[]>([]);
   const [currentColumn, setCurrentColumn] = useState<string>("");
 

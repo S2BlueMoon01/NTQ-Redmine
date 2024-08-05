@@ -94,10 +94,11 @@ const TableIssues: React.FC<PropsComponent> = ({ className, columnNames = [], da
             {columnNames.map((columnName) => {
               const id = row["#"];
               const columnTable = columnName.replace(/\s+/g, "");
+              const priority = row?.priority;
               return (
                 <td
                   key={columnName}
-                  className={columnName === "tracker" ? "text-center whitespace-nowrap px-3" : "hover:underline text-center whitespace-nowrap px-3"}
+                  className={`${columnName === "tracker" ? "text-center whitespace-nowrap px-3" : "hover:underline text-center whitespace-nowrap px-3"} ${priority === "Low" && "bg-blue-50"} ${priority === "High" && "bg-red-100"} ${priority === "Urgent" && "bg-red-200"} ${priority === "Immediate" && "bg-red-200 text-red-900 font-semibold"}`}
                 >
                   {row[columnTable] !== undefined &&
                     (typeof id === "number" ? (

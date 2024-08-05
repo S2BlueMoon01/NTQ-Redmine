@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { type ClassValue, clsx } from "clsx";
+import moment from "moment";
 import { twMerge } from "tailwind-merge";
 import ArrowLeftIcon from "~/assets/images/arrow_left.png";
 import ArrowRightIcon from "~/assets/images/arrow_right.png";
@@ -76,6 +77,61 @@ export function getWeekNumber(d: Date): number[] {
   const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
   const weekNo = Math.ceil(((d.getTime() - yearStart.getTime()) / (60 * 60 * 24 * 1000) + 1) / 7);
   return [d.getUTCFullYear(), weekNo];
+}
+
+export function getFullWeeksOfMonth(month: number, year: number = moment().year()): string[][] {
+  const weeks: string[][] = [];
+  const startOfMonth = moment({ year, month: month - 1, day: 1 });
+  const endOfMonth = startOfMonth.clone().endOf("month");
+
+  let currentWeek = startOfMonth.clone().startOf("week");
+
+  while (currentWeek.isBefore(endOfMonth) || currentWeek.isSame(endOfMonth, "week")) {
+    const week: string[] = [];
+
+    for (let i = 0; i < 7; i++) {
+      week.push(currentWeek.clone().add(i, "day").format("YYYY-MM-DD"));
+    }
+
+    weeks.push(week);
+    currentWeek.add(1, "week");
+  }
+
+  while (weeks.length < 5) {
+    const lastWeek = weeks[weeks.length - 1];
+    const nextWeek = lastWeek[lastWeek.length - 1];
+    const nextWeekStart = moment(nextWeek).add(1, "day").startOf("week");
+    const week: string[] = [];
+
+    for (let i = 0; i < 7; i++) {
+      week.push(nextWeekStart.clone().add(i, "day").format("YYYY-MM-DD"));
+    }
+
+    weeks.push(week);
+  }
+
+  return weeks;
+}
+
+export function getDateMonth(monthNumber: number, year: number = new Date().getFullYear()): string[] {
+  const dates: string[] = [];
+
+  if (monthNumber < 1 || monthNumber > 12) {
+    throw new Error("Invalid month. Please enter a value from 1 to 12.");
+  }
+
+  const firstDayOfMonth = new Date(year, monthNumber - 1, 1);
+  const lastDayOfMonth = new Date(year, monthNumber, 0);
+
+  for (let day = firstDayOfMonth.getDate(); day <= lastDayOfMonth.getDate(); day++) {
+    const currentDate = new Date(year, monthNumber - 1, day);
+    const currentYear = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const dayString = String(currentDate.getDate()).padStart(2, "0");
+    dates.push(`${currentYear}-${month}-${dayString}`);
+  }
+
+  return dates;
 }
 
 /**
@@ -168,16 +224,18 @@ export function getWeekDates(weekNumber: number, year: number = new Date().getFu
 export function groupTasksByExactDate(tasks: Issue[], dates: string[]): GroupedIssueByDay[] {
   const result = dates.map((date) => {
     const day = new Date(date).getDate();
+    // console.log("day", day);
     const tasksForDate = tasks.filter((task) => {
       const startDate = task.start_date === date;
       const dueDate = task.due_date === date;
       return startDate || dueDate;
     });
+    // console.log(day, tasksForDate);
     return {
       [day]: tasksForDate,
     };
   });
-
+  // console.log(result);
   return result;
 }
 

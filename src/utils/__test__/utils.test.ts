@@ -329,6 +329,7 @@ describe("Utils", () => {
       custom_fields: [],
       created_on: "2024-07-01",
       updated_on: "2024-07-01",
+      done_ratio: 0,
     },
     {
       id: 2,
@@ -347,6 +348,7 @@ describe("Utils", () => {
       custom_fields: [],
       created_on: "2024-07-02",
       updated_on: "2024-07-02",
+      done_ratio: 0,
     },
     {
       id: 3,
@@ -365,6 +367,7 @@ describe("Utils", () => {
       custom_fields: [],
       created_on: "2024-07-03",
       updated_on: "2024-07-03",
+      done_ratio: 0,
     },
   ];
 
