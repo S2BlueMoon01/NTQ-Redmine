@@ -50,8 +50,6 @@ const fetchTimeEntries = async () => {
       });
 
   return listDataTable;
-
-  return listDataTable;
 };
 
 const SpentTime: React.FC = () => {
@@ -85,7 +83,15 @@ const SpentTime: React.FC = () => {
           </Link>
           <p className="text-16 text-mouse-gray font-medium">(last 7 days)</p>
         </div>
-        {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={handleClose} src={CloseImg} alt="closeButton" />}
+        {isEditMyPage && (
+          <img
+            className="w-fit h-fit mr-3 cursor-pointer"
+            data-testid="btn-close-spent-time"
+            onClick={handleClose}
+            src={CloseImg}
+            alt="closeButton"
+          />
+        )}
       </div>
       <div className="flex justify-between">
         <p className="text-mouse-gray font-semibold">Total Time: {totalHours}</p>

@@ -18,7 +18,9 @@ const Documents = () => {
   return (
     <div className="flex justify-between items-center ">
       <h2 className="text-base text-mouse-gray font-bold">Documents</h2>
-      {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={handleClose} src={CloseImg} alt="closeButton" />}
+      {isEditMyPage && (
+        <img className="w-fit h-fit mr-3 cursor-pointer" data-testid="btn-close-documents" onClick={handleClose} src={CloseImg} alt="closeButton" />
+      )}
     </div>
   );
 };
