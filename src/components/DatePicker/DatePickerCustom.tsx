@@ -33,15 +33,15 @@ const DatePickerCustom: React.FC<DatePickerCustomProps> = ({ classNameDatePicker
         dropdownMode="select"
         weekLabel="Wk"
         showWeekNumbers
-        className={cn("border pl-1 w-[97px] text-xs py-[2px]", classNameDatePicker)}
+        className={cn("border pl-1 w-24 text-xs py-0.5", classNameDatePicker)}
         open={isOpen}
         onClickOutside={() => setIsOpen(false)}
       >
         <div className=" ">
           <hr className="w-64 border-t-2" />
           <div className="flex justify-between pt-2">
-            <button className="border border-[#d6d6d6] text-[#90adc9] rounded-md bg-[#fafafa] px-2 py-1 hover:border-[#8caac7]">Today</button>
-            <button className="border border-[#cccccc] text-[#628db6] font-bold rounded-md bg-[#fafafa] px-2 py-1 relative left-10 hover:border-[#8caac7]">
+            <button className="border border-gray-300 text-blue-gray rounded-md bg-slate-50 px-2 py-1 hover:border-blue-gray">Today</button>
+            <button className="border border-gray-300 text-blue-gray font-bold rounded-md bg-slate-50 px-2 py-1 relative left-10 hover:border-blue-gray">
               Done
             </button>
           </div>

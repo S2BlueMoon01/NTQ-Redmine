@@ -85,7 +85,7 @@ const CalendarDetail = () => {
 
                     return (
                       <td key={dayIndex} className={`${isCurrentDay ? "bg-light-yellow" : ""} hover:bg-light-yellow relative  text-xs`}>
-                        <div className={`${isCurrentDay ? "font-bold" : ""} text-right text-[#505050] absolute top-1 right-1`}>
+                        <div className={`${isCurrentDay ? "font-bold" : ""} text-right text-mouse-gray absolute top-1 right-1`}>
                           {moment(daysOfWeek).date()}
                         </div>
                         {issues &&

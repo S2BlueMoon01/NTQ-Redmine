@@ -40,12 +40,12 @@ const LostPasswordPage = () => {
           <span className="text-[#880000]">{errors.email.message}</span>
         </div>
       )}
-      <h2 className="text-[#555] text-xl font-bold">Lost Password</h2>
-      <div className="border pl-36 bg-[#fcfcfc] p-3 mt-2">
+      <h2 className="text-mouse-gray text-xl font-bold">Lost Password</h2>
+      <div className="border pl-36 bg-slate-50 p-3 mt-2">
         <form action="" className="flex items-center" onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="email" className="font-bold text-xs text-[#505050]">
             Email
-            <span className="text-[#bb0000] mx-1">*</span>
+            <span className="text-red-700 mx-1">*</span>
           </label>
           <input
             id="email"
