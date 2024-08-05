@@ -86,7 +86,6 @@ const SpentTime = () => {
               ))}
             </Select>
             <Input id="issue" {...register("issue")} />
-
             <Input type="date" id="date" value={currentDate} min="2018-01-01" {...register("date")} />
             <Input id="hours" {...register("hours", { required: "Hours can't be blank" })} />
             <Input id="comment" {...register("comment")} />

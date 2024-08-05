@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <footer className="text-[10.8px] p-1.5 text-center text-[#aaa]">
+    <footer className="text-10 p-1.5 text-center text-mouse-gray">
       Powered by{" "}
       <a className="hover:underline text-ocean-blue" href="https://bitnami.com/stack/redmine">
         Bitnami Redmine Stack

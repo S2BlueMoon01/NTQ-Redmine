@@ -95,17 +95,17 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
           className="bg-[#eeeeee] rounded p-1 border border-[#dddddd] h-full overflow-hidden"
         >
           <div className="drag-handle border py-1.5 px-2 flex justify-between rounded-md title_dialog items-center cursor-move">
-            <span className="font-bold text-[#fff] text-[13.2px] overflow-hidden whitespace-nowrap text-ellipsis">
+            <span className="font-bold text-[#fff] text-sm overflow-hidden whitespace-nowrap text-ellipsis">
               Quick View - #{issue?.id} {issue?.subject}
             </span>
             <button
-              className="w-5 h-5 icon_close bg-[#f6f6f6] px-2 rounded-sm border-[1px] border-[#ccc] hover:border-[#628db6]"
+              className="w-5 h-5 icon_close bg-[#f6f6f6] px-2 rounded-sm border border-[#ccc] hover:border-[#628db6] "
               onClick={handleClickOutside}
               title="Close"
             ></button>
           </div>
-          <div style={{ flexGrow: 1, overflow: "auto", height: "calc(100% - 110px)" }} className="bg-[#fff] h-[85%] overflow-auto mb-2">
-            <div className="mx-3 mt-2 border p-2 text-[#333] text-[13.2px] bg-[#ffffdd]">
+          <div style={{ flexGrow: 1, overflow: "auto", height: "calc(100% - 110px)" }} className="bg-[#fff] h-4/5 overflow-auto mb-2">
+            <div className="mx-3 mt-2 border p-2 text-[#333] text-sm bg-[#ffffdd]">
               <div className="flex gap-2 flex-wrap">
                 <div className="w-16 h-16 p-1 border bg-[#fff]">
                   <img
@@ -116,7 +116,7 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
                 </div>
                 <div className="flex flex-col gap-2 text-left">
                   <h3 className="text-base font-bold text-[#555] whitespace-normal">{issue?.subject}</h3>
-                  <div className="text-[13.2px] font-light whitespace-normal">
+                  <div className="text-sm font-light whitespace-normal">
                     {"Added by "}
                     <a href="" className="link">
                       {`${issue?.author.name} `}
@@ -131,40 +131,40 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
               <div className="text-left pb-1">
                 <div className="flex flex-wrap">
                   <div className="pt-1 flex items-center w-1/2 min-w-40 flex-wrap">
-                    <label htmlFor="" className="font-bold w-[45%] min-w-14">
+                    <label htmlFor="" className="font-bold w-2/5 min-w-14">
                       Status:
                     </label>
-                    <span className="w-[55%] min-w-14">{issue?.status.name}</span>
+                    <span className="w-1/2 min-w-14">{issue?.status.name}</span>
                   </div>
                   <div className="pt-1 w-1/2 flex items-center min-w-40 flex-wrap">
-                    <label htmlFor="" className="font-bold w-[45%] min-w-14">
+                    <label htmlFor="" className="font-bold w-2/5 min-w-14">
                       Start date:
                     </label>
-                    {issue && issue.start_date && <span className="w-[55%] min-w-14">{convertDateFormat(issue.start_date)}</span>}
+                    {issue && issue.start_date && <span className="w-1/2 min-w-14">{convertDateFormat(issue.start_date)}</span>}
                   </div>
                 </div>
 
                 <div className="flex flex-wrap">
                   <div className="pt-1 flex items-center w-1/2 min-w-40 flex-wrap">
-                    <label htmlFor="" className="font-bold w-[45%] min-w-14">
+                    <label htmlFor="" className="font-bold  w-2/5 min-w-14">
                       Priority:
                     </label>
-                    <span className="w-[55%] min-w-14">{issue?.priority.name}</span>
+                    <span className="w-1/2 min-w-14">{issue?.priority.name}</span>
                   </div>
                   <div className="pt-1 w-1/2 flex items-center min-w-40 flex-wrap">
-                    <label htmlFor="" className="font-bold w-[45%] min-w-14">
+                    <label htmlFor="" className="font-bold  w-2/5 min-w-14">
                       Due date:
                     </label>
-                    {issue && issue.due_date && <span className="w-[55%] min-w-14">{convertDateFormat(issue.due_date)}</span>}
+                    {issue && issue.due_date && <span className="w-1/2 min-w-14">{convertDateFormat(issue.due_date)}</span>}
                   </div>
                 </div>
 
                 <div className="flex flex-wrap">
                   <div className="flex w-1/2 min-w-40 flex-wrap">
-                    <label htmlFor="" className="font-bold w-[45%] min-w-14">
+                    <label htmlFor="" className="font-bold  w-2/5 min-w-14">
                       Assignee:
                     </label>
-                    <span className="flex w-[55%]">
+                    <span className="flex w-1/2">
                       <div className="min-w-5 w-5 h-5 p-[2px] border mr-1">
                         <img
                           src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
@@ -179,10 +179,10 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
                   </div>
 
                   <div className="pt-1 w-1/2 inline-flex align-top flex-wrap">
-                    <label htmlFor="" className="font-bold w-[45%] min-w-14">
+                    <label htmlFor="" className="font-bold  w-2/5 min-w-14">
                       % Done:
                     </label>
-                    <div className="gap-1 inline-flex align-top w-[55%] min-w-14">
+                    <div className="gap-1 inline-flex align-top w-1/2 min-w-14">
                       <div className="whitespace-nowrap flex flex-wrap pt-1">
                         <div className="w-[100px] h-5 overflow-hidden bg-[#eeeeee] inline-block align-top">
                           <div className="loading-progress bg-[#b8e0b6] h-full" style={{ width: `${issue?.done_ratio}px` }}></div>
@@ -195,28 +195,28 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
 
                 <div className="flex flex-wrap">
                   <div className="pt-1 flex items-center w-1/2 min-w-40 flex-wrap">
-                    <label htmlFor="" className="font-bold w-[45%] min-w-14">
+                    <label htmlFor="" className="font-bold  w-2/5 min-w-14">
                       Category:
                     </label>
-                    <span className="w-[55%] min-w-14">-</span>
+                    <span className="w-1/2 min-w-14">-</span>
                   </div>
                   <div className="pt-1 w-1/2 flex items-center min-w-40 flex-wrap">
-                    <label htmlFor="" className="font-bold w-[45%] min-w-24">
+                    <label htmlFor="" className="font-bold  w-2/5 min-w-24">
                       Estimated time:
                     </label>
-                    <span className="w-[55%] min-w-14">{issue?.estimated_hours ? `${issue?.estimated_hours} hours` : "-"}</span>
+                    <span className="w-1/2 min-w-14">{issue?.estimated_hours ? `${issue?.estimated_hours} hours` : "-"}</span>
                   </div>
                 </div>
 
                 <div className="flex flex-wrap">
                   <div className="pt-1 w-1/2 flex flex-wrap min-w-24  items-center">
-                    <label htmlFor="" className="font-bold w-[45%] min-w-24">
+                    <label htmlFor="" className="font-bold  w-2/5 min-w-24">
                       Target version:
                     </label>
-                    <span className="w-[55%] min-w-14">-</span>
+                    <span className="w-1/2 min-w-14">-</span>
                   </div>
                   <div className="pt-1 w-1/2 flex flex-wrap min-w-24">
-                    <label htmlFor="" className="font-bold w-[45%] min-w-20">
+                    <label htmlFor="" className="font-bold  w-2/5 min-w-20">
                       Spent time:
                     </label>
                     <a href="#!" className="link">
@@ -230,10 +230,10 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
                     issue.custom_fields &&
                     issue.custom_fields.map((item) => (
                       <div className="pt-1 w-1/2 flex flex-wrap min-w-24" key={item.id}>
-                        <label htmlFor="" className="font-bold w-[45%] min-w-28">
+                        <label htmlFor="" className="font-bold  w-2/5 min-w-28">
                           {item.name}:
                         </label>
-                        <span className="w-[55%] whitespace-normal min-w-21">{item.value}</span>
+                        <span className="w-1/2 whitespace-normal min-w-21">{item.value}</span>
                       </div>
                     ))}
                 </div>
@@ -241,14 +241,14 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
 
               <hr />
               <div className="py-2 text-left flex flex-col gap-3">
-                <label htmlFor="" className="text-[13.2px] text-[#333] font-bold  inline-block">
+                <label htmlFor="" className="text-sm text-[#333] font-bold  inline-block">
                   Description
                 </label>
-                <div className="text-[13.2px] text-[#333]">{issue?.description ? issue.description : "description is empty"}</div>
+                <div className="text-sm text-[#333]">{issue?.description ? issue.description : "description is empty"}</div>
               </div>
               <hr className="my-1" />
               <div className="flex items-center justify-between">
-                <label htmlFor="" className="py-2 inline-block text-[13.2px] text-[#333] font-bold">
+                <label htmlFor="" className="py-2 inline-block text-sm text-[#333] font-bold">
                   Subtasks
                 </label>
                 <a href="#!" className="link">
@@ -319,7 +319,7 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
 
                 <ul className="pl-11 text-[#333] list-disc">
                   <li className="py-3">
-                    <span className="text-[13.2px] font-bold">% Done changed</span> from 10 to 70
+                    <span className="text-sm font-bold">% Done changed</span> from 10 to 70
                   </li>
                 </ul>
               </div>
@@ -328,15 +328,15 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
 
           <hr />
 
-          <div className="flex mt-2 gap-2 justify-end pb-[10px] pr-5">
-            <button className="border-[1px] text-[#628db6] bg-[#f8f8f8] font-bold px-3 py-1 border-[#ccc] rounded-md hover:bg-[#eff6fe] hover:border-[#628db6]">
+          <div className="flex mt-2 gap-2 justify-end pb-2.5 pr-5">
+            <button className="border text-[#628db6] bg-[#f8f8f8] font-bold px-3 py-1 border-[#ccc] rounded-md hover:bg-[#eff6fe] hover:border-[#628db6]">
               details
             </button>
-            <button className="border-[1px] text-[#628db6] bg-[#f8f8f8] font-bold px-3 py-1 border-[#ccc] rounded-md hover:bg-[#eff6fe] hover:border-[#628db6]">
+            <button className="border text-[#628db6] bg-[#f8f8f8] font-bold px-3 py-1 border-[#ccc] rounded-md hover:bg-[#eff6fe] hover:border-[#628db6]">
               edit
             </button>
             <button
-              className="border-[1px] text-[#628db6] bg-[#f8f8f8] font-bold px-3 py-1 border-[#ccc] rounded-md hover:bg-[#eff6fe] hover:border-[#628db6]"
+              className="border text-[#628db6] bg-[#f8f8f8] font-bold px-3 py-1 border-[#ccc] rounded-md hover:bg-[#eff6fe] hover:border-[#628db6]"
               onClick={handleClickOutside}
             >
               close

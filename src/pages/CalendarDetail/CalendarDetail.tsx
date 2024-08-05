@@ -91,7 +91,7 @@ const CalendarDetail = () => {
                         {issues &&
                           issues[day]?.map((issue) => (
                             <div key={issue.id} className="py-1">
-                              <div className="flex gap-1 flex-wrap p-1.5 w-full text-[10.8px] text-mouse-gray bg-light-yellow border relative card">
+                              <div className="flex gap-1 flex-wrap p-1.5 w-full text-10 text-mouse-gray bg-light-yellow border relative card">
                                 <span>
                                   <img src={checkDateStatus({ startDate: issue.start_date, dueDate: issue.due_date, day })} alt="ArrowRightIcon" />
                                 </span>
