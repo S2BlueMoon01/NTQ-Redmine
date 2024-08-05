@@ -193,7 +193,7 @@ const IssuesCreate = () => {
               </div>
             </div>
           )}
-          <div className="bg-[#fcfcfc] h-[735px] w-full border border-[#e4e4e4]">
+          <div className="bg-[#fcfcfc]  w-full border border-[#e4e4e4] py-2">
             <div className="flex-block">
               <Label htmlFor="tracker" isRequired={true} className="flex gap-1 items-center p-0" name="Tracker">
                 <EnhanceSelect id="tracker" className="text-[13.33px] font-normal text-[black]" arrayOption={trackerOptions} defaultValue={"Bug"} />
