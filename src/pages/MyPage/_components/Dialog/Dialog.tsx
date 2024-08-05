@@ -1,8 +1,12 @@
-import React, { useRef, useState } from "react";
-import Draggable from "react-draggable";
-import { SyncLoader } from "react-spinners";
+import React, { useState } from "react";
 import issuesApi from "~/apis/issue.api";
 import { Issue } from "~/types/issue.type";
+import { useGlobalStore } from "~/store/globalStore";
+import Select from "~/components/Select";
+import IconSearch from "~/assets/images/magnifier.png";
+import Button from "~/components/Button";
+
+import { Rnd } from "react-rnd";
 import "./Dialog.css";
 
 import Loading from "~/components/Loading";
@@ -15,22 +19,43 @@ interface DialogProps {
   handleClick: (index: number) => void;
 }
 
+interface Options {
+  label: string;
+  value: string | number;
+}
+
 const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleClick }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const itemRef = useRef<HTMLDivElement>(null);
+  const { activeItemId, setActiveItemId } = useGlobalStore((state) => state);
+
   const [issue, setIssue] = useState<Issue | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [displayRelatedIssue, setDisplayRelatedIssue] = useState<boolean>(false);
+  const [isActive, setIsActive] = useState(false);
+  const [relatedIssueOptions, _setRelatedIssueOptions] = useState<Options[]>([
+    { label: "Related to", value: "relates" },
+    { label: "Duplicates", value: "duplicates" },
+    { label: "Duplicated by", value: "duplicated" },
+    { label: "Blocks", value: "blocks" },
+    { label: "Precedes", value: "precedes" },
+    { label: "Follows", value: "follows" },
+    { label: "Copied to", value: "copied_to" },
+    { label: "Copied from", value: "copied_from" },
+  ]);
 
   const handleClickOutside = () => {
     setIsVisible(false);
+    setActiveItemId(0);
   };
 
   const fetchIssue = async () => {
     try {
-      setLoading(true);
-      const response = await issuesApi.getIssueById({ id: issueId });
-      setIssue(response.data.issue);
-      setIsVisible(true);
+      if (activeItemId !== issueId) {
+        setLoading(true);
+        const response = await issuesApi.getIssueById({ id: issueId });
+        setIssue(response.data.issue);
+        setIsVisible(true);
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -38,8 +63,12 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
     }
   };
 
+  const handleClickRelatedIssue = () => {
+    setDisplayRelatedIssue((displayRelatedIssue) => !displayRelatedIssue);
+  };
+
   return (
-    <div>
+    <>
       <div
         onClick={() => {
           fetchIssue();
@@ -48,235 +77,274 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
         {content}
       </div>
       {loading && <Loading />}
-      {isVisible && (
-        <Draggable onStart={() => handleClick(issueId)}>
-          <div className={`pt-5 pl-5 absolute`} style={{ zIndex: ZIndex }} ref={itemRef}>
-            <SyncLoader loading={loading} color="#169" size={5} />
-            <div className="p-[2px] w-[645px] h-[630px] border-1 rounded-md border-[#e5e7eb] bg-[#eeeeee]">
-              <div className="bg-[#fff] z-20 h-[571px] overflow-y-auto">
-                <div className="border py-1 px-2 flex justify-between rounded-md title_dialog items-center">
-                  <span className="font-bold text-[#fff] text-[13.2px]">
-                    Quick View - #{issue?.id} {issue?.subject}
-                  </span>
-                  <button
-                    className="w-5 h-5 icon_close bg-[#f6f6f6] px-2 rounded-sm border-[1px] border-[#ccc] hover:border-[#628db6] "
-                    onClick={handleClickOutside}
-                    title="Close"
-                  ></button>
+      <div className={`wrapper ${isVisible ? "" : "disappear"}`} style={{ zIndex: ZIndex }}>
+        <Rnd
+          default={{
+            x: 0,
+            y: 0,
+            width: 645,
+            height: 615,
+          }}
+          minWidth={200}
+          minHeight={150}
+          style={{ zIndex: ZIndex }}
+          dragHandleClassName="drag-handle"
+          onDragStart={() => {
+            handleClick(issueId);
+          }}
+          className="bg-[#eeeeee] rounded p-1 border border-[#dddddd] h-full overflow-hidden"
+        >
+          <div className="drag-handle border py-1.5 px-2 flex justify-between rounded-md title_dialog items-center cursor-move">
+            <span className="font-bold text-[#fff] text-sm overflow-hidden whitespace-nowrap text-ellipsis">
+              Quick View - #{issue?.id} {issue?.subject}
+            </span>
+            <button
+              className="w-5 h-5 icon_close bg-[#f6f6f6] px-2 rounded-sm border border-[#ccc] hover:border-[#628db6] "
+              onClick={handleClickOutside}
+              title="Close"
+            ></button>
+          </div>
+          <div style={{ flexGrow: 1, overflow: "auto", height: "calc(100% - 110px)" }} className="bg-[#fff] h-4/5 overflow-auto mb-2">
+            <div className="mx-3 mt-2 border p-2 text-[#333] text-sm bg-[#ffffdd]">
+              <div className="flex gap-2 flex-wrap">
+                <div className="w-16 h-16 p-1 border bg-[#fff]">
+                  <img
+                    src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
+                    alt=""
+                    className=""
+                  />
                 </div>
-                <div className="mx-3 mt-2 border p-2 text-[#333] text-[13.2px] bg-[#ffffdd]">
-                  <div className="flex gap-2">
-                    <div className="w-16 h-16 p-1 border bg-[#fff]">
-                      <img
-                        src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
-                        alt=""
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2 text-left">
-                      <h3 className="text-base font-bold text-[#555]">{issue?.subject}</h3>
-                      <div className="text-[13.2px] font-light">
-                        {"Added by "}
-                        <a href="" className="link">
-                          {`${issue?.author.name} `}
-                        </a>
-                        <a href="" className="link">
-                          {`${getSecondsDifference(issue?.created_on)} `}
-                        </a>
-                        ago.
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-left">
-                    <div className="flex">
-                      <div className="pt-1 w-1/2 flex items-center">
-                        <label htmlFor="" className="font-bold w-[45%]">
-                          Status:
-                        </label>
-                        <span className="">{issue?.status.name}</span>
-                      </div>
-                      <div className="pt-1 w-1/2 flex items-center">
-                        <label htmlFor="" className="font-bold w-[45%]">
-                          Start date:
-                        </label>
-                        {issue && issue.start_date && <span className="">{convertDateFormat(issue.start_date)}</span>}
-                      </div>
-                    </div>
-
-                    <div className="flex justify-between">
-                      <div className="pt-1 w-1/2 flex items-center">
-                        <label htmlFor="" className=" font-bold w-[45%]">
-                          Priority:
-                        </label>
-                        <span>{issue?.priority.name}</span>
-                      </div>
-                      <div className="pt-1 w-1/2 flex items-center">
-                        <label htmlFor="" className="font-bold w-[45%]">
-                          Due date:
-                        </label>
-                        {issue && issue.due_date && <span>{convertDateFormat(issue.due_date)}</span>}
-                      </div>
-                    </div>
-
-                    <div className="flex justify-between">
-                      <div className="flex pt-1 w-[50%]">
-                        <label htmlFor="" className="font-bold w-[45%]">
-                          Assignee:
-                        </label>
-                        <span className="flex w-[55%]">
-                          <div className="min-w-5 w-5 h-5 p-[2px] border mr-1">
-                            <img
-                              src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
-                              alt=""
-                              className="object-cover"
-                            />
-                          </div>
-                          <a href="" className="link whitespace-normal">
-                            {issue?.assigned_to ? issue?.assigned_to?.name : "-"}
-                          </a>
-                        </span>
-                      </div>
-
-                      <div className="pt-1 w-1/2 inline-flex align-top">
-                        <label htmlFor="" className="font-bold w-[45%]">
-                          % Done:
-                        </label>
-                        <div className="gap-1 inline-flex align-top">
-                          <div className="whitespace-nowrap inline-block pt-1">
-                            <div className="w-[100px] h-5 overflow-hidden bg-[#eeeeee] inline-block align-top">
-                              <div className="loading-progress bg-[#b8e0b6] h-full " style={{ width: `${issue?.done_ratio}px` }}></div>
-                            </div>
-                            <span className="text-xs inline-block align-top pl-2">{issue?.done_ratio}%</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex justify-between">
-                      <div className="pt-1 w-1/2 flex items-center">
-                        <label htmlFor="" className="font-bold w-[45%]">
-                          Category:
-                        </label>
-                        <span>-</span>
-                      </div>
-                      <div className="pt-1 w-1/2 flex items-center">
-                        <label htmlFor="" className="font-bold w-[45%]">
-                          Estimated time:
-                        </label>
-                        <span>{issue?.estimated_hours ? `${issue?.estimated_hours} hours` : "-"}</span>
-                      </div>
-                    </div>
-
-                    <div className="flex justify-between">
-                      <div className="pt-1 w-1/2 flex items-center">
-                        <label htmlFor="" className="font-bold w-[45%]">
-                          Target version:
-                        </label>
-                        <span>-</span>
-                      </div>
-                      <div className="pt-1 w-1/2 flex">
-                        <label htmlFor="" className="font-bold w-[45%]">
-                          Spent time:
-                        </label>
-                        <a href="#!" className="link">
-                          {issue?.spent_hours ? `${issue?.spent_hours} hours` : "-"}
-                        </a>
-                      </div>
-                    </div>
-
-                    <div className="flex pb-2 flex-wrap">
-                      {issue &&
-                        issue.custom_fields &&
-                        issue.custom_fields.map((item) => (
-                          <div className="pt-1 w-1/2 flex items-center" key={item.id}>
-                            <label htmlFor="" className="font-bold w-[45%]">
-                              {item.name}:
-                            </label>
-                            <span>{item.value}</span>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-
-                  <hr />
-                  <div className="py-1 text-left">
-                    <label htmlFor="" className="text-[13.2px] text-[#333] font-bold py-1 inline-block">
-                      Description
-                    </label>
-                    <div className="text-[13.2px] text-[#333]">{issue?.description ? issue.description : "description is empty"}</div>
-                  </div>
-                  <hr className="mt-1" />
-                  <div className="flex items-center justify-between">
-                    <label htmlFor="" className="py-2 inline-block text-[13.2px] text-[#333] font-bold">
-                      Subtasks
-                    </label>
+                <div className="flex flex-col gap-2 text-left">
+                  <h3 className="text-base font-bold text-[#555] whitespace-normal">{issue?.subject}</h3>
+                  <div className="text-sm font-light whitespace-normal">
+                    {"Added by "}
                     <a href="" className="link">
-                      Add
+                      {`${issue?.author.name} `}
                     </a>
-                  </div>
-
-                  <hr />
-                  <div className="flex items-center justify-between">
-                    <label htmlFor="" className="py-2 inline-block text-[13.2px] text-[#333] font-bold">
-                      Related issues
-                    </label>
                     <a href="" className="link">
-                      Add
+                      {`${getSecondsDifference(issue?.created_on)} `}
                     </a>
+                    ago.
                   </div>
                 </div>
-                <div className="text-left px-3 py-1 text-mouse-gray">
-                  <div className="text-base font-bold pb-1">History</div>
-                  <div className="pt-1">
-                    <div className="flex justify-between">
-                      <div className="flex items-center gap-1">
+              </div>
+              <div className="text-left pb-1">
+                <div className="flex flex-wrap">
+                  <div className="pt-1 flex items-center w-1/2 min-w-40 flex-wrap">
+                    <label htmlFor="" className="font-bold w-2/5 min-w-14">
+                      Status:
+                    </label>
+                    <span className="w-1/2 min-w-14">{issue?.status.name}</span>
+                  </div>
+                  <div className="pt-1 w-1/2 flex items-center min-w-40 flex-wrap">
+                    <label htmlFor="" className="font-bold w-2/5 min-w-14">
+                      Start date:
+                    </label>
+                    {issue && issue.start_date && <span className="w-1/2 min-w-14">{convertDateFormat(issue.start_date)}</span>}
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap">
+                  <div className="pt-1 flex items-center w-1/2 min-w-40 flex-wrap">
+                    <label htmlFor="" className="font-bold  w-2/5 min-w-14">
+                      Priority:
+                    </label>
+                    <span className="w-1/2 min-w-14">{issue?.priority.name}</span>
+                  </div>
+                  <div className="pt-1 w-1/2 flex items-center min-w-40 flex-wrap">
+                    <label htmlFor="" className="font-bold  w-2/5 min-w-14">
+                      Due date:
+                    </label>
+                    {issue && issue.due_date && <span className="w-1/2 min-w-14">{convertDateFormat(issue.due_date)}</span>}
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap">
+                  <div className="flex w-1/2 min-w-40 flex-wrap">
+                    <label htmlFor="" className="font-bold  w-2/5 min-w-14">
+                      Assignee:
+                    </label>
+                    <span className="flex w-1/2">
+                      <div className="min-w-5 w-5 h-5 p-[2px] border mr-1">
                         <img
                           src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
                           alt=""
-                          className="w-8 h-8"
+                          className="object-cover"
                         />
-                        <span className="font-bold">
-                          Updated by{" "}
-                          <a href="" className="link font-bold">
-                            Son (internship) Nguyen Hoang Huu
-                          </a>{" "}
-                          <a href="" className="link font-bold">
-                            38 minutes
-                          </a>{" "}
-                          ago
-                        </span>
                       </div>
-                      <a className="link font-bold">#1</a>
-                    </div>
+                      <a href="" className="link whitespace-normal">
+                        {issue?.assigned_to ? issue?.assigned_to?.name : "-"}
+                      </a>
+                    </span>
+                  </div>
 
-                    <ul className="pl-11 text-[#333] list-disc">
-                      <li className="py-3">
-                        <span className="text-[13.2px] font-bold">% Done changed</span> from 10 to 70
-                      </li>
-                    </ul>
+                  <div className="pt-1 w-1/2 inline-flex align-top flex-wrap">
+                    <label htmlFor="" className="font-bold  w-2/5 min-w-14">
+                      % Done:
+                    </label>
+                    <div className="gap-1 inline-flex align-top w-1/2 min-w-14">
+                      <div className="whitespace-nowrap flex flex-wrap pt-1">
+                        <div className="w-[100px] h-5 overflow-hidden bg-[#eeeeee] inline-block align-top">
+                          <div className="loading-progress bg-[#b8e0b6] h-full" style={{ width: `${issue?.done_ratio}px` }}></div>
+                        </div>
+                        <span className="text-xs inline-block align-top pl-2">{issue?.done_ratio}%</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <hr className="my-2" />
 
-              <div className="flex gap-2 justify-end pb-[10px] pr-5">
-                <button className="border-[1px] text-[#628db6] bg-[#f8f8f8] font-bold px-3 py-1 border-[#ccc] rounded-md hover:bg-[#eff6fe] hover:border-[#628db6]">
-                  details
-                </button>
-                <button className="border-[1px] text-[#628db6] bg-[#f8f8f8] font-bold px-3 py-1 border-[#ccc] rounded-md hover:bg-[#eff6fe] hover:border-[#628db6]">
-                  edit
-                </button>
-                <button
-                  className="border-[1px] text-[#628db6] bg-[#f8f8f8] font-bold px-3 py-1 border-[#ccc] rounded-md hover:bg-[#eff6fe] hover:border-[#628db6]"
-                  onClick={handleClickOutside}
-                >
-                  close
-                </button>
+                <div className="flex flex-wrap">
+                  <div className="pt-1 flex items-center w-1/2 min-w-40 flex-wrap">
+                    <label htmlFor="" className="font-bold  w-2/5 min-w-14">
+                      Category:
+                    </label>
+                    <span className="w-1/2 min-w-14">-</span>
+                  </div>
+                  <div className="pt-1 w-1/2 flex items-center min-w-40 flex-wrap">
+                    <label htmlFor="" className="font-bold  w-2/5 min-w-24">
+                      Estimated time:
+                    </label>
+                    <span className="w-1/2 min-w-14">{issue?.estimated_hours ? `${issue?.estimated_hours} hours` : "-"}</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap">
+                  <div className="pt-1 w-1/2 flex flex-wrap min-w-24  items-center">
+                    <label htmlFor="" className="font-bold  w-2/5 min-w-24">
+                      Target version:
+                    </label>
+                    <span className="w-1/2 min-w-14">-</span>
+                  </div>
+                  <div className="pt-1 w-1/2 flex flex-wrap min-w-24">
+                    <label htmlFor="" className="font-bold  w-2/5 min-w-20">
+                      Spent time:
+                    </label>
+                    <a href="#!" className="link">
+                      {issue?.spent_hours ? `${issue?.spent_hours} hours` : "-"}
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex pb-2 flex-wrap">
+                  {issue &&
+                    issue.custom_fields &&
+                    issue.custom_fields.map((item) => (
+                      <div className="pt-1 w-1/2 flex flex-wrap min-w-24" key={item.id}>
+                        <label htmlFor="" className="font-bold  w-2/5 min-w-28">
+                          {item.name}:
+                        </label>
+                        <span className="w-1/2 whitespace-normal min-w-21">{item.value}</span>
+                      </div>
+                    ))}
+                </div>
+              </div>
+
+              <hr />
+              <div className="py-2 text-left flex flex-col gap-3">
+                <label htmlFor="" className="text-sm text-[#333] font-bold  inline-block">
+                  Description
+                </label>
+                <div className="text-sm text-[#333]">{issue?.description ? issue.description : "description is empty"}</div>
+              </div>
+              <hr className="my-1" />
+              <div className="flex items-center justify-between">
+                <label htmlFor="" className="py-2 inline-block text-sm text-[#333] font-bold">
+                  Subtasks
+                </label>
+                <a href="#!" className="link">
+                  Add
+                </a>
+              </div>
+
+              <hr className="my-1" />
+              <div className="flex flex-col">
+                <div className="flex items-center justify-between">
+                  <label htmlFor="" className="py-2 inline-block text-[13.2px] text-[#333] font-bold">
+                    Related issues
+                  </label>
+                  <a href="#!" className="link" onClick={handleClickRelatedIssue}>
+                    Add
+                  </a>
+                </div>
+                {displayRelatedIssue && (
+                  <div className="flex gap-1 text-xs font-light items-center">
+                    <Select className="text-xs">
+                      {relatedIssueOptions.map((issue) => {
+                        return <option value={issue.value}>{issue.label}</option>;
+                      })}
+                    </Select>
+                    <span className="">Issue #</span>
+                    <div className={`flex items-center border ml-1 w-32 ${isActive ? "border-[black] rounded-sm" : ""}`}>
+                      <img src={IconSearch} alt="IconSearch" className="px-1" />
+                      <input
+                        id="ParentTask"
+                        type="text"
+                        className="outline-none w-full text-xs py-1"
+                        onFocus={() => setIsActive(true)}
+                        onBlur={() => setIsActive(false)}
+                      />
+                    </div>
+                    <Button type="button">Add</Button>
+                    <a href="#!" className="link" onClick={handleClickRelatedIssue}>
+                      Cancel
+                    </a>
+                    <></>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="text-left px-3 py-1 text-mouse-gray">
+              <div className="text-base font-bold pb-1">History</div>
+              <div className="pt-1">
+                <div className="flex justify-between">
+                  <div className="flex items-center gap-1">
+                    <img
+                      src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
+                      alt=""
+                      className="w-8 h-8"
+                    />
+                    <span className="font-bold">
+                      Updated by{" "}
+                      <a href="" className="link font-bold">
+                        Son (internship) Nguyen Hoang Huu
+                      </a>{" "}
+                      <a href="" className="link font-bold">
+                        38 minutes
+                      </a>{" "}
+                      ago
+                    </span>
+                  </div>
+                  <a className="link font-bold">#1</a>
+                </div>
+
+                <ul className="pl-11 text-[#333] list-disc">
+                  <li className="py-3">
+                    <span className="text-sm font-bold">% Done changed</span> from 10 to 70
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
-        </Draggable>
-      )}
-    </div>
+
+          <hr />
+
+          <div className="flex mt-2 gap-2 justify-end pb-2.5 pr-5">
+            <button className="border text-[#628db6] bg-[#f8f8f8] font-bold px-3 py-1 border-[#ccc] rounded-md hover:bg-[#eff6fe] hover:border-[#628db6]">
+              details
+            </button>
+            <button className="border text-[#628db6] bg-[#f8f8f8] font-bold px-3 py-1 border-[#ccc] rounded-md hover:bg-[#eff6fe] hover:border-[#628db6]">
+              edit
+            </button>
+            <button
+              className="border text-[#628db6] bg-[#f8f8f8] font-bold px-3 py-1 border-[#ccc] rounded-md hover:bg-[#eff6fe] hover:border-[#628db6]"
+              onClick={handleClickOutside}
+            >
+              close
+            </button>
+          </div>
+        </Rnd>
+      </div>
+    </>
   );
 };
 

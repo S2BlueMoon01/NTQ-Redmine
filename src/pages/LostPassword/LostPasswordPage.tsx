@@ -41,7 +41,7 @@ const LostPasswordPage = () => {
         </div>
       )}
       <h2 className="text-[#555] text-xl font-bold">Lost Password</h2>
-      <div className="border pl-[144px] bg-[#fcfcfc] p-3 mt-2">
+      <div className="border pl-36 bg-[#fcfcfc] p-3 mt-2">
         <form action="" className="flex items-center" onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="email" className="font-bold text-xs text-[#505050]">
             Email
@@ -50,7 +50,7 @@ const LostPasswordPage = () => {
           <input
             id="email"
             type="text"
-            className="border w-[345px] h-[23px] text-xs pl-1"
+            className="border w-[345px] h-6 text-xs pl-1"
             {...register("email", {
               required: "Email is required.",
               pattern: {

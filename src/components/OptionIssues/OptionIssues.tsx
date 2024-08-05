@@ -8,28 +8,40 @@ interface OptionProps {
   onChangeOptions: (optionArray: string[]) => void;
 }
 
-const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
+const OptionIssues: React.FC<OptionProps> = ({ onChangeOptions }) => {
   const [isDragDown, setIsDragDown] = useState(false);
   const [availableColumns, setAvailableColumns] = useState([
-    "product category",
+    "parent Task",
+    "category",
+    "target Version",
+    "start Date",
+    "due Date",
+    "estimated Time",
+    "spent time",
+    "total spent time",
+    "done Ratio",
+    "created_on",
+    "closed_on",
+    "related issues",
     "target",
+    "degrade",
     "similar",
     "cause",
     "solution",
     "process",
     "from customer",
     "version",
-    "functionId",
+    "functionID",
     "bug type",
     "severity",
-    "testCaseId",
+    "testCaseID",
     "purpose",
     "department",
     "duplicate issue",
-    "tested ok",
+    "tested OK",
     "qna related",
     "difficulty",
-    "test on staging ok",
+    "test on staging OK",
     "defect origin",
     "qc activity",
     "defect type",
@@ -49,7 +61,7 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
     "builded",
     "current state",
     "test checklist",
-    "reproduce?",
+    "reproduce",
     "after refactor",
     "swat",
     "test environment",
@@ -79,8 +91,7 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
   ]);
   const [middleArray, setMiddleArray] = useState<string[]>([]);
   const [currentColumn, setCurrentColumn] = useState<string>("");
-
-  const [selectedColumns, setSelectedColumns] = useState(["project", "date", "user", "activity", "issues", "comment", "hours"]);
+  const [selectedColumns, setSelectedColumns] = useState(["#", "project", "tracker", "status", "priority", "assignee", "updated", "author"]);
 
   const handleClickDragDown = () => {
     setIsDragDown((isDragDown) => !isDragDown);
@@ -298,4 +309,4 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
   );
 };
 
-export default Option;
+export default OptionIssues;

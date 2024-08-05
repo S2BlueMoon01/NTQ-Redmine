@@ -3,11 +3,13 @@ import { immer } from "zustand/middleware/immer";
 import { BoardSections, Block } from "~/types/utils.type";
 
 type State = {
+  activeItemId: number;
   isEditMyPage: boolean;
   boardSections: BoardSections;
 };
 
 type Actions = {
+  setActiveItemId: (data: number) => void;
   setIsEditMyPage: (data: boolean) => void;
   setBoardSections: (data: BoardSections) => void;
   removeBlock: (blockId: string) => void;
@@ -16,6 +18,12 @@ type Actions = {
 
 export const useGlobalStore = create<State & Actions>()(
   immer((set) => ({
+    activeItemId: 1,
+    setActiveItemId: (data) => {
+      set((state) => {
+        state.activeItemId = data;
+      });
+    },
     isEditMyPage: false,
     setIsEditMyPage: (data) => {
       set((state) => {

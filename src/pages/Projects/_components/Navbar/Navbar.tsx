@@ -68,7 +68,7 @@ const Navbar = ({ idProject, nameHeader }: { idProject?: string | undefined; nam
 
   return (
     <div>
-      <ul className="flex gap-[1px] cursor-pointer pl-1 text-[#fff] text-xs font-bold">
+      <ul className="flex gap-0.5 cursor-pointer pl-1 text-[#fff] text-xs font-bold">
         {listValueNavbar.length > 0 &&
           listValueNavbar.map((item) => (
             <Link

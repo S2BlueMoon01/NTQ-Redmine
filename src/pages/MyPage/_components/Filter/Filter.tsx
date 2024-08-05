@@ -62,29 +62,29 @@ const Filter = () => {
 
   return (
     <>
-      <div className="relative pb-2 mt-2">
+      <div className="relative pb-2 my-2">
         <hr />
-        <div className="flex items-center px-1 absolute top-[-8px] left-3 bg-[#fff] cursor-pointer" onClick={handleClickDragDown}>
+        <div className="flex items-center px-1 absolute -top-2 left-3 bg-[#fff] cursor-pointer" onClick={handleClickDragDown}>
           <div className="text-gray-700">
             <img src={isDragDown ? ArrowExpanded : ArrowCollapsed} alt="icon expend" />
           </div>
-          <span className="text-[10.8px] text-gray-rain">Filters</span>
+          <span className="text-10 text-gray-rain">Filters</span>
         </div>
       </div>
       {isDragDown && (
         <div className="flex justify-between px-3">
-          <div className="gap-2 min-w-16 w-[70%]">
+          <div className="gap-2 min-w-16 w-3/4">
             {fakeData.map((item) => (
               <div key={item.title} className="flex items-center">
                 <div className="flex items-center gap-2 w-72">
                   <input type="checkbox" className="" />
-                  <label htmlFor="assignee-role" className="text-[10.8px]">
+                  <label htmlFor="assignee-role" className="text-10">
                     {item.title}
                   </label>
                 </div>
                 <div className="w-80">
                   {item.type === "select" && (
-                    <Select className="bg-[#efefef] border text-[12px]">
+                    <Select className="bg-[#efefef] border text-xs">
                       {item.sortBy?.map((option) => (
                         <option key={option.value} value={option.value}>
                           {option.label}
@@ -97,7 +97,7 @@ const Filter = () => {
                   {item.type === "input" && <Input type="text" className="border" />}
                   {item.type === "select" && (
                     <>
-                      <Select className="bg-transparent border h-full bg-[#efefef] pl-0" size={size}>
+                      <Select className="bg-transparent border h-full bg-[#efefef] pl-0 text-xs" size={size}>
                         {item.filerOptions?.map((filterOption) => (
                           <option key={filterOption.value} value={filterOption.value}>
                             {filterOption.label}
@@ -113,8 +113,8 @@ const Filter = () => {
             ))}
           </div>
           <div>
-            <span className="text-[10.8px] text-gray-rain">Add filter </span>
-            <Select className="border">
+            <span className="text-10 text-gray-rain">Add filter </span>
+            <Select className="border text-xs">
               <option value="Developer">Developer</option>
             </Select>
           </div>

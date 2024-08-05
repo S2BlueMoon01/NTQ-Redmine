@@ -38,7 +38,7 @@ export interface TimeEntriesTable {
   activity: string;
   comment: string | undefined;
   hours: number;
-  project: string | undefined;
+  project: string | undefined | JSX.Element;
   date: string;
 }
 
