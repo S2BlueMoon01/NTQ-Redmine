@@ -33,7 +33,7 @@ const Board: React.FC<BoardProps> = ({ boardId, blocks }) => {
         <div
           ref={provided.innerRef}
           {...provided.droppableProps}
-          className={cn("w-full flex flex-col gap-4 py-2 min-h-8", isEditMyPage ? "border-dashed border border-gray-400" : "")}
+          className={cn("w-full flex flex-col gap-4 py-2 min-h-8", { "border-dashed border border-gray-400": isEditMyPage })}
         >
           {renderBlocks()}
           {provided.placeholder}
