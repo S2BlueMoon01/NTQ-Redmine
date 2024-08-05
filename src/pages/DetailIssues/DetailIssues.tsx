@@ -18,11 +18,11 @@ const DetailIssues = () => {
   const { name, id } = useParams();
   const [columnName, setColumnName] = useState<string[]>(["#", "project", "tracker", "status", "priority", "assignee", "updated", "author"]);
   const [midColumnName, setMidColumnName] = useState<string[]>(["#", "project", "tracker", "status", "priority", "assignee", "updated", "author"]);
+  const isProjectPage = location.pathname.startsWith(`/projects`);
   const projectID = Number(id) ? Number(id) : 323;
 
   const fetchIssuesOfProject = async () => {
-    const response = await issuesApi.listIssues({ project_id: projectID, assigned_to_id: "*", parent_id: "*" });
-    console.log(response.data.issues);
+    const response = await issuesApi.listIssues({ project_id: projectID });
     return (
       response.data?.issues?.map((issue) => {
         const doneRatio = (
@@ -105,18 +105,20 @@ const DetailIssues = () => {
             <h2 className="text-base text-mouse-gray font-bold">Issues</h2>
             <div className="text-ocean-blue flex flex-col gap-2">
               <Link to="">View all issues</Link>
+              {isProjectPage && <Link to="">Summary</Link>}
               <Link to="">Calendar</Link>
               <Link to="">Gantt</Link>
-              <Link to="">Summary</Link>
-              <Link to="">Agile board</Link>
+              {!isProjectPage && <Link to="">Agile board</Link>}
             </div>
           </>
-          <div>
-            <h2 className="text-base text-mouse-gray font-bold mb-2">Agile charts</h2>
-            <Link className="text-ocean-blue" to="">
-              Issues burndown
-            </Link>
-          </div>
+          {!isProjectPage && (
+            <div>
+              <h2 className="text-base text-mouse-gray font-bold mb-2">Agile charts</h2>
+              <Link className="text-ocean-blue" to="">
+                Issues burndown
+              </Link>
+            </div>
+          )}
           <div>
             <h2 className="text-base text-mouse-gray font-bold mb-2">Custom queries</h2>
             <Link className="text-ocean-blue" to="">
