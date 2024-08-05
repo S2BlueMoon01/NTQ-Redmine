@@ -25,23 +25,19 @@ const LostPasswordPage = () => {
   return (
     <>
       {errorMessage && (
-        <div className="pt-2">
-          <div className="flex border-[#dd0000] items-center text-[13.2px] border-2 bg-[#ffe3e3] gap-3 p-[2px] mt-2 mb-3">
-            <figure className="ml-2">
-              <img src={ErrorImg} alt="error" />
-            </figure>
-            <span className="text-[#880000]">{errorMessage}</span>
-          </div>
+        <div className="flex border-[#dd0000] items-center text-[13.2px] border-2 bg-[#ffe3e3] gap-3 p-0.5 pt-2 mt-2 mb-3">
+          <figure className="ml-2">
+            <img src={ErrorImg} alt="error" />
+          </figure>
+          <span className="text-[#880000]">{errorMessage}</span>
         </div>
       )}
       {errors.email && (
-        <div className="pt-2">
-          <div className="flex border-[#dd0000] items-center text-[13.2px] border-2 bg-[#ffe3e3] gap-3 p-[2px] mt-2 mb-3">
-            <figure className="ml-2">
-              <img src={ErrorImg} alt="error" />
-            </figure>
-            <span className="text-[#880000]">{errors.email.message}</span>
-          </div>
+        <div className="flex border-[#dd0000] items-center text-[13.2px] border-2 bg-[#ffe3e3] gap-3 p-0.5 pt-2 mt-2 mb-3">
+          <figure className="ml-2">
+            <img src={ErrorImg} alt="error" />
+          </figure>
+          <span className="text-[#880000]">{errors.email.message}</span>
         </div>
       )}
       <h2 className="text-[#555] text-xl font-bold">Lost Password</h2>

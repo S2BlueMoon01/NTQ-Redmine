@@ -4,12 +4,10 @@ import { twMerge } from "tailwind-merge";
 import ArrowLeftIcon from "~/assets/images/arrow_left.png";
 import ArrowRightIcon from "~/assets/images/arrow_right.png";
 import DiamondIcon from "~/assets/images/bullet_diamond.png";
-import { optionBlockMyPage } from "~/constants/constants";
 import HttpStatusCode from "~/constants/httpStatusCode.enum";
 import { GroupedIssueByDay, Issue } from "~/types/issue.type";
 import { GroupedTimeEntries, TimeEntriesTable } from "~/types/timeEntries.type";
-import { Block, BoardSections, ErrorResponse } from "~/types/utils.type";
-import { BoardSections as BoardSectionsType } from "~/types/utils.type";
+import { Block, BoardSections, BoardSections as BoardSectionsType, ErrorResponse } from "~/types/utils.type";
 
 /**
  * Combines multiple class names into a single string.

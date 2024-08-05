@@ -48,7 +48,15 @@ const WatchedIssues: React.FC = () => {
         <Link className="text-ocean-blue font-semibold hover:underline" to="/issues">
           Watched issues ({listIssuesWatcher.length})
         </Link>
-        {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={handleClose} src={CloseImg} alt="closeButton" />}
+        {isEditMyPage && (
+          <img
+            className="w-fit h-fit mr-3 cursor-pointer"
+            data-testid="btn-close-watched-issues"
+            onClick={handleClose}
+            src={CloseImg}
+            alt="closeButton"
+          />
+        )}
       </div>
       <TableIssues className="bg-slate-500 min-w-full mt-3" loading={isLoading} columnNames={columnNames} dataTable={listIssuesWatcher} />
     </div>

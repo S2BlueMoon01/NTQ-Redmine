@@ -50,7 +50,15 @@ const ReportedIssues: React.FC = () => {
         <Link className="text-ocean-blue font-semibold hover:underline " to="/issues">
           Reported issues ({listReportedIssues.length})
         </Link>
-        {isEditMyPage && <img className="w-fit h-fit mr-3 cursor-pointer" onClick={handleClose} src={CloseImg} alt="closeButton" />}
+        {isEditMyPage && (
+          <img
+            className="w-fit h-fit mr-3 cursor-pointer"
+            data-testid="btn-close-reported-issues"
+            onClick={handleClose}
+            src={CloseImg}
+            alt="closeButton"
+          />
+        )}
       </div>
       <TableIssues className="bg-slate-500 min-w-full mt-3" loading={isLoading} columnNames={columnNames} dataTable={listReportedIssues} />
     </div>
