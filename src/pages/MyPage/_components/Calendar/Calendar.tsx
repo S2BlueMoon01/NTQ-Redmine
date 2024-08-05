@@ -1,7 +1,7 @@
 import React from "react";
 import "./Calendar.css";
 import Card from "~/pages/MyPage/_components/Card/Card";
-import { getWeekNumber, groupTasksByExactDate, getWeekDates, getDay, removeBlockFromBoardSections, getDateMonth } from "~/utils/utils";
+import { getWeekNumber, groupTasksByExactDate, getWeekDates, getDay, removeBlockFromBoardSections } from "~/utils/utils";
 import { Issue } from "~/types/issue.type";
 import { SyncLoader } from "react-spinners";
 import CloseImg from "~/assets/images/close-img.png";
