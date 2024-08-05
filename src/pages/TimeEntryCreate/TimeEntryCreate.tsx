@@ -16,7 +16,7 @@ interface IFormInput {
   productCategory: string;
 }
 
-const optionsProject = [
+const OPTIONS_PROJECT = [
   { id: 1, nameProject: "project 1" },
   { id: 2, nameProject: "project 2" },
   { id: 3, nameProject: "project 3" },
@@ -77,33 +77,33 @@ const SpentTime = () => {
           </div>
 
           <div className="flex flex-col gap-1 m-1 text-sm text-mouse-gray pl-1">
-            <Select id="project" {...register("project", { required: "Project can't be blank" })}>
+            <Select id="project" className="text-xs" {...register("project", { required: "Project can't be blank" })}>
               <option value="" disabled></option>
-              {optionsProject.map((option) => (
+              {OPTIONS_PROJECT.map((option) => (
                 <option key={option.id} value={option.nameProject}>
                   {option.nameProject}
                 </option>
               ))}
             </Select>
             <Input id="issue" {...register("issue")} />
-            <Input type="date" id="date" value={currentDate} min="2018-01-01" {...register("date")} />
+            <Input type="date" className="text-xs" id="date" value={currentDate} min="2018-01-01" {...register("date")} />
             <Input id="hours" {...register("hours", { required: "Hours can't be blank" })} />
             <Input id="comment" {...register("comment")} />
-            <Select id="activity" {...register("activity", { required: "Activity  can't be blank" })}>
+            <Select id="activity" className="text-xs" {...register("activity", { required: "Activity  can't be blank" })}>
               <option value="" disabled>
                 ---Please select---
               </option>
-              {optionsProject.map((option) => (
+              {OPTIONS_PROJECT.map((option) => (
                 <option key={option.id} value={option.nameProject}>
                   {option.nameProject}
                 </option>
               ))}
             </Select>
-            <Select id="category" {...register("productCategory", { required: "Product Category can't be blank" })}>
+            <Select id="category" className="text-xs" {...register("productCategory", { required: "Product Category can't be blank" })}>
               <option value="" disabled>
                 ---Please select---
               </option>
-              {optionsProject.map((option) => (
+              {OPTIONS_PROJECT.map((option) => (
                 <option key={option.id} value={option.nameProject}>
                   {option.nameProject}
                 </option>

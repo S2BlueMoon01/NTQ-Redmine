@@ -12,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import config from "~/constants/config";
 import moment from "moment";
 
-const columNameDefault = ["#", "project", "tracker", "status", "priority", "assignee", "updated", "author"];
+const COLUMN_NAME_DEFAULT = ["#", "project", "tracker", "status", "priority", "assignee", "updated", "author"];
 
 const DetailIssues = () => {
   const { name, id } = useParams();
@@ -80,7 +80,7 @@ const DetailIssues = () => {
             <button className="flex gap-1 hover:underline" onClick={handleApply}>
               <img src={ApplyImg} alt="apply" /> Apply
             </button>
-            <button className="flex gap-1 hover:underline" onClick={() => setColumnName(columNameDefault)}>
+            <button className="flex gap-1 hover:underline" onClick={() => setColumnName(COLUMN_NAME_DEFAULT)}>
               <img src={ReLoadImg} alt="apply" /> Clear
             </button>
           </div>

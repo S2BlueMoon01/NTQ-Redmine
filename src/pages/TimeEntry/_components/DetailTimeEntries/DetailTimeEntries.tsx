@@ -17,13 +17,13 @@ interface ListDataTable {
   [key: string]: string | number | JSX.Element | undefined;
 }
 
-const columnNamesSample = ["project", "date", "user", "issues", "activity", "comment", "hours", "", "Name"];
+const COLUMN_NAME_DEFAULT = ["project", "date", "user", "issues", "activity", "comment", "hours", "name"];
 
 interface DetailTimeEntriesProps {
   columnNames: string[];
 }
 
-const DetailTimeEntries: React.FC<DetailTimeEntriesProps> = ({ columnNames = columnNamesSample }) => {
+const DetailTimeEntries: React.FC<DetailTimeEntriesProps> = ({ columnNames = COLUMN_NAME_DEFAULT }) => {
   const [checkList, setCheckList] = useState<number[]>([]);
   const [isAllChecked, setIsAllChecked] = useState<boolean>(false);
   const [listDataTableTime, setListDataTable] = useState<ListDataTable[]>([]);

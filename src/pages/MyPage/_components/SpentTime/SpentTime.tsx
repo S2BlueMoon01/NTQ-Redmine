@@ -12,7 +12,7 @@ import { removeBlockFromBoardSections } from "~/utils/utils";
 import TableSpentTime from "../TableSpentTime";
 import issuesApi from "~/apis/issue.api";
 
-const columnNames = ["Activity", "Project", "Comment", "Hours", "Action"];
+const COLUMN_NAME = ["Activity", "Project", "Comment", "Hours", "Action"];
 
 const fetchTimeEntries = async () => {
   const responseTime = await timeEntriesApi.listTimeEntries({ user_id: "me" });
@@ -99,7 +99,7 @@ const SpentTime: React.FC = () => {
           <img className="mr-1 w-fit h-fit" src={IconAdd} alt="Add" /> <p className="text-xs">log time</p>
         </Link>
       </div>
-      <TableSpentTime className="bg-slate-500 min-w-full" loading={isLoading} columnNames={columnNames} dataTable={listTimeEntries} />
+      <TableSpentTime className="bg-slate-500 min-w-full" loading={isLoading} columnNames={COLUMN_NAME} dataTable={listTimeEntries} />
     </div>
   );
 };
