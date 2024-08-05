@@ -50,8 +50,6 @@ const fetchTimeEntries = async () => {
       });
 
   return listDataTable;
-
-  return listDataTable;
 };
 
 const SpentTime: React.FC = () => {

@@ -9,7 +9,9 @@ import {
   cn,
   convertDateFormat,
   getBoardSectionsFromLS,
+  getDateMonth,
   getDay,
+  getFullWeeksOfMonth,
   getSecondsDifference,
   getTaskById,
   getWeekDates,
@@ -29,6 +31,7 @@ import ArrowLeftIcon from "~/assets/images/arrow_left.png";
 import ArrowRightIcon from "~/assets/images/arrow_right.png";
 import DiamondIcon from "~/assets/images/bullet_diamond.png";
 import { GroupedTimeEntries, TimeEntriesTable } from "~/types/timeEntries.type";
+import moment from "moment";
 
 describe("Utils", () => {
   describe("cn", () => {
@@ -1021,6 +1024,93 @@ describe("Utils", () => {
 
     it("should handle entries with negative hours correctly", () => {
       expect(groupTimeEntriesByDate(negativeHoursEntries)).toEqual(expectedNegativeHours);
+    });
+  });
+
+  // Test cases for getFullWeeksOfMonth
+  describe("getFullWeeksOfMonth", () => {
+    it("should return the correct weeks for January 2024", () => {
+      const weeks = getFullWeeksOfMonth(1, 2024);
+      expect(weeks.length).toBe(5); // January 2024 has 5 weeks
+      expect(weeks[0][0]).toBe("2023-12-31"); // The first day of the first week
+      expect(weeks[4][6]).toBe("2024-02-03"); // The last day of the last week
+    });
+
+    it("should return the correct weeks for February 2024 (leap year)", () => {
+      const weeks = getFullWeeksOfMonth(2, 2024);
+      expect(weeks.length).toBe(5); // February 2024 has 5 weeks
+      expect(weeks[0][0]).toBe("2024-01-28"); // The first day of the first week
+      expect(weeks[4][6]).toBe("2024-03-02"); // The last day of the last week
+    });
+
+    it("should return the correct weeks for a month with only 4 weeks", () => {
+      const weeks = getFullWeeksOfMonth(4, 2024);
+      expect(weeks.length).toBe(5); // April 2024 has 5 weeks
+      expect(weeks[0][0]).toBe("2024-03-31"); // The first day of the first week
+      expect(weeks[4][6]).toBe("2024-05-04"); // The last day of the last week
+    });
+
+    it("should return exactly 5 weeks if the month has less than 5 weeks", () => {
+      const weeks = getFullWeeksOfMonth(2, 2021);
+      expect(weeks.length).toBe(5);
+    });
+
+    it("should throw an error if the month is invalid", () => {
+      expect(() => getFullWeeksOfMonth(13, 2024)).toThrow();
+    });
+
+    it("should add additional weeks to make the total count at least 5", () => {
+      // Test a month like February in a non-leap year that won't have 5 full weeks
+      const february2024 = getFullWeeksOfMonth(2, 2024); // February 2024 is a leap year, so it has more days
+      const february2023 = getFullWeeksOfMonth(2, 2023); // February 2023 is a non-leap year with fewer days
+
+      // Check the length of weeks
+      expect(february2024.length).toBe(5); // February 2024 will have 5 weeks including additional ones
+      expect(february2023.length).toBe(5); // February 2023 will have 5 weeks including additional ones
+
+      // Check that the last week is correctly formed
+      const lastWeek = february2023[february2023.length - 1];
+      expect(lastWeek.length).toBe(7);
+
+      // Ensure the weeks are in the correct format
+      lastWeek.forEach((date) => {
+        expect(moment(date, "YYYY-MM-DD", true).isValid()).toBe(true);
+      });
+    });
+  });
+
+  // Test cases for getDateMonth
+  describe("getDateMonth", () => {
+    it("should return all dates for January 2024", () => {
+      const dates = getDateMonth(1, 2024);
+      expect(dates.length).toBe(31); // January has 31 days
+      expect(dates[0]).toBe("2024-01-01"); // The first day
+      expect(dates[30]).toBe("2024-01-31"); // The last day
+    });
+
+    it("should return all dates for February 2024 (leap year)", () => {
+      const dates = getDateMonth(2, 2024);
+      expect(dates.length).toBe(29); // February in a leap year has 29 days
+      expect(dates[0]).toBe("2024-02-01"); // The first day
+      expect(dates[28]).toBe("2024-02-29"); // The last day
+    });
+
+    it("should return all dates for February 2023 (non-leap year)", () => {
+      const dates = getDateMonth(2, 2023);
+      expect(dates.length).toBe(28); // February in a non-leap year has 28 days
+      expect(dates[0]).toBe("2023-02-01"); // The first day
+      expect(dates[27]).toBe("2023-02-28"); // The last day
+    });
+
+    it("should throw an error if the month is invalid", () => {
+      expect(() => getDateMonth(13, 2024)).toThrow("Invalid month. Please enter a value from 1 to 12.");
+    });
+
+    it("should return the correct dates for a month with 30 days", () => {
+      const dates = getDateMonth(4, 2024); // April has 30 days
+      expect(dates.length).toBe(30);
+      expect(dates[0]).toBe("2024-04-01");
+      expect(dates[29]).toBe("2024-04-30");
     });
   });
 });
