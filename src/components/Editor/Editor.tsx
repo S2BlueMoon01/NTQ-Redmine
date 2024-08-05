@@ -194,6 +194,7 @@ const Editor = () => {
             return (
               <button
                 key={item.label}
+                type="button"
                 className="border bg-[#f7f7f7] hover:bg-[#e5e5e5] w-6 h-6 flex items-center justify-center"
                 onClick={item.action}
               >

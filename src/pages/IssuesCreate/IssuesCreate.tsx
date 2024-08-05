@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
 import Label from "~/components/Label";
@@ -11,13 +11,22 @@ import DatePickerCustom from "~/components/DatePicker";
 import ErrorImg from "~/assets/images/error-img.png";
 import EnhanceSelect from "~/components/EnhanceSelect";
 import Editor from "~/components/Editor";
+import { SyncLoader } from "react-spinners";
+import { Issue } from "~/types/issue.type";
+import issuesApi from "~/apis/issue.api";
 import ModalNewVersion from "./_components/ModalNewVersion";
 import projectMembershipsApi from "~/apis/projectMemberships.api";
+import ModalAddWatchers from "./_components/ModalAddWatchers";
 
 interface Member {
   id: number;
   name: string;
   role: string;
+}
+
+interface Task {
+  id: number;
+  name: string;
 }
 
 const IssuesCreate = () => {
@@ -28,10 +37,19 @@ const IssuesCreate = () => {
   const [newVersion, setNewVersion] = useState(false);
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredItems, setFilteredItems] = useState<Task[]>([]);
+  const [allIssue, setAllIssue] = useState<Task[]>([]);
+
+  const [errorFile, setErrorFile] = useState<string | null>(null);
+  const maxSize = 100 * 1024 * 1024;
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [assigneeOptions, setAssigneeOptions] = useState([
     { label: "", value: "" },
     { label: "<<me>>", value: "1" },
   ]);
+
+  const [isAddWatcher, setIsAddWatcher] = useState<boolean>(false);
 
   const [trackerOptions, _setTrackerOptions] = useState([
     { label: "Bug", value: "Bug" },
@@ -128,6 +146,35 @@ const IssuesCreate = () => {
     { label: "No", value: 0 },
   ]);
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+
+    const filtered = allIssue.filter((item) => item.name.toLowerCase().includes(value.toLowerCase()));
+    setFilteredItems(filtered);
+  };
+
+  const handleItemClick = (id: number) => {
+    setSearchTerm(id.toString());
+    setFilteredItems([]);
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (file) {
+      if (file.size > maxSize) {
+        setErrorFile("File size exceeds the 500MB limit.");
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+      } else {
+        setErrorFile(null);
+        // Handle file upload
+      }
+    }
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSubject(e.target.value.trim());
   };
@@ -138,6 +185,15 @@ const IssuesCreate = () => {
     } else {
       setError(false);
     }
+  };
+
+  const convertListIssue = (listItem: Issue[]): Task[] => {
+    const newList = listItem.map((item) => ({
+      id: item.id,
+      name: `${item.tracker.name} #${item.id}: ${item.subject}`,
+    }));
+
+    return newList;
   };
 
   const fetchProject = async () => {
@@ -160,8 +216,10 @@ const IssuesCreate = () => {
         label: item.user.name,
         value: String(item.user.id),
       }));
-
       setAssigneeOptions((assigneeOptions) => [...assigneeOptions, ...assigneeArray]);
+      const responseIssue = await issuesApi.listIssues({ project_id: Number(id) });
+      const issueConvert = convertListIssue(responseIssue.data.issues);
+      setAllIssue(issueConvert);
 
       setLoading(false);
     } catch (error) {
@@ -176,6 +234,7 @@ const IssuesCreate = () => {
   return (
     <>
       {newVersion && <ModalNewVersion handleClick={setNewVersion} />}
+      {isAddWatcher && <ModalAddWatchers data={members} handleClick={setIsAddWatcher} />}
       <Helmet>
         <title>{`New Issue - ${name} - NTQ Redmine`}</title>
         <meta name="description" content="Redmine" />
@@ -216,12 +275,12 @@ const IssuesCreate = () => {
                     id="status"
                     className="text-[13.33px] font-normal text-[black] w-1/3 ml-2"
                     arrayOption={statusOptions}
-                    defaultValue={"Bug"}
+                    defaultValue={1}
                   />
                 </div>
               </div>
               <div className="w-1/2">
-                <div className="flex">
+                <div className="flex relative">
                   <Label htmlFor="ParentTask" className="flex gap-1 items-center p-0 parent-task" name="Parent task"></Label>
                   <div className={`flex items-center border ml-1 w-32 ${isActiveParentTask ? "border-[black] rounded-sm" : ""}`}>
                     <img src={IconSearch} alt="IconSearch" className="px-1" />
@@ -229,10 +288,21 @@ const IssuesCreate = () => {
                       id="ParentTask"
                       type="text"
                       className="outline-none w-full text-xs py-1"
+                      value={searchTerm}
+                      onChange={handleSearchChange}
                       onFocus={() => setIsActiveParentTask(true)}
                       onBlur={() => setIsActiveParentTask(false)}
                     />
                   </div>
+                  {filteredItems.length > 0 && (
+                    <div className="absolute top-[30px] left-[180px] border border-gray-300 bg-white z-10" style={{ width: "calc(100% - 225px)" }}>
+                      {filteredItems.map((item) => (
+                        <div key={item.id} className="border-b border-[#eee] text-xs hover:bg-blue-300" onClick={() => handleItemClick(item.id)}>
+                          {item.name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -245,7 +315,7 @@ const IssuesCreate = () => {
                     id="priority"
                     className="text-[13.33px] font-normal text-[black] w-1/3 ml-2"
                     arrayOption={priorityOptions}
-                    defaultValue={"Bug"}
+                    defaultValue={2}
                   />
                 </div>
               </div>
@@ -265,7 +335,7 @@ const IssuesCreate = () => {
                     id="assignee"
                     className="text-[13.33px] font-normal text-[black] w-1/3 ml-2"
                     arrayOption={assigneeOptions}
-                    defaultValue={"Bug"}
+                    defaultValue={""}
                   />
                 </div>
               </div>
@@ -285,7 +355,7 @@ const IssuesCreate = () => {
                     id="TargetVersion"
                     className="text-[13.33px] font-normal text-[black] w-1/3 ml-2"
                     arrayOption={priorityOptions}
-                    defaultValue={"Bug"}
+                    defaultValue={2}
                   />
                   <img src={IconAdd} alt="IconAdd" className="cursor-pointer" onClick={() => setNewVersion(true)} />
                 </div>
@@ -304,7 +374,7 @@ const IssuesCreate = () => {
               <div className="w-1/2">
                 <div className="flex">
                   <Label htmlFor="done" className="flex gap-1 items-center p-0" name="% Done"></Label>
-                  <EnhanceSelect id="done" className="text-[13.33px] font-normal text-[black]" arrayOption={percentDoneOptions} defaultValue={"0%"} />
+                  <EnhanceSelect id="done" className="text-[13.33px] font-normal text-[black]" arrayOption={percentDoneOptions} defaultValue={0} />
                 </div>
               </div>
             </div>
@@ -380,26 +450,32 @@ const IssuesCreate = () => {
             <div className="flex gap-2">
               <Label htmlFor="files" className="flex gap-1 items-center p-0" name="Files"></Label>
               <div className="text-[9.6px] text-[#505050] ">
-                <input id="files" type="file" className="text-xs" />
+                <input id="files" type="file" className="text-xs" onChange={handleFileChange} ref={fileInputRef} />
                 <span>{`(Maximum size: 500MB)`}</span>
+                {errorFile && <div style={{ color: "red" }}>{errorFile}</div>}
               </div>
             </div>
             <div className="flex pt-2 w-full">
               <Label htmlFor="watcher" className="inline-flex gap-1 items-center p-0 " name="Watcher"></Label>
               <div className="flex flex-col h-full">
-                <div className="flex items-center text-xs text-[#505050] pl-3 h-full flex-wrap">
-                  {members
-                    .filter((item) => item.role === "Developer")
-                    .map((item) => {
-                      return (
-                        <div className="flex items-center gap-1 min-w-72 pr-4" key={item.id}>
-                          <input type="checkbox" />
-                          <span className="">{item.name}</span>
-                        </div>
-                      );
-                    })}
-                </div>
-                <div className="flex items-center pl-2 text-[9.6px]">
+                {loading ? (
+                  <SyncLoader className="ml-4" color="#169" size={5} />
+                ) : (
+                  <div className="flex items-center text-xs text-[#505050] pl-3 h-full flex-wrap">
+                    {members
+                      .filter((item) => item.role === "Developer")
+                      .map((item) => {
+                        return (
+                          <div className="flex items-center gap-1 min-w-72 pr-4" key={item.id}>
+                            <input type="checkbox" />
+                            <span className="">{item.name}</span>
+                          </div>
+                        );
+                      })}
+                  </div>
+                )}
+
+                <div className="flex items-center pl-2 text-[9.6px]" onClick={() => setIsAddWatcher(true)}>
                   <img src={IconBulletAdd} alt="" />
                   <a href="#!" className="link">
                     Search for watchers to add
