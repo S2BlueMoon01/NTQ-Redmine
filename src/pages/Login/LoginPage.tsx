@@ -20,9 +20,9 @@ const LoginPage = () => {
 
   return (
     <div className="flex justify-center align-center">
-      <div className="min-w-400 min-h-42 mt-15 border-2 border-solid border-amber-400 p-3 bg-light-yellow">
+      <div className="min-w-400 min-h-42 mt-15 border-2 border-amber-400 p-3 bg-light-yellow">
         <form onSubmit={handleSubmit(submit)} className="flex gap-x-2 mt-1.5">
-          <div className="flex flex-col gap-y-1 width text-right">
+          <div className="flex flex-col gap-y-1 text-right">
             <label htmlFor="login" className="text-xs text-gray-rain font-bold p-1.5">
               Login:
             </label>
