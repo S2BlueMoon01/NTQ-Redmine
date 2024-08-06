@@ -46,7 +46,7 @@ const HomePage = () => {
                 <SyncLoader loading={isLoading} color="#169" size={5} />
                 {listProject.map((item) => (
                   <li key={item.id}>
-                    <Link className="text-ocean-blue hover:underline" to={`/projects/${item.identifier}`}>
+                    <Link className="text-ocean-blue hover:underline" to={`/projects/${item.id}/${item.name}/overview`}>
                       {item.name}
                     </Link>{" "}
                     ({item.created_on})<p>{item.description}</p>
