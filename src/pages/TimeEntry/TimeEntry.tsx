@@ -51,13 +51,13 @@ const TimeEntry = () => {
 
         <ul className="flex items-center gap-2 text-xs font-semibold text-mouse-gray px-2 border-b">
           <li
-            onClick={() => setTabActive(!tabActive)}
+            onClick={() => setTabActive(true)}
             className={`relative bottom-[-1px] rounded-tl-md rounded-tr-md p-1 border z-10 cursor-pointer ${tabActive ? "border-b-white" : "bg-slate-100 text-gray-400 hover:bg-yellow-custom-10"}`}
           >
             Detail
           </li>
           <li
-            onClick={() => setTabActive(!tabActive)}
+            onClick={() => setTabActive(false)}
             className={`relative bottom-[-1px] rounded-tl-md rounded-tr-md p-1 border z-10 cursor-pointer ${!tabActive ? "border-b-white" : "bg-slate-100 text-gray-400 hover:bg-yellow-custom-10"}`}
           >
             Report

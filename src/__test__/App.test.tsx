@@ -182,5 +182,38 @@ describe("App", () => {
     await userEvent.click(screen.getByText("[Fresher]_ ReactJS Fresher"));
   });
 
+  test("should render spent time page", async () => {
+    render(<App />, { wrapper: AppWrapper });
+
+    await userEvent.click(screen.getByText(/My page/i));
+    await userEvent.click(screen.getByText(/Personalize this page/i));
+    await userEvent.selectOptions(screen.getByTestId("blockSelect"), screen.getByRole("option", { name: "Spent time" }));
+    await userEvent.click(screen.getByText(/Add/i));
+    await userEvent.click(screen.getByRole("link", { name: /Spent time/i }));
+    await userEvent.click(screen.getByText(/Detail/i));
+    await userEvent.click(screen.getByText(/Report/i));
+    await userEvent.click(screen.getByText(/Apply/i));
+    await userEvent.click(screen.getByText(/log time/i));
+    screen.debug(document.body.parentElement as HTMLElement, 999999999);
+    await userEvent.selectOptions(screen.getByTestId("projectOption"), screen.getByTestId("projectOption project 1"));
+    await userEvent.selectOptions(screen.getByTestId("activity"), screen.getByTestId("activity project 2"));
+    await userEvent.selectOptions(screen.getByTestId("productCategory"), screen.getByTestId("productCategory project 3"));
+    await userEvent.click(screen.getByText(/Create and continue/i));
+  });
+
+  // test("should render time entry page", async () => {
+  //   render(<App />, { wrapper: AppWrapper });
+
+  //   await userEvent.click(screen.getByText(/My page/i));
+
+  //   // await userEvent.click(screen.getByText(/Personalize this page/i));
+
+  //   // await userEvent.selectOptions(screen.getByTestId("blockSelect"), screen.getByRole("option", { name: "Spent time" }));
+  //   // await userEvent.click(screen.getByText(/Add/i));
+  //   // await userEvent.click(screen.getByRole("link", { name: /Spent time/i }));
+  //   // await userEvent.click(screen.getByText(/Options/i));
+  //   screen.debug(document.body.parentElement as HTMLElement, 999999999);
+  // });
+
   // screen.debug(document.body.parentElement as HTMLElement, 999999999);
 });
