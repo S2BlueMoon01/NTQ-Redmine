@@ -215,5 +215,45 @@ describe("App", () => {
   //   screen.debug(document.body.parentElement as HTMLElement, 999999999);
   // });
 
+  test("should render spent time page", async () => {
+    render(<App />, { wrapper: AppWrapper });
+
+    await userEvent.click(screen.getByText(/My page/i));
+    await userEvent.click(screen.getByText(/Personalize this page/i));
+    await userEvent.selectOptions(screen.getByTestId("blockSelect"), screen.getByRole("option", { name: "Spent time" }));
+    await userEvent.click(screen.getByText(/Add/i));
+    await userEvent.click(screen.getByRole("link", { name: /Spent time/i }));
+    await userEvent.click(screen.getByText(/Options/i));
+    await userEvent.click(screen.getByText(/similar/i));
+    await userEvent.click(screen.getByText(/→/i));
+    await userEvent.click(screen.getByText(/similar/i));
+    await userEvent.click(screen.getByText(/←/i));
+    await userEvent.click(screen.getByText(/similar/i));
+    await userEvent.click(screen.getByText(/→/i));
+    await userEvent.click(screen.getByText(/similar/i));
+    await userEvent.click(screen.getByText(/↑/i));
+    await userEvent.click(screen.getByText(/similar/i));
+    await userEvent.click(screen.getByText(/↓/i));
+    await userEvent.click(screen.getByText(/similar/i));
+    await userEvent.click(screen.getByText(/⇊/i));
+    await userEvent.dblClick(screen.getByText(/similar/i));
+    await userEvent.dblClick(screen.getByText(/similar/i));
+    await userEvent.click(screen.getByText(/version/i));
+    // screen.debug(document.body.parentElement as HTMLElement, 999999999);
+  });
+
+  test("should render activity page", async () => {
+    render(<App />, { wrapper: AppWrapper });
+    await userEvent.click(screen.getByRole("link", { name: "Projects" }));
+    await waitFor(() => {
+      const element = screen.getByTestId("desired-element");
+      screen.debug(document.body.parentElement as HTMLElement, 999999999);
+      expect(element).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByText("[Fresher]_ ReactJS Fresher"));
+    // await userEvent.click(screen.getByText(/Activity/i));
+  });
+
   // screen.debug(document.body.parentElement as HTMLElement, 999999999);
 });
