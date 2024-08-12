@@ -5,7 +5,7 @@ import ApplyImg from "~/assets/images/apply-img.png";
 import WifiImg from "~/assets/images/wifi-img.png";
 import ReLoadImg from "~/assets/images/reload-img.png";
 import { Helmet } from "react-helmet-async";
-import TableIssues from "~/components/TableIssues";
+import TableIssues from "~/components/Table";
 import OptionIssues from "~/components/OptionIssues";
 import issuesApi from "~/apis/issue.api";
 import { useQuery } from "@tanstack/react-query";
@@ -104,9 +104,9 @@ const DetailIssues = () => {
           <>
             <h2 className="text-base text-mouse-gray font-bold">Issues</h2>
             <div className="text-ocean-blue flex flex-col gap-2">
-              <Link to="">View all issues</Link>
+              <Link to={`/projects/${id}/${name}/issues`}>View all issues</Link>
               {isProjectPage && <Link to="">Summary</Link>}
-              <Link to="">Calendar</Link>
+              <Link to={`/projects/${id}/${name}/issues/calendar`}>Calendar</Link>
               <Link to="">Gantt</Link>
               {!isProjectPage && <Link to="">Agile board</Link>}
             </div>

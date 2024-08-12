@@ -4,7 +4,7 @@ import issuesApi from "~/apis/issue.api";
 import CloseImg from "~/assets/images/close-img.png";
 import { optionBlockMyPage } from "~/constants/constants";
 import { useGlobalStore } from "~/store/globalStore";
-import TableIssues from "~/components/TableIssues";
+import TableIssues from "~/components/Table";
 import { IssueTable } from "~/types/issue.type";
 import { removeBlockFromBoardSections } from "~/utils/utils";
 import { useQuery } from "@tanstack/react-query";

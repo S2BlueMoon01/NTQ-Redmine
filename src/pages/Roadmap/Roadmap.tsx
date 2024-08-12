@@ -75,7 +75,22 @@ const Roadmap = () => {
   useEffect(() => {
     const storedData = localStorage.getItem("isCheckedBoxRoadmap");
     if (storedData) {
-      setIsCheckedBoxRoadmap(JSON.parse(storedData));
+      let parsedData;
+      try {
+        parsedData = JSON.parse(storedData);
+      } catch (e) {
+        console.log(e);
+      }
+
+      setIsCheckedBoxRoadmap(
+        typeof parsedData === "object" &&
+          parsedData !== null &&
+          typeof parsedData.task === "boolean" &&
+          typeof parsedData.bug === "boolean" &&
+          typeof parsedData.showComplete === "boolean"
+          ? parsedData
+          : { task: true, bug: false, showComplete: false },
+      );
     }
   }, []);
 
