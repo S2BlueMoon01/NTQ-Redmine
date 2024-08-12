@@ -18,33 +18,26 @@ const Filter = () => {
     {
       title: "Status",
       sortBy: [
-        { value: "is not1", label: "is not1" },
-        { value: "is1", label: "is1" },
+        { value: "is not", label: "is not" },
+        { value: "is", label: "is" },
       ],
       type: "select",
       filerOptions: [
-        { value: "is not", label: "is not" },
-        { value: "fake", label: "hahah" },
-        { value: "fale2", label: "hahahd" },
-        { value: "is notx", label: "is noxt" },
-        { value: "faske", label: "hahash" },
-        { value: "falwe2", label: "hahawhd" },
+        { value: "Contain", label: "Contain" },
+        { value: "Done", label: "Done" },
+        { value: "Doing", label: "Doing" },
+        { value: "Reopen", label: "Reopen" },
+        { value: "Close", label: "Close" },
+        { value: "Open", label: "Open" },
       ],
     },
     {
       title: "Start date",
-      sortBy: [
-        { value: "is not2", label: "is not2" },
-        { value: "is2", label: "is2" },
-      ],
+
       type: "date",
     },
     {
       title: "Copied to",
-      sortBy: [
-        { value: "is not3", label: "is not3" },
-        { value: "is3", label: "is3" },
-      ],
       type: "input",
     },
   ];
