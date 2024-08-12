@@ -259,7 +259,7 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
               <hr className="my-1" />
               <div className="flex flex-col">
                 <div className="flex items-center justify-between">
-                  <label htmlFor="" className="py-2 inline-block text-sm text-[#333] font-bold">
+                  <label htmlFor="" className="py-2 inline-block text-sm text-zinc-700  font-bold">
                     Related issues
                   </label>
                   <a href="#!" className="link" onClick={handleClickRelatedIssue}>
@@ -274,7 +274,7 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
                       })}
                     </Select>
                     <span className="">Issue #</span>
-                    <div className={`flex items-center border ml-1 w-32 ${isActive ? "border-[black] rounded-sm" : ""}`}>
+                    <div className={`flex items-center border ml-1 w-32 ${isActive ? "border-black rounded-sm" : ""}`}>
                       <img src={IconSearch} alt="IconSearch" className="px-1" />
                       <input
                         id="ParentTask"

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import "./Calendar.css";
 import { SyncLoader } from "react-spinners";
 import issuesApi from "~/apis/issue.api";
 import CloseImg from "~/assets/images/close-img.png";
