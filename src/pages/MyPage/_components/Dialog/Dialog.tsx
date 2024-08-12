@@ -63,10 +63,6 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
     }
   };
 
-  const handleClickRelatedIssue = () => {
-    setDisplayRelatedIssue((displayRelatedIssue) => !displayRelatedIssue);
-  };
-
   return (
     <>
       <div
@@ -99,7 +95,7 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
               Quick View - #{issue?.id} {issue?.subject}
             </span>
             <button
-              className="w-5 h-5 icon_close bg-white px-2 rounded-sm border border-gray-300 hover:border-blue-gray "
+              className="size-5 icon_close bg-white px-2 rounded-sm border border-gray-300 hover:border-blue-gray "
               onClick={handleClickOutside}
               title="Close"
             ></button>
@@ -107,11 +103,10 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
           <div style={{ flexGrow: 1, overflow: "auto", height: "calc(100% - 110px)" }} className="bg-white h-4/5 overflow-auto mb-2">
             <div className="mx-3 mt-2 border p-2 text-zinc-700 text-sm bg-yellow-50">
               <div className="flex gap-2 flex-wrap">
-                <div className="w-16 h-16 p-1 border bg-white">
+                <div className="size-16 p-1 border bg-white">
                   <img
                     src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
-                    alt=""
-                    className=""
+                    alt="avatar"
                   />
                 </div>
                 <div className="flex flex-col gap-2 text-left">
@@ -165,21 +160,21 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
                       Assignee:
                     </label>
                     <span className="flex w-1/2">
-                      <div className="min-w-5 w-5 h-5 p-0.5 border mr-1">
+                      <div className="size-5 p-0.5 border mr-1">
                         <img
                           src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
-                          alt=""
+                          alt="Avatar"
                           className="object-cover"
                         />
                       </div>
-                      <a href="" className="link whitespace-normal">
+                      <a href="#!" className="link whitespace-normal">
                         {issue?.assigned_to ? issue?.assigned_to?.name : "-"}
                       </a>
                     </span>
                   </div>
 
                   <div className="pt-1 text-xs w-1/2 inline-flex align-top flex-wrap">
-                    <label htmlFor="" className="font-bold  w-2/5 min-w-14">
+                    <label htmlFor="" className="font-bold w-2/5 min-w-14">
                       % Done:
                     </label>
                     <div className="gap-1 inline-flex align-top w-1/2 min-w-14">
@@ -240,7 +235,7 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
               </div>
 
               <hr />
-              <div className="py-2 text-left flex flex-col gap-3">
+              <div className="flex flex-col py-2 text-left gap-3">
                 <label htmlFor="" className="text-sm text-zinc-700 font-bold  inline-block">
                   Description
                 </label>
@@ -262,7 +257,7 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
                   <label htmlFor="" className="py-2 inline-block text-sm text-zinc-700  font-bold">
                     Related issues
                   </label>
-                  <a href="#!" className="link" onClick={handleClickRelatedIssue}>
+                  <a href="#!" className="link" onClick={() => setDisplayRelatedIssue(true)}>
                     Add
                   </a>
                 </div>
@@ -285,7 +280,7 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
                       />
                     </div>
                     <Button type="button">Add</Button>
-                    <a href="#!" className="link" onClick={handleClickRelatedIssue}>
+                    <a href="#!" className="link" onClick={() => setDisplayRelatedIssue(false)}>
                       Cancel
                     </a>
                     <></>
@@ -300,8 +295,8 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
                   <div className="flex items-center gap-1">
                     <img
                       src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
-                      alt=""
-                      className="w-8 h-8"
+                      alt="Avatar"
+                      className="size-8"
                     />
                     <span className="font-bold">
                       Updated by{" "}

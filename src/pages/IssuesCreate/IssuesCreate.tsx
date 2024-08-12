@@ -180,11 +180,7 @@ const IssuesCreate = () => {
   };
 
   const handleSubmit = () => {
-    if (!subject) {
-      setError(true);
-    } else {
-      setError(false);
-    }
+    setError(!subject);
   };
 
   const convertListIssue = (listItem: Issue[]): Task[] => {
@@ -294,7 +290,7 @@ const IssuesCreate = () => {
                       onBlur={() => setIsActiveParentTask(false)}
                     />
                   </div>
-                  {isActiveParentTask && filteredItems.length > 0 && (
+                  {filteredItems.length > 0 && (
                     <div
                       className="absolute top-[30px] left-[180px] border border-gray-300 bg-white z-10 max-h-48 overflow-y-auto"
                       style={{ width: "calc(100% - 225px)" }}

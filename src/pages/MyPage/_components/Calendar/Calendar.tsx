@@ -47,7 +47,7 @@ const Calendar: React.FC = () => {
       <div className="flex justify-between items-center">
         <h2 className="text-base text-mouse-gray font-bold">Calendar</h2>
         {isEditMyPage && (
-          <img className="w-fit h-fit mr-3 cursor-pointer" data-testid="btn-close-calendar" onClick={handleClose} src={CloseImg} alt="closeButton" />
+          <img className="size-fit mr-3 cursor-pointer" data-testid="btn-close-calendar" onClick={handleClose} src={CloseImg} alt="closeButton" />
         )}
       </div>
       <table className="w-full border-collapse table-fixed">
