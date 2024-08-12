@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import issuesApi from "~/apis/issue.api";
-import TableIssues from "~/components/TableIssues";
+import TableIssues from "~/components/Table";
 import CloseImg from "~/assets/images/close-img.png";
 import { optionBlockMyPage } from "~/constants/constants";
 import { useGlobalStore } from "~/store/globalStore";
