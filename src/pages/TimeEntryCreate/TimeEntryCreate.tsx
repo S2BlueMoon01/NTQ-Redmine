@@ -77,10 +77,10 @@ const SpentTime = () => {
           </div>
 
           <div className="flex flex-col gap-1 m-1 text-sm text-mouse-gray pl-1">
-            <Select id="project" className="text-xs" {...register("project", { required: "Project can't be blank" })}>
+            <Select data-testid="projectOption" id="project" className="text-xs" {...register("project", { required: "Project can't be blank" })}>
               <option value="" disabled></option>
               {OPTIONS_PROJECT.map((option) => (
-                <option key={option.id} value={option.nameProject}>
+                <option data-testid={`projectOption ${option.nameProject}`} key={option.id} value={option.nameProject}>
                   {option.nameProject}
                 </option>
               ))}
@@ -89,22 +89,27 @@ const SpentTime = () => {
             <Input type="date" className="text-xs" id="date" value={currentDate} min="2018-01-01" {...register("date")} />
             <Input id="hours" {...register("hours", { required: "Hours can't be blank" })} />
             <Input id="comment" {...register("comment")} />
-            <Select id="activity" className="text-xs" {...register("activity", { required: "Activity  can't be blank" })}>
+            <Select data-testid="activity" id="activity" className="text-xs" {...register("activity", { required: "Activity  can't be blank" })}>
               <option value="" disabled>
                 ---Please select---
               </option>
               {OPTIONS_PROJECT.map((option) => (
-                <option key={option.id} value={option.nameProject}>
+                <option data-testid={`activity ${option.nameProject}`} key={option.id} value={option.nameProject}>
                   {option.nameProject}
                 </option>
               ))}
             </Select>
-            <Select id="category" className="text-xs" {...register("productCategory", { required: "Product Category can't be blank" })}>
+            <Select
+              data-testid="productCategory"
+              id="category"
+              className="text-xs"
+              {...register("productCategory", { required: "Product Category can't be blank" })}
+            >
               <option value="" disabled>
                 ---Please select---
               </option>
               {OPTIONS_PROJECT.map((option) => (
-                <option key={option.id} value={option.nameProject}>
+                <option data-testid={`productCategory ${option.nameProject}`} key={option.id} value={option.nameProject}>
                   {option.nameProject}
                 </option>
               ))}
