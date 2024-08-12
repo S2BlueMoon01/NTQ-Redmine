@@ -23,6 +23,11 @@ const Overview = () => {
   const { id, name } = useParams();
   const [issueTracker, setIssueTracker] = useState<{ [key: string]: number }>({});
   const [members, setMembers] = useState<Member[]>([]);
+  const links = [
+    { href: "#", text: "View all issues" },
+    { href: "#", text: "Calendar" },
+    { href: "#", text: "Gantt" },
+  ];
 
   const fetchProject = async () => {
     try {
@@ -69,12 +74,12 @@ const Overview = () => {
         <title>{`Overview - ${name} - NTQ Redmine`}</title>
         <meta name="description" content="Redmine" />
       </Helmet>
-      <div className="p-2.5 pt-1 min-h-84 bg-white px-3 mt-3 pb-8">
+      <div className="p-2.5 min-h-84 bg-white mt-3 pb-8">
         <h2 className="text-xl font-semibold pt-0.5 pr-3 mb-3 text-mouse-gray">Overview</h2>
         <div className="flex justify-between gap-6 items-center">
           <div className="border bg-[#fcfcfc] p-2.5 w-[50%]">
             <div className="flex gap-1 text-mouse-gray font-bold text-base items-center">
-              <img src={Document} alt="" className="w-4 h-4" />
+              <img src={Document} alt="Document" className="size-4" />
               <span>Issue tracking</span>
             </div>
             {loading ? (
@@ -95,25 +100,22 @@ const Overview = () => {
             )}
 
             <div className="text-xs text-mouse-gray my-3">
-              <span>
-                <a href="#" className="text-ocean-blue hover:text-red-600 hover:underline">
-                  View all issues
-                </a>
-                {" | "}
-                <a href="#" className="text-ocean-blue hover:text-red-600 hover:underline">
-                  Calendar
-                </a>
-                {" | "}
-                <a href="#" className="text-ocean-blue hover:text-red-600 hover:underline">
-                  Gantt
-                </a>
+              <span className="flex">
+                {links.map((link, index) => (
+                  <div key={index}>
+                    <a href={link.href} className="text-ocean-blue hover:text-red-600 hover:underline">
+                      {link.text}
+                    </a>
+                    {index < links.length - 1 && " | "}
+                  </div>
+                ))}
               </span>
             </div>
           </div>
 
           <div className="border p-2.5 bg-white w-2/4">
             <div className="flex gap-1 text-mouse-gray font-bold text-base items-center">
-              <img src={Group} alt="" />
+              <img src={Group} alt="Group" />
               <span>Member</span>
             </div>
             {loading ? (

@@ -41,7 +41,7 @@ const LoginPage = () => {
 
           <div className="flex flex-col">
             <Input
-              className="min-w-[300px]"
+              className="min-w-80"
               id="login"
               {...register("email", {
                 required: "Email is required.",
