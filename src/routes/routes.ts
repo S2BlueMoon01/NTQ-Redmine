@@ -18,7 +18,8 @@ import Wiki from "~/pages/Wiki";
 import FilesPage from "~/pages/Files";
 import Settings from "~/pages/Settings";
 import NewVersion from "~/pages/Roadmap/_components/NewVersion";
-import DetailIssues from "~/pages/DetailIssues";
+import Issues from "~/pages/Issues";
+import DetailIssue from "~/pages/Issues/_components/DetailIssue/DetailIssue";
 
 const publicRoutes = [
   { path: "/login", component: LoginPage, layout: DefaultLayout },
@@ -30,13 +31,14 @@ const privateRoutes = [
   { path: "/time_entries", component: TimeEntry, layout: DefaultLayout },
   { path: "/", component: HomePage, layout: DefaultLayout },
   { path: "/projects", component: ProjectsPage, layout: DefaultLayout },
-  { path: "/issues", component: DetailIssues, layout: DefaultLayout },
+  { path: "/issues", component: Issues, layout: DefaultLayout },
 
   { path: "/projects/:id/:name/overview", component: OverView, layout: DefaultLayout },
   { path: "/projects/:id/:name/activity", component: Activity, layout: DefaultLayout },
   { path: "/projects/:id/:name/roadmap", component: Roadmap, layout: DefaultLayout },
   { path: "/projects/:id/:name/roadmap/newVersion", component: NewVersion, layout: DefaultLayout },
-  { path: "/projects/:id/:name/issues", component: DetailIssues, layout: DefaultLayout },
+  { path: "/projects/:id/:name/issues", component: Issues, layout: DefaultLayout },
+  { path: "/projects/:id/:name/issues/:issueId", component: DetailIssue, layout: DefaultLayout },
   { path: "/projects/:id/:name/issues/new", component: IssuesCreate, layout: DefaultLayout },
   { path: "/projects/:id/:name/issues/gantt", component: Gantt, layout: DefaultLayout },
   { path: "/projects/:id/:name/issues/calendar", component: CalendarDetail, layout: DefaultLayout },

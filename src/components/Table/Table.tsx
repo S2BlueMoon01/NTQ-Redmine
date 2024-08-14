@@ -131,7 +131,7 @@ const Table: React.FC<PropsComponent> = ({ className, columnNames = [], dataTabl
                       (typeof id === "number" ? (
                         <Dialog
                           issueId={id}
-                          content={row[columnName] as string}
+                          content={row[columnTable] as string}
                           handleClick={handleMouseDown}
                           ZIndex={activeItemId === id ? 40 : 30}
                         />
