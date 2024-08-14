@@ -49,6 +49,13 @@ export interface Issue {
   created_on: string;
   updated_on?: string;
   fixed_version?: FixVersion;
+  BugType?: string;
+  Severity?: string;
+  QCActivity?: string;
+  CauseCategory?: [string];
+  "IsDegrade?"?: boolean;
+  Reopencounter?: number;
+  watchers?: User[];
 }
 
 interface FixVersion {
@@ -62,6 +69,10 @@ export interface IssueStatus {
   is_closed: boolean;
 }
 
+export interface CustomFields {
+  [key: string]: string | Array<string> | number;
+}
+
 export interface GroupedIssueByDay {
   [key: string]: Issue[];
 }
@@ -71,4 +82,5 @@ export type IssueTable = {
   project: string | undefined;
   tracker: string | undefined;
   subject: string | undefined;
+  [key: string]: string | number | JSX.Element | undefined;
 };

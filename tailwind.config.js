@@ -13,6 +13,7 @@ export default {
         "blue-gray": "#628DB6",
         "mouse-gray": "#555",
         "light-yellow": "#ffffdd",
+        "light-gray": "#fcfcfc",
       },
       minHeight: {
         84: "84vh",

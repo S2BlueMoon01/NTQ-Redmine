@@ -5,7 +5,7 @@ import ApplyImg from "~/assets/images/apply-img.png";
 import WifiImg from "~/assets/images/wifi-img.png";
 import ReLoadImg from "~/assets/images/reload-img.png";
 import { Helmet } from "react-helmet-async";
-import TableIssues from "~/components/TableIssues";
+import TableIssues from "~/components/Table";
 import OptionIssues from "~/components/OptionIssues";
 import issuesApi from "~/apis/issue.api";
 import { useQuery } from "@tanstack/react-query";
@@ -14,7 +14,7 @@ import moment from "moment";
 
 const COLUMN_NAME_DEFAULT = ["#", "project", "tracker", "status", "priority", "assignee", "updated", "author"];
 
-const DetailIssues = () => {
+const Issues = () => {
   const { name, id } = useParams();
   const [columnName, setColumnName] = useState<string[]>(["#", "project", "tracker", "status", "priority", "assignee", "updated", "author"]);
   const [midColumnName, setMidColumnName] = useState<string[]>(["#", "project", "tracker", "status", "priority", "assignee", "updated", "author"]);
@@ -26,7 +26,7 @@ const DetailIssues = () => {
     return (
       response.data?.issues?.map((issue) => {
         const doneRatio = (
-          <div className="bg-gray-200 h-4">
+          <div className="bg-black-200 h-4">
             <div className="bg-green-400 h-4" style={{ width: `${issue.done_ratio}%` }}></div>
           </div>
         );
@@ -104,9 +104,9 @@ const DetailIssues = () => {
           <>
             <h2 className="text-base text-mouse-gray font-bold">Issues</h2>
             <div className="text-ocean-blue flex flex-col gap-2">
-              <Link to="">View all issues</Link>
+              <Link to={`/projects/${id}/${name}/issues`}>View all issues</Link>
               {isProjectPage && <Link to="">Summary</Link>}
-              <Link to="">Calendar</Link>
+              <Link to={`/projects/${id}/${name}/issues/calendar`}>Calendar</Link>
               <Link to="">Gantt</Link>
               {!isProjectPage && <Link to="">Agile board</Link>}
             </div>
@@ -131,4 +131,4 @@ const DetailIssues = () => {
   );
 };
 
-export default DetailIssues;
+export default Issues;

@@ -47,7 +47,7 @@ const LostPasswordPage = () => {
           <input
             id="email"
             type="text"
-            className="border w-[345px] h-6 text-xs pl-1"
+            className="border w-80 h-6 text-xs pl-1"
             {...register("email", {
               required: "Email is required.",
               pattern: {

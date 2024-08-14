@@ -12,8 +12,6 @@ interface SideBarProps {
 }
 
 const SideBar: React.FC<SideBarProps> = ({ listVersionOfProject, handleApply }) => {
-  const storedData = localStorage.getItem("isCheckedBoxRoadmap");
-  const storedDataVersion = localStorage.getItem("IsCheckBoxShowVersion");
   const [isCheckBoxShowVersion, setIsCheckBoxShowVersion] = useState<boolean>(false);
   const [isShowComplete, setIsShowComplete] = useState<boolean>(false);
   const [isCheckedBoxRoadmap, setIsCheckedBoxRoadmap] = useState<CheckBoxRoadMap>({
@@ -38,10 +36,21 @@ const SideBar: React.FC<SideBarProps> = ({ listVersionOfProject, handleApply }) 
   };
 
   useEffect(() => {
-    if (storedData && storedDataVersion) {
-      setIsCheckedBoxRoadmap(JSON.parse(storedData));
-      setIsCheckBoxShowVersion(JSON.parse(storedDataVersion));
+    const storedDataVersion = localStorage.getItem("IsCheckBoxShowVersion");
+    const storedData = localStorage.getItem("isCheckedBoxRoadmap");
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      setIsCheckedBoxRoadmap(
+        typeof parsedData === "object" &&
+          parsedData !== null &&
+          typeof parsedData.task === "boolean" &&
+          typeof parsedData.bug === "boolean" &&
+          typeof parsedData.showComplete === "boolean"
+          ? parsedData
+          : { task: true, bug: false, showComplete: false },
+      );
     }
+    setIsCheckBoxShowVersion(storedDataVersion && typeof JSON.parse(storedDataVersion) === "boolean" ? JSON.parse(storedDataVersion) : false);
   }, []);
 
   return (

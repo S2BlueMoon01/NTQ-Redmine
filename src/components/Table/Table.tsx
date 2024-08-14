@@ -13,7 +13,7 @@ interface PropsComponent {
   isCheckbox?: boolean;
 }
 
-const TableIssues: React.FC<PropsComponent> = ({ className, columnNames = [], dataTable = [], loading = true, isCheckbox = false }) => {
+const Table: React.FC<PropsComponent> = ({ className, columnNames = [], dataTable = [], loading = true, isCheckbox = false }) => {
   const { activeItemId, setActiveItemId } = useGlobalStore((state) => state);
   const [checkList, setCheckList] = useState<number[]>([]);
   const [isAllChecked, setIsAllChecked] = useState<boolean>(false);
@@ -131,7 +131,7 @@ const TableIssues: React.FC<PropsComponent> = ({ className, columnNames = [], da
                       (typeof id === "number" ? (
                         <Dialog
                           issueId={id}
-                          content={row[columnName] as string}
+                          content={row[columnTable] as string}
                           handleClick={handleMouseDown}
                           ZIndex={activeItemId === id ? 40 : 30}
                         />
@@ -158,4 +158,4 @@ const TableIssues: React.FC<PropsComponent> = ({ className, columnNames = [], da
   );
 };
 
-export default TableIssues;
+export default Table;

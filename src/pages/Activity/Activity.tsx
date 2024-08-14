@@ -50,9 +50,7 @@ const Activity = () => {
     newDateStart.setDate(newDateStart.getDate() - 30);
     setDateStart(newDateStart.toISOString().split("T")[0]);
     const newDateEnd = new Date(dateEnd);
-    if (newDateEnd < new Date()) {
-      setIsDisplayNext(true);
-    }
+    setIsDisplayNext(true);
     newDateEnd.setDate(newDateEnd.getDate() - 30);
     setDateEnd(newDateEnd.toISOString().split("T")[0]);
   };
@@ -225,7 +223,7 @@ const Activity = () => {
             {isLoading ? (
               <SyncLoader color="#169" size={5} />
             ) : isNoData ? (
-              <div className="border-2 border-[#fdbf3b] bg-[#ffebc1] text-[#b7793b] text-[13.2px] w-full py-1 text-center">No data to display</div>
+              <div className="border-2 border-[#fdbf3b] bg-[#ffebc1] text-[#b7793b] text-sm w-full py-1 text-center">No data to display</div>
             ) : (
               <div className="">
                 {Object.keys(listData).map((date) => (
@@ -234,21 +232,19 @@ const Activity = () => {
                     {listData[date].map((issue: any) => (
                       <div className="flex gap-3 ml-6 mb-3" key={issue.title}>
                         <div className="flex gap-1">
-                          <img src={handleIconOfData(issue.type)} alt="" className="w-4 h-4" />
+                          <img src={handleIconOfData(issue.type)} alt="" className="size-4" />
                           <img
                             src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
-                            alt=""
-                            className="object-cover w-8 h-8 border p-0.5 border-stone-300"
+                            alt="Avatar"
+                            className="object-cover size-8 border p-0.5 border-stone-300"
                           />
                         </div>
-                        <div className="">
+                        <div className="text-xs">
                           <div className="flex items-center leading-4 gap-1">
                             <span className="text-10 text-mouse-gray">{handleFormatTime(issue.created_on)}</span>
-                            <span className="">
-                              <a href="#!" className="link text-xs">
-                                {issue.title}
-                              </a>
-                            </span>
+                            <a href="#!" className="link text-xs">
+                              {issue.title}
+                            </a>
                           </div>
                           <div className="text-10 text-zinc-500 italic leading-3">{issue?.description}</div>
                           <div className="leading-3">
@@ -277,7 +273,7 @@ const Activity = () => {
             </div>
             <div className="flex items-center justify-end pt-2 text-10 leading-3 gap-1 text-mouse-gray">
               <span>Also available in:</span>
-              <img src={Atom} alt="" />
+              <img src={Atom} alt="Atom" />
               <a href="#!" className="link text-10">
                 Atom
               </a>
@@ -298,9 +294,7 @@ const Activity = () => {
             ))}
           </div>
 
-          <Button className="" onClick={fetchData}>
-            Apply
-          </Button>
+          <Button onClick={fetchData}>Apply</Button>
         </div>
       </div>
     </>

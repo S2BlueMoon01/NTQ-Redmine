@@ -218,7 +218,7 @@ const Option: React.FC<OptionProps> = ({ onChangeOptions }) => {
     <>
       <div className="relative pb-3">
         <hr />
-        <div className="flex items-center px-1 absolute -top-2 left-3 bg-white cursor-pointer" onClick={handleClickDragDown}>
+        <div className="flex items-center px-1 absolute top-2 left-3 bg-white cursor-pointer" onClick={handleClickDragDown}>
           <div className="text-gray-700">
             <img src={isDragDown ? ArrowExpanded : ArrowCollapsed} alt="icon expend" />
           </div>

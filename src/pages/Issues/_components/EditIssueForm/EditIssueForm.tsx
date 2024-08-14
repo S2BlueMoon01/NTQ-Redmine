@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
 import Label from "~/components/Label";
@@ -14,9 +14,8 @@ import Editor from "~/components/Editor";
 import { SyncLoader } from "react-spinners";
 import { Issue } from "~/types/issue.type";
 import issuesApi from "~/apis/issue.api";
-import ModalNewVersion from "./_components/ModalNewVersion";
 import projectMembershipsApi from "~/apis/projectMemberships.api";
-import ModalAddWatchers from "./_components/ModalAddWatchers";
+import ModalNewVersion from "~/pages/IssuesCreate/_components/ModalNewVersion";
 
 interface Member {
   id: number;
@@ -29,7 +28,11 @@ interface Task {
   name: string;
 }
 
-const IssuesCreate = () => {
+interface PropsEdit {
+  formRef: React.MutableRefObject<HTMLFormElement | null>;
+}
+
+const EditIssueForm: React.FC<PropsEdit> = ({ formRef }) => {
   const { id, name } = useParams();
   const [isActiveParentTask, setIsActiveParentTask] = useState(false);
   const [subject, setSubject] = useState<string>("");
@@ -230,14 +233,12 @@ const IssuesCreate = () => {
   return (
     <>
       {newVersion && <ModalNewVersion handleClick={setNewVersion} />}
-      {isAddWatcher && <ModalAddWatchers data={members} handleClick={setIsAddWatcher} />}
       <Helmet>
         <title>{`New Issue - ${name} - NTQ Redmine`}</title>
         <meta name="description" content="Redmine" />
       </Helmet>
-      <form action="">
-        <div className="p-2.5 pt-1 min-h-84 bg-white px-3 mt-3 pb-8">
-          <h2 className="text-xl font-semibold pt-0.5 pr-3 mb-3 text-mouse-gray">New issue</h2>
+      <form action="" ref={formRef}>
+        <div className=" p-2.5 pt-1 min-h-84 bg-white px-3 mt-3 pb-8">
           {error && (
             <div className="pt-2">
               <div className="flex border-[#dd0000] items-center text-[13.2px] border-2 bg-[#ffe3e3] gap-3 p-[2px] mt-2 mb-3">
@@ -499,4 +500,4 @@ const IssuesCreate = () => {
   );
 };
 
-export default IssuesCreate;
+export default EditIssueForm;

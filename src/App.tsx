@@ -1,3 +1,4 @@
+import "~/configs/i18n";
 import { Fragment } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
