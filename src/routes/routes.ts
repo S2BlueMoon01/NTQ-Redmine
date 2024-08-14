@@ -21,6 +21,9 @@ import NewVersion from "~/pages/Roadmap/_components/NewVersion";
 import Issues from "~/pages/Issues";
 import DetailIssue from "~/pages/Issues/_components/DetailIssue/DetailIssue";
 
+import MyAccount from "~/pages/MyAccount";
+
+
 const publicRoutes = [
   { path: "/login", component: LoginPage, layout: DefaultLayout },
   { path: "/lost-password", component: LostPasswordPage, layout: DefaultLayout },
@@ -32,6 +35,8 @@ const privateRoutes = [
   { path: "/", component: HomePage, layout: DefaultLayout },
   { path: "/projects", component: ProjectsPage, layout: DefaultLayout },
   { path: "/issues", component: Issues, layout: DefaultLayout },
+
+  { path: "/my/account", component: MyAccount, layout: DefaultLayout },
 
   { path: "/projects/:id/:name/overview", component: OverView, layout: DefaultLayout },
   { path: "/projects/:id/:name/activity", component: Activity, layout: DefaultLayout },

@@ -21,7 +21,20 @@ const listMenuLeft = [
   },
 ];
 
-const listMenuRight = ["WorkTime", "My account", "Sign out"];
+const listMenuRight = [
+  {
+    name: "WorkTime",
+    path: "#!",
+  },
+  {
+    name: "My account",
+    path: "/my/account",
+  },
+  {
+    name: "Sign out",
+    path: "/si",
+  },
+];
 
 interface PropComponent {
   isShowNavbar?: boolean;
@@ -58,8 +71,10 @@ const Header: React.FC<PropComponent> = ({ isShowNavbar = false, idProject, name
               </li>
               {listMenuRight.length > 0 &&
                 listMenuRight.map((item) => (
-                  <li className="hover:underline" key={item}>
-                    {item}
+                  <li className="hover:underline" key={item.name}>
+                    <Link className="hover:underline" to={item.path}>
+                      {item.name}
+                    </Link>
                   </li>
                 ))}
             </ul>
