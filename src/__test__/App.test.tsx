@@ -215,7 +215,7 @@ describe("App", () => {
   //   screen.debug(document.body.parentElement as HTMLElement, 999999999);
   // });
 
-  test("should render spent time page", async () => {
+  test("should render option spent time page", async () => {
     render(<App />, { wrapper: AppWrapper });
 
     await userEvent.click(screen.getByText(/My page/i));

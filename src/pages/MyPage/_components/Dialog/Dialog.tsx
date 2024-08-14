@@ -11,6 +11,7 @@ import "./Dialog.css";
 
 import Loading from "~/components/Loading";
 import { convertDateFormat, getSecondsDifference } from "~/utils/utils";
+import { useNavigate } from "react-router-dom";
 
 interface DialogProps {
   issueId: number;
@@ -42,6 +43,7 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
     { label: "Copied to", value: "copied_to" },
     { label: "Copied from", value: "copied_from" },
   ]);
+  const navigate = useNavigate();
 
   const handleClickOutside = () => {
     setIsVisible(false);
@@ -61,6 +63,10 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleNavigateDetail = () => {
+    navigate(`/projects/${issue?.project.id}/${issue?.project.name}/issues/${issue?.id}`);
   };
 
   return (
@@ -114,7 +120,7 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
                   <div className="text-sm font-light whitespace-normal">
                     {"Added by "}
                     <a href="" className="link">
-                      {`${issue?.author.name} `}
+                      {issue?.author.name}
                     </a>
                     <a href="" className="link">
                       {`${getSecondsDifference(issue?.created_on)} `}
@@ -208,7 +214,7 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
                     <label htmlFor="" className="font-bold  w-2/5 min-w-24">
                       Target version:
                     </label>
-                    <span className="w-1/2 min-w-14">-</span>
+                    <span className="w-1/2 min-w-14">{issue?.fixed_version?.name ? issue?.fixed_version?.name : "-"}</span>
                   </div>
                   <div className="pt-1 text-xs w-1/2 flex flex-wrap min-w-24">
                     <label htmlFor="" className="font-bold  w-2/5 min-w-20">
@@ -324,7 +330,10 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
           <hr />
 
           <div className="flex mt-2 gap-2 justify-end pb-2.5 pr-5">
-            <button className="border text-blue-gray bg-slate-100 font-bold px-3 py-1 border-gray-300 rounded-md hover:bg-sky-50 hover:border-blue-gray">
+            <button
+              onClick={handleNavigateDetail}
+              className="border text-blue-gray bg-slate-100 font-bold px-3 py-1 border-gray-300 rounded-md hover:bg-sky-50 hover:border-blue-gray"
+            >
               details
             </button>
             <button className="border text-blue-gray a bg-slate-100 font-bold px-3 py-1 border-gray-300 rounded-md hover:bg-sky-50 hover:border-blue-gray">

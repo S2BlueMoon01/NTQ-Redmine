@@ -14,7 +14,7 @@ import moment from "moment";
 
 const COLUMN_NAME_DEFAULT = ["#", "project", "tracker", "status", "priority", "assignee", "updated", "author"];
 
-const DetailIssues = () => {
+const Issues = () => {
   const { name, id } = useParams();
   const [columnName, setColumnName] = useState<string[]>(["#", "project", "tracker", "status", "priority", "assignee", "updated", "author"]);
   const [midColumnName, setMidColumnName] = useState<string[]>(["#", "project", "tracker", "status", "priority", "assignee", "updated", "author"]);
@@ -26,7 +26,7 @@ const DetailIssues = () => {
     return (
       response.data?.issues?.map((issue) => {
         const doneRatio = (
-          <div className="bg-gray-200 h-4">
+          <div className="bg-black-200 h-4">
             <div className="bg-green-400 h-4" style={{ width: `${issue.done_ratio}%` }}></div>
           </div>
         );
@@ -131,4 +131,4 @@ const DetailIssues = () => {
   );
 };
 
-export default DetailIssues;
+export default Issues;
