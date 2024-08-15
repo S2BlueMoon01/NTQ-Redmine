@@ -23,7 +23,6 @@ import DetailIssue from "~/pages/Issues/_components/DetailIssue/DetailIssue";
 
 import MyAccount from "~/pages/MyAccount";
 
-
 const publicRoutes = [
   { path: "/login", component: LoginPage, layout: DefaultLayout },
   { path: "/lost-password", component: LostPasswordPage, layout: DefaultLayout },

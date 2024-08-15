@@ -1,6 +1,6 @@
 import { Project } from "~/types/project.type";
 import { ListDataResponse } from "~/types/utils.type";
-import { Version } from "~/types/version.type";
+import { NewVersion, Version } from "~/types/version.type";
 import http from "~/utils/http";
 
 export const URL_PROJECTS = "projects";
@@ -15,6 +15,10 @@ const versionsApi = {
   getProjectById(data: { id: number; include?: string }) {
     const params = data.include ? { include: data.include } : {};
     return http.get<{ project: Project }>(`${URL_PROJECTS}/${data.id}.json`, { params });
+  },
+
+  postNewVersions(id: number, data: NewVersion) {
+    return http.post(`/projects/${id}/${URL_VERSIONS}.json`, { version: data });
   },
 };
 

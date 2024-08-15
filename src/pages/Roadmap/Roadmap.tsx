@@ -1,5 +1,6 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import IconAdd from "~/assets/images/icon-add.png";
+import IconSuccess from "~/assets/images/apply-img.png";
 import PackageImg from "~/assets/images/package-img.png";
 import useScrollToTop from "~/hooks/useScrollToTop";
 import ProgressBar from "./_components/ProgressBar";
@@ -22,7 +23,11 @@ const Roadmap = () => {
     bug: false,
     showComplete: false,
   });
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const { id, name } = useParams();
+  const location = useLocation();
+  const isSuccessCreate = location.state?.isSuccess;
+  console.log(isSuccessCreate);
   const currentDate = moment();
   const [activeItem, setActiveItem] = useState<number>(1);
 
@@ -48,8 +53,13 @@ const Roadmap = () => {
       responseVersion.data.versions &&
       responseVersion.data.versions.map((version) => {
         const issuesOfVersion = issues.filter((issue) => issue?.fixed_version?.id === version.id);
-        const createdDate = moment(version.due_date, "YYYY-MM-DD");
-        const difference = currentDate.diff(createdDate, "days");
+
+        // if ( version.due_date) {
+        const dueDate = moment(version.due_date, "YYYY-MM-DD");
+        const difference = currentDate.diff(dueDate, "days");
+        // }
+        // const difference = dueDate.diff(currentDate, "days");
+
         return {
           ...version,
           daysLate: difference,
@@ -94,6 +104,17 @@ const Roadmap = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (isSuccessCreate) {
+      setShowSuccessMessage(true);
+      const timer = setTimeout(() => {
+        setShowSuccessMessage(false);
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccessCreate]);
+
   const handleApply = (data: CheckBoxRoadMap) => {
     setIsCheckedBoxRoadmap(data);
     localStorage.setItem("isCheckedBoxRoadmap", JSON.stringify(data));
@@ -112,12 +133,20 @@ const Roadmap = () => {
 
       <div className="flex min-h-84">
         <div className="flex flex-col gap-2.5 bg-white w-9/12 px-3 mt-3 pb-8 border border-solid ">
+          {showSuccessMessage && (
+            <div className="flex mt-3 items-center text-xs text-lime-900 p-2 bg-green-100 border-2 border-lime-500">
+              <img className="flex w-fit h-fit" src={IconSuccess} alt="Error" />
+              <div className="pl-5">Successful creation.</div>
+            </div>
+          )}
+
           <div className="flex justify-between items-center p-1.5">
             <h2 className="text-xl text-mouse-gray font-semibold">Roadmap</h2>
             <Link className="flex min-w-20 hover:underline" to={`/projects/${id}/${name}/roadmap/newVersion`}>
               <img className="mr-1 w-fit h-fit" src={IconAdd} alt="Add" /> <p className="text-xs">New version</p>
             </Link>
           </div>
+
           <div className="flex flex-col gap-1.5 text-sm">
             {listVersionOfProject.length ? (
               listVersionOfProject.map((version) => {
