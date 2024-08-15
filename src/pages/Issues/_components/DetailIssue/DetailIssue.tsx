@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import IconSearch from "~/assets/images/magnifier.png";
 import TimeAdd from "~/assets/images/time_add.png";
 import StarIcon from "~/assets/images/star-img.png";
+import StarOffIcon from "~/assets/images/fav_off_start.png";
+
 import CopyIcon from "~/assets/images/copy.png";
 import EditIcon from "~/assets/images/edit-img.png";
 import WifiImg from "~/assets/images/wifi-img.png";
@@ -24,6 +26,7 @@ const DetailIssue = () => {
   const [isActive, setIsActive] = useState(false);
   const [displayRelatedIssue, setDisplayRelatedIssue] = useState<boolean>(false);
   const [isActiveEdit, setIsActiveEdit] = useState(false);
+  const [isWatchIssue, setIsWatchIssue] = useState(false);
   const [listIssuesOfProject, setListIssuesOfProject] = useState<Issue[]>([]);
   const index = listIssuesOfProject.findIndex((issue) => issue.id === Number(issueId));
   const [indexOfIssue, setIndexOfIssue] = useState<number>(index);
@@ -82,22 +85,24 @@ const DetailIssue = () => {
     }, 500);
   };
 
+  console.log(issue);
+
   return (
     <div className="flex gap-2">
       <div className="min-h-84 flex flex-col gap-2 bg-white px-3 mt-3 border pb-6 w-9/12">
         <div className="flex justify-between mt-2 items-center">
           <h2 className="text-mouse-gray font-bold ">{issue ? `${issue?.tracker?.name} #${issue?.id} ` : ""}</h2>
           <div className="flex gap-2 text-10 text-ocean-blue">
-            <button className="flex gap-1" onClick={handleShowEditForm}>
+            <button className="flex gap-1 hover:underline" onClick={handleShowEditForm}>
               <img src={EditIcon} className="w-4" alt="Time add" /> Edit
             </button>
-            <button className="flex gap-1">
+            <button className="flex gap-1 hover:underline" onClick={() => navigate(`/projects/${id}/${name}/time-entries/new`)}>
               <img src={TimeAdd} className="w-4" alt="Time add" /> Log time
             </button>
-            <button className="flex gap-1">
-              <img src={StarIcon} className="w-4" alt="Time add" /> Unwatch
+            <button className="flex gap-1 hover:underline" onClick={() => setIsWatchIssue(!isWatchIssue)}>
+              <img src={isWatchIssue ? StarIcon : StarOffIcon} className="w-4" alt="Time add" /> {isWatchIssue ? "Unwatch" : "Watch"}
             </button>
-            <button className="flex gap-1">
+            <button className="flex gap-1 hover:underline">
               <img src={CopyIcon} className="w-4" alt="Time add" /> Copy
             </button>
           </div>
@@ -128,7 +133,7 @@ const DetailIssue = () => {
               <div className="text-10 text-gray-500 items-start flex gap-1">
                 <button
                   title={indexOfIssue === 0 && listIssuesOfProject ? " " : `${listIssuesOfProject[indexOfIssue - 1]?.id}`}
-                  className={` ${indexOfIssue === 0 ? "text-gray-300" : "text-ocean-blue"} `}
+                  className={` ${indexOfIssue === 0 ? "text-gray-300" : "text-ocean-blue hover:underline"} `}
                   onClick={handleClickPrevious}
                 >
                   « Previous
@@ -137,7 +142,7 @@ const DetailIssue = () => {
                   | {indexOfIssue == -1 ? " " : indexOfIssue + 1} of {listIssuesOfProject.length} |
                 </span>
                 <button
-                  className={` ${indexOfIssue === listIssuesOfProject.length - 1 ? "text-gray-500" : "text-ocean-blue"} `}
+                  className={` ${indexOfIssue === listIssuesOfProject.length - 1 ? "text-gray-500" : "text-ocean-blue hover:underline"} `}
                   title={
                     indexOfIssue === listIssuesOfProject.length - 1 && listIssuesOfProject ? " " : `${listIssuesOfProject[indexOfIssue + 1]?.id}`
                   }
@@ -288,16 +293,16 @@ const DetailIssue = () => {
         </div>
 
         <div className="flex gap-2 text-10 justify-end text-ocean-blue">
-          <button className="flex gap-1" onClick={handleShowEditForm}>
+          <button className="flex gap-1 hover:underline" onClick={handleShowEditForm}>
             <img src={EditIcon} className="w-4" alt="Time add" /> Edit
           </button>
-          <button className="flex gap-1">
+          <button className="flex gap-1 hover:underline" onClick={() => navigate(`/projects/${id}/${name}/time-entries/new`)}>
             <img src={TimeAdd} className="w-4" alt="Time add" /> Log time
           </button>
-          <button className="flex gap-1">
-            <img src={StarIcon} className="w-4" alt="Time add" /> Unwatch
+          <button className="flex gap-1 hover:underline" onClick={() => setIsWatchIssue(!isWatchIssue)}>
+            <img src={isWatchIssue ? StarIcon : StarOffIcon} className="w-4" alt="Time add" /> {isWatchIssue ? "Unwatch" : "Watch"}
           </button>
-          <button className="flex gap-1">
+          <button className="flex gap-1 hover:underline">
             <img src={CopyIcon} className="w-4" alt="Time add" /> Copy
           </button>
         </div>
@@ -306,10 +311,7 @@ const DetailIssue = () => {
           <div className="mt-5 flex flex-col gap-2">
             <h2 className="text-mouse-gray text-sm">Edit</h2>
             <div className=" min-h-52 pb-3 border">
-              <div className="relative m-2 pb-3 border">
-                <span className="text-10 px-1 absolute -top-2 left-3 bg-white cursor-pointer text-gray-rain">Change properties</span>
-              </div>
-              <EditIssueForm formRef={formRef} />
+              <EditIssueForm formRef={formRef} dataEdit={issue} setIsActiveEdit={setIsActiveEdit} />
             </div>
           </div>
         )}

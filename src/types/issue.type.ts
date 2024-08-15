@@ -53,7 +53,7 @@ export interface Issue {
   Severity?: string;
   QCActivity?: string;
   CauseCategory?: [string];
-  "IsDegrade?"?: boolean;
+  "IsDegrade?"?: string;
   Reopencounter?: number;
   watchers?: User[];
 }

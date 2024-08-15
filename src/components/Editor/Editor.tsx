@@ -1,7 +1,11 @@
 import React, { useState, useRef } from "react";
 import icons from "./icons";
 
-const Editor = () => {
+interface Props {
+  description?: string;
+}
+
+const Editor: React.FC<Props> = ({ description }) => {
   const [text, setText] = useState<string>("");
   const [selectionStart, setSelectionStart] = useState<number>(0);
   const [selectionEnd, setSelectionEnd] = useState<number>(0);
@@ -208,8 +212,8 @@ const Editor = () => {
           ref={textareaRef}
           name=""
           id="textareaEdit"
-          className="border w-full h-36 px-1 text-sm"
-          value={text}
+          className="border w-full h-36 px-1 text-xs"
+          value={description || text}
           onChange={handleChange}
           onSelect={handleSelect}
         ></textarea>
