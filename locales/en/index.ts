@@ -1,7 +1,7 @@
-import myAccount from './myAccount.json'
+import myAccount from "./myAccount.json";
 
 const enLocales = {
   myAccount,
-}
+};
 
-export default enLocales
+export default enLocales;

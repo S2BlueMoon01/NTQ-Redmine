@@ -18,3 +18,12 @@ export interface Version {
   daysLate?: number;
   issues?: Issue[];
 }
+
+export interface NewVersion {
+  name: string;
+  description?: string;
+  status: string;
+  wiki_page_title: string;
+  due_date: string;
+  sharing: string;
+}
