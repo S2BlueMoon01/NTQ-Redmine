@@ -14,6 +14,8 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Issue } from "~/types/issue.type";
 import { Helmet } from "react-helmet-async";
+import { useTranslation } from "react-i18next";
+import { handleFormatTime, handleFormatDate } from "~/utils/utils";
 
 type DataGeneral = {
   title: string;
@@ -28,6 +30,7 @@ type DataGeneral = {
 
 const Activity = () => {
   const { id, name } = useParams();
+  const { t } = useTranslation("activity");
 
   const [dateEnd, setDateEnd] = useState<string>(new Date().toISOString().split("T")[0]);
   const [dateStart, setDateStart] = useState<string>(new Date(new Date(dateEnd).setDate(new Date().getDate() - 29)).toISOString().split("T")[0]);
@@ -35,14 +38,15 @@ const Activity = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [listData, setListData] = useState<Record<string, DataGeneral[]>>({});
   const [isNoData, setIsNoData] = useState(false);
+  const [data, setData] = useState<DataGeneral[]>([]);
 
   const [activity, setActivity] = useState([
-    { name: "issues", label: "Issues", checked: true },
-    { name: "changesets", label: "Changesets", checked: true },
-    { name: "documents", label: "Documents", checked: true },
-    { name: "files", label: "Files", checked: true },
-    { name: "wikiEdits", label: "Wiki edits", checked: false },
-    { name: "spentTime", label: "Spent time", checked: false },
+    { name: "issues", label: t("activity_options.issues"), checked: true },
+    { name: "changesets", label: t("activity_options.changesets"), checked: true },
+    { name: "documents", label: t("activity_options.documents"), checked: true },
+    { name: "files", label: t("activity_options.files"), checked: true },
+    { name: "wikiEdits", label: t("activity_options.wiki_edits"), checked: false },
+    { name: "spentTime", label: t("activity_options.spent_time"), checked: false },
   ]);
 
   const handlePrevious = () => {
@@ -70,71 +74,15 @@ const Activity = () => {
     }
   };
 
-  const fetchData = async () => {
-    try {
-      setIsLoading(true);
-      let arrayItem: DataGeneral[] = [];
-      //Issue
-      const responseIssue = await issuesApi.listIssues({ project_id: Number(id), created_on: `><${dateStart}|${dateEnd}` });
-      const issueConvert = convertListIssue(responseIssue.data.issues);
-      if (activity[0].checked) {
-        arrayItem = [...arrayItem, ...issueConvert];
-      }
-
-      //Wiki
-      const responseWikis = await wikiApi.getAllWikiProject({ project_id: Number(id) });
-      const wikiData = await wikiApi.getWikiProject({ project_id: Number(id), name: responseWikis.data.wiki_pages[0].title });
-      const wikiDataConvert = convertListWiki([wikiData.data.wiki_page]);
-      if (activity[4].checked) {
-        arrayItem = [...arrayItem, ...wikiDataConvert];
-      }
-      //TimeEntries
-      const responseTimeEntries = await timeEntriesApi.listTimeEntries({ project_id: Number(id), from: dateStart, to: dateEnd });
-      const timeEntriesConvert = convertListTimeEntries(responseTimeEntries.data.time_entries, responseIssue.data.issues);
-      if (activity[5].checked) {
-        arrayItem = [...arrayItem, ...timeEntriesConvert];
-      }
-      setIsNoData(!arrayItem.length);
-      const listData = arrangeListByDate(arrayItem);
-      setListData(listData);
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-    }
-  };
-
   const handleIconOfData = (type: string) => {
     switch (type) {
       case "spentTime":
         return SpentTime;
-      case "issue":
+      case "issues":
         return Document;
-      case "wiki":
+      case "wikiEdits":
         return Edit;
     }
-  };
-
-  const handleFormatTime = (time: string): string => {
-    const date = new Date(time);
-    const options: Intl.DateTimeFormatOptions = {
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-      timeZone: "Asia/Ho_Chi_Minh",
-    };
-    const timeString = date.toLocaleString("en-US", options);
-    return timeString;
-  };
-
-  const handleFormatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      timeZone: "Asia/Ho_Chi_Minh",
-    };
-    return date.toLocaleDateString("en-US", options);
   };
 
   const handleChange = (index: number) => {
@@ -143,10 +91,45 @@ const Activity = () => {
     setActivity(newActivity);
   };
 
+  const handleApply = (data: DataGeneral[]) => {
+    const filterMapping: { index: number; type: string }[] = [
+      { index: 0, type: "issues" },
+      { index: 4, type: "wikiEdits" },
+      { index: 5, type: "spentTime" },
+    ];
+
+    const arrayItem = filterMapping.reduce((acc: DataGeneral[], { index, type }) => {
+      if (activity[index].checked) {
+        return [...acc, ...data.filter((item) => item.type === type)];
+      }
+      return acc;
+    }, []);
+
+    setIsNoData(!arrayItem.length);
+
+    const listData = arrangeListByDate(arrayItem);
+    setListData(listData);
+  };
+
+  const handleClickActivity = (index: number) => {
+    const newlisData = data.filter((item) => item.type === activity[index].name);
+    const listData = arrangeListByDate(newlisData);
+    setListData(listData);
+
+    const newActivity = activity.map(
+      (item, i) =>
+        i === index
+          ? { ...item, checked: true } // Nếu đúng index thì thay đổi checked
+          : { ...item, checked: false }, // Nếu không đúng thì đặt checked = false
+    );
+
+    setActivity(newActivity);
+  };
+
   const convertListIssue = (listItem: Issue[]): DataGeneral[] => {
     const newList = listItem.map((item) => ({
       title: `${item.tracker.name} #${item.id} (${item.status.name}): ${item.subject}`,
-      type: "issue",
+      type: "issues",
       description: item.description,
       author: {
         id: item.author.id,
@@ -161,7 +144,7 @@ const Activity = () => {
   const convertListWiki = (listItem: Wiki[]): DataGeneral[] => {
     const newList = listItem.map((item) => ({
       title: `${item.title} edit: ${item.title} (#${item.version})`,
-      type: "wiki",
+      type: "wikiEdits",
       description: "",
       author: {
         id: +item.author.id,
@@ -205,6 +188,32 @@ const Activity = () => {
     return newList;
   };
 
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      let arrayItem: DataGeneral[] = [];
+      //Issue
+      const responseIssue = await issuesApi.listIssues({ project_id: Number(id), created_on: `><${dateStart}|${dateEnd}` });
+      const issueConvert = convertListIssue(responseIssue.data.issues);
+
+      //Wiki
+      const responseWikis = await wikiApi.getAllWikiProject({ project_id: Number(id) });
+      const wikiData = await wikiApi.getWikiProject({ project_id: Number(id), name: responseWikis.data.wiki_pages[0].title });
+      const wikiDataConvert = convertListWiki([wikiData.data.wiki_page]);
+
+      //TimeEntries
+      const responseTimeEntries = await timeEntriesApi.listTimeEntries({ project_id: Number(id), from: dateStart, to: dateEnd });
+      const timeEntriesConvert = convertListTimeEntries(responseTimeEntries.data.time_entries, responseIssue.data.issues);
+
+      arrayItem = [...arrayItem, ...issueConvert, ...wikiDataConvert, ...timeEntriesConvert];
+      setData(arrayItem);
+      handleApply(arrayItem);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, [dateEnd, dateStart]);
@@ -217,13 +226,13 @@ const Activity = () => {
       </Helmet>
       <div className="pt-2.5 flex">
         <div className="bg-white w-3/4 min-h-[70vh] px-3 pt-2 border-neutral-300 border">
-          <div className="text-xl font-semibold pt-0.5 pr-3 text-mouse-gray">Activity</div>
+          <div className="text-xl font-semibold pt-0.5 pr-3 text-mouse-gray">{t("title")}</div>
           <>
-            <span className="text-gray-rain text-10 italic inline-block mb-4">{`From ${convertDateFormat(dateStart)} to ${convertDateFormat(dateEnd)}`}</span>
+            <span className="text-gray-rain text-10 italic inline-block mb-4">{`${t("from")} ${convertDateFormat(dateStart)} ${t("to")} ${convertDateFormat(dateEnd)}`}</span>
             {isLoading ? (
               <SyncLoader color="#169" size={5} />
             ) : isNoData ? (
-              <div className="border-2 border-[#fdbf3b] bg-[#ffebc1] text-[#b7793b] text-sm w-full py-1 text-center">No data to display</div>
+              <div className="border-2 border-[#fdbf3b] bg-[#ffebc1] text-[#b7793b] text-sm w-full py-1 text-center">{t("no_data_notify")}</div>
             ) : (
               <div className="">
                 {Object.keys(listData).map((date) => (
@@ -232,7 +241,7 @@ const Activity = () => {
                     {listData[date].map((issue: any) => (
                       <div className="flex gap-3 ml-6 mb-3" key={issue.title}>
                         <div className="flex gap-1">
-                          <img src={handleIconOfData(issue.type)} alt="" className="size-4" />
+                          <img src={handleIconOfData(issue.type)} alt="Icon" className="size-4" />
                           <img
                             src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp"
                             alt="Avatar"
@@ -263,16 +272,16 @@ const Activity = () => {
           <div className="py-4">
             <div className="flex text-xs justify-between">
               <a href="#!" className="link" onClick={handlePrevious}>
-                « Previous
+                {t("button_apply.previous")}
               </a>
               {isDisplayNext && (
                 <a href="#!" className="link" onClick={handleNext}>
-                  Next »
+                  {t("button_apply.next")}
                 </a>
               )}
             </div>
             <div className="flex items-center justify-end pt-2 text-10 leading-3 gap-1 text-mouse-gray">
-              <span>Also available in:</span>
+              <span>{t("other_format_notify")}</span>
               <img src={Atom} alt="Atom" />
               <a href="#!" className="link text-10">
                 Atom
@@ -281,20 +290,20 @@ const Activity = () => {
           </div>
         </div>
         <div className="pt-4 pl-2">
-          <h3 className="text-mouse-gray text-sm font-bold">Activity</h3>
+          <h3 className="text-mouse-gray text-sm font-bold">{t("title")}</h3>
 
           <div className="flex flex-col my-2 pl-3">
             {activity.map((item, index) => (
               <label key={item.name} className="flex items-center gap-1">
                 <input type="checkbox" checked={item.checked} onChange={() => handleChange(index)} />
-                <a href="#!" className="link">
+                <a href="#!" className="link" onClick={() => handleClickActivity(index)}>
                   {item.label}
                 </a>
               </label>
             ))}
           </div>
 
-          <Button onClick={fetchData}>Apply</Button>
+          <Button onClick={() => handleApply(data)}>{t("button_apply.apply")}</Button>
         </div>
       </div>
     </>
