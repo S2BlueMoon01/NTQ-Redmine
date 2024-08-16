@@ -15,6 +15,7 @@ import issuesApi from "~/apis/issue.api";
 import { useNavigate, useParams } from "react-router-dom";
 import { CustomFields, Issue } from "~/types/issue.type";
 import { convertDateFormat, getSecondsDifference } from "~/utils/utils";
+import { Helmet } from "react-helmet-async";
 
 interface Options {
   label: string;
@@ -48,6 +49,7 @@ const DetailIssue = () => {
   const fetchIssuesOfProject = async () => {
     const response = await issuesApi.listIssues({ project_id: projectID, limit: 100 });
     const listIssuesProject = response.data.issues;
+    const IssueOfId = await issuesApi.getIssueById({ id: Number(issueId) });
     const index = listIssuesProject.findIndex((issue) => issue.id === Number(issueId));
     const customFields = listIssuesProject[index]?.custom_fields?.reduce((acc: CustomFields, item) => {
       const formattedName = item.name.replace(/\s+/g, "").replace(/^[a-z]/, (match) => match.toLowerCase());
@@ -57,7 +59,7 @@ const DetailIssue = () => {
     setListIssuesOfProject(listIssuesProject);
     setIndexOfIssue(index);
     setIssuesOfId(listIssuesProject[index]);
-    setIssuesOfId({ ...listIssuesProject[index], ...customFields });
+    setIssuesOfId({ ...IssueOfId?.data?.issue, ...customFields });
   };
 
   useEffect(() => {
@@ -67,28 +69,34 @@ const DetailIssue = () => {
   const handleClickNext = () => {
     if (indexOfIssue < listIssuesOfProject.length - 1) {
       navigate(`/projects/${id}/${name}/issues/${listIssuesOfProject[indexOfIssue + 1]?.id}`);
+      setIsActiveEdit(false);
     }
   };
 
   const handleClickPrevious = () => {
     if (indexOfIssue > 0) {
       navigate(`/projects/${id}/${name}/issues/${listIssuesOfProject[indexOfIssue - 1]?.id}`);
+      setIsActiveEdit(false);
     }
   };
 
   const handleShowEditForm = () => {
-    setIsActiveEdit(true);
-    setTimeout(() => {
-      if (formRef.current) {
-        formRef.current.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 500);
+    if (issue.id !== undefined) {
+      setIsActiveEdit(true);
+      setTimeout(() => {
+        if (formRef.current) {
+          formRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 1000);
+    }
   };
-
-  console.log(issue);
 
   return (
     <div className="flex gap-2">
+      <Helmet>
+        <title>{`Detail Issue - ${name} - NTQ Redmine`}</title>
+        <meta name="description" content="Redmine" />
+      </Helmet>
       <div className="min-h-84 flex flex-col gap-2 bg-white px-3 mt-3 border pb-6 w-9/12">
         <div className="flex justify-between mt-2 items-center">
           <h2 className="text-mouse-gray font-bold ">{issue ? `${issue?.tracker?.name} #${issue?.id} ` : ""}</h2>

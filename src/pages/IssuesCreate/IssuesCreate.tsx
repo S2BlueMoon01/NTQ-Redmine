@@ -17,6 +17,8 @@ import issuesApi from "~/apis/issue.api";
 import ModalNewVersion from "./_components/ModalNewVersion";
 import projectMembershipsApi from "~/apis/projectMemberships.api";
 import ModalAddWatchers from "./_components/ModalAddWatchers";
+import { Controller, useForm } from "react-hook-form";
+import moment from "moment";
 
 interface Member {
   id: number;
@@ -86,11 +88,6 @@ const IssuesCreate = () => {
   ]);
 
   const [priorityOptions, _setPriorityOptions] = useState([
-    { label: "Low", value: 1 },
-    { label: "Normal", value: 2 },
-    { label: "High", value: 3 },
-    { label: "Urgent", value: 4 },
-    { label: "Immediate", value: 5 },
     { label: "Low", value: 1 },
     { label: "Normal", value: 2 },
     { label: "High", value: 3 },
@@ -227,6 +224,14 @@ const IssuesCreate = () => {
     fetchProject();
   }, []);
 
+  const {
+    register,
+    control,
+    formState: { errors },
+  } = useForm();
+
+  // const onSubmit: SubmitHandler<IFormInput> = (data) => postNewVersions(data);
+
   return (
     <>
       {newVersion && <ModalNewVersion handleClick={setNewVersion} />}
@@ -321,7 +326,17 @@ const IssuesCreate = () => {
               <div className="w-1/2">
                 <div className="flex">
                   <Label htmlFor="StartDate" className="flex gap-1 items-center p-0" name="Start date"></Label>
-                  <DatePickerCustom id="StartDate" className="ml-1" />
+                  <Controller
+                    control={control}
+                    name="start_date"
+                    render={({ field }) => (
+                      <DatePickerCustom
+                        id="start_date"
+                        selected={field.value ? new Date(field.value) : null}
+                        onChange={(date) => field.onChange(date ? moment(date).format("YYYY-MM-DD") : "")}
+                      />
+                    )}
+                  />
                 </div>
               </div>
             </div>
@@ -341,7 +356,17 @@ const IssuesCreate = () => {
               <div className="w-1/2">
                 <div className="flex">
                   <Label htmlFor="DueDate" className="flex gap-1 items-center p-0" name="Due date"></Label>
-                  <DatePickerCustom id="DueDate" className="ml-1" />
+                  <Controller
+                    control={control}
+                    name="due_date"
+                    render={({ field }) => (
+                      <DatePickerCustom
+                        id="due_date"
+                        selected={field.value ? new Date(field.value) : null}
+                        onChange={(date) => field.onChange(date ? moment(date).format("YYYY-MM-DD") : "")}
+                      />
+                    )}
+                  />
                 </div>
               </div>
             </div>

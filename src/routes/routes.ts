@@ -34,6 +34,7 @@ const privateRoutes = [
   { path: "/", component: HomePage, layout: DefaultLayout },
   { path: "/projects", component: ProjectsPage, layout: DefaultLayout },
   { path: "/issues", component: Issues, layout: DefaultLayout },
+  { path: "/user/:userId", component: OverView, layout: DefaultLayout },
 
   { path: "/my/account", component: MyAccount, layout: DefaultLayout },
 
