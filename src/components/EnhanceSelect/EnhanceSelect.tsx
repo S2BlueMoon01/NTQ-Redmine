@@ -11,22 +11,25 @@ type SelectProps = {
   }[];
   children?: ReactNode;
   size?: number;
+  onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 } & SelectHTMLAttributes<HTMLSelectElement>;
 
-const EnhanceSelect = forwardRef<HTMLSelectElement, SelectProps>(({ className, defaultValue = "", arrayOption, children, ...rest }, ref) => {
-  return (
-    <select className={cn("border h-6 m-1 text-sm pl-1", className)} defaultValue={defaultValue} ref={ref} {...rest}>
-      {arrayOption.map((item) => {
-        return (
-          <option key={item.value} value={item.value}>
-            {item.label}
-          </option>
-        );
-      })}
-      {children}
-    </select>
-  );
-});
+const EnhanceSelect = forwardRef<HTMLSelectElement, SelectProps>(
+  ({ className, defaultValue = "", arrayOption, children, onChange, ...rest }, ref) => {
+    return (
+      <select className={cn("border h-6 m-1 text-sm pl-1", className)} onChange={onChange} defaultValue={defaultValue} ref={ref} {...rest}>
+        {arrayOption.map((item) => {
+          return (
+            <option key={item.value} value={item.value}>
+              {item.label}
+            </option>
+          );
+        })}
+        {children}
+      </select>
+    );
+  },
+);
 
 EnhanceSelect.displayName = "EnhanceSelect";
 

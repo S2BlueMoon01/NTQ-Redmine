@@ -55,6 +55,7 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
       if (activeItemId !== issueId) {
         setLoading(true);
         const response = await issuesApi.getIssueById({ id: issueId });
+        console.log(response.data.issue);
         setIssue(response.data.issue);
         setIsVisible(true);
       }

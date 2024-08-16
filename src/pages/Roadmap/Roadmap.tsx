@@ -53,7 +53,6 @@ const Roadmap = () => {
       responseVersion.data.versions &&
       responseVersion.data.versions.map((version) => {
         const issuesOfVersion = issues.filter((issue) => issue?.fixed_version?.id === version.id);
-
         // if ( version.due_date) {
         const dueDate = moment(version.due_date, "YYYY-MM-DD");
         const difference = currentDate.diff(dueDate, "days");
@@ -75,6 +74,8 @@ const Roadmap = () => {
     staleTime: config.staleTime,
     enabled: false,
   });
+
+  console.log(listVersionOfProject);
 
   useEffect(() => {
     if (listIssuesOfVersion.length > 0) {
