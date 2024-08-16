@@ -413,3 +413,27 @@ export const groupTimeEntriesByDate = (entries: TimeEntriesTable[]): GroupedTime
 
   return Object.values(groupedEntries);
 };
+
+
+export const handleFormatTime = (time: string): string => {
+  const date = new Date(time);
+  const options: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+    timeZone: "Asia/Ho_Chi_Minh",
+  };
+  const timeString = date.toLocaleString("en-US", options);
+  return timeString;
+};
+
+export const handleFormatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    timeZone: "Asia/Ho_Chi_Minh",
+  };
+  return date.toLocaleDateString("en-US", options);
+};
