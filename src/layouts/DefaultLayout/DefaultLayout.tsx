@@ -12,7 +12,7 @@ const DefaultLayout = ({ children }: FormItemProps) => {
   const { id, name } = useParams();
   const isProjectPage = location.pathname.startsWith(`/projects`);
   const isIssuesPage = location.pathname.startsWith(`/issues`);
-  const isMyAccountPage = location.pathname.startsWith(`/my`);
+  const isMyAccountPage = location.pathname.startsWith(`/my/account`);
   const isDetailProjectPage = location.pathname.startsWith(`/projects/${id}`);
   return (
     <div className="min-w-[1160px] px-3 overflow-x-hidden">

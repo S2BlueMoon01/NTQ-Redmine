@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
 import Label from "~/components/Label";
 import Input from "~/components/Input";
@@ -17,6 +16,7 @@ import ModalNewVersion from "~/pages/IssuesCreate/_components/ModalNewVersion";
 import { Controller, useForm } from "react-hook-form";
 import versionsApi from "~/apis/versions.api";
 import moment from "moment";
+import { useGlobalStore } from "~/store/globalStore";
 
 interface Member {
   id: number;
@@ -178,6 +178,9 @@ const EditIssueForm: React.FC<PropsEdit> = ({ formRef, dataEdit, setIsActiveEdit
   ]);
   const [versionOptions, setVersionOptions] = useState([{ label: "", value: 0 }]);
   const [isAddWatcher, setIsAddWatcher] = useState<boolean>(false);
+  const { setIsSuccessEdit } = useGlobalStore((state) => ({
+    setIsSuccessEdit: state.setIsSuccessEdit,
+  }));
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -280,15 +283,11 @@ const EditIssueForm: React.FC<PropsEdit> = ({ formRef, dataEdit, setIsActiveEdit
     console.log(responses);
     if (responses.status === 200) {
       setIsActiveEdit(false);
+      setIsSuccessEdit(true);
     }
   };
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { register, control, handleSubmit } = useForm();
 
   const onSubmit = (data: {}) => UpdateIssuesByID(data);
 
@@ -336,7 +335,10 @@ const EditIssueForm: React.FC<PropsEdit> = ({ formRef, dataEdit, setIsActiveEdit
                 name="subject"
                 control={control}
                 defaultValue={dataEdit.subject}
-                rules={{ required: "Subject can't be blank" }}
+                rules={{
+                  required: "Subject can't be blank",
+                  validate: (value) => value !== dataEdit.subject || "Subject must be different from the current value",
+                }}
                 render={({ field }) => <Input id="subject" style={{ width: "calc(100% - 225px)" }} className="ml-2 text-xs" {...field} />}
               />
             </div>
@@ -424,7 +426,7 @@ const EditIssueForm: React.FC<PropsEdit> = ({ formRef, dataEdit, setIsActiveEdit
               </div>
               <div className="w-1/2">
                 <div className="flex">
-                  <Label htmlFor="StartDate" className="flex gap-1 items-center p-0" name="Start date"></Label>
+                  <Label htmlFor="start_date" className="flex gap-1 items-center p-0" name="Start date"></Label>
                   <Controller
                     control={control}
                     name="start_date"

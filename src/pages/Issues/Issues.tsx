@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Filter from "../MyPage/_components/Filter";
 import { Link, useParams } from "react-router-dom";
 import ApplyImg from "~/assets/images/apply-img.png";
 import WifiImg from "~/assets/images/wifi-img.png";
+import IconSuccess from "~/assets/images/apply-img.png";
 import ReLoadImg from "~/assets/images/reload-img.png";
 import { Helmet } from "react-helmet-async";
 import TableIssues from "~/components/Table";
@@ -11,6 +12,7 @@ import issuesApi from "~/apis/issue.api";
 import { useQuery } from "@tanstack/react-query";
 import config from "~/constants/config";
 import moment from "moment";
+import { useGlobalStore } from "~/store/globalStore";
 
 const COLUMN_NAME_DEFAULT = ["#", "project", "tracker", "status", "priority", "assignee", "updated", "author"];
 
@@ -20,6 +22,11 @@ const Issues = () => {
   const [midColumnName, setMidColumnName] = useState<string[]>(["#", "project", "tracker", "status", "priority", "assignee", "updated", "author"]);
   const isProjectPage = location.pathname.startsWith(`/projects`);
   const projectID = Number(id) ? Number(id) : 323;
+
+  const { isSuccessEdit, setIsSuccessEdit } = useGlobalStore((state) => ({
+    isSuccessEdit: state.isSuccessEdit,
+    setIsSuccessEdit: state.setIsSuccessEdit,
+  }));
 
   const fetchIssuesOfProject = async () => {
     const response = await issuesApi.listIssues({ project_id: projectID });
@@ -51,7 +58,11 @@ const Issues = () => {
     );
   };
 
-  const { data: listIssuesOfProject = [], isLoading } = useQuery({
+  const {
+    data: listIssuesOfProject = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["issuesProjects"],
     queryFn: () => fetchIssuesOfProject(),
     staleTime: config.staleTime,
@@ -65,6 +76,17 @@ const Issues = () => {
     setMidColumnName(optionArray);
   };
 
+  useEffect(() => {
+    if (isSuccessEdit) {
+      refetch();
+      const timer = setTimeout(() => {
+        setIsSuccessEdit(false);
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccessEdit]);
+
   return (
     <>
       <Helmet>
@@ -73,6 +95,12 @@ const Issues = () => {
       </Helmet>
       <div className="flex">
         <div className="flex flex-col gap-3 min-h-84 pt-2 bg-white w-9/12 px-3 mt-3 pb-8 border border-solid border-gray-300">
+          {isSuccessEdit && (
+            <div className="flex mt-3 items-center text-xs text-lime-900 p-2 bg-green-100 border-2 border-lime-500">
+              <img className="flex w-fit h-fit" src={IconSuccess} alt="Error" />
+              <div className="pl-5">Successful creation.</div>
+            </div>
+          )}
           <h2 className="text-base text-mouse-gray font-bold">Issues</h2>
           <Filter />
           <OptionIssues onChangeOptions={onChangeOptions} />

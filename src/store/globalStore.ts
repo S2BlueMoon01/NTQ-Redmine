@@ -6,11 +6,13 @@ type State = {
   activeItemId: number;
   isEditMyPage: boolean;
   boardSections: BoardSections;
+  isSuccessEdit: boolean;
 };
 
 type Actions = {
   setActiveItemId: (data: number) => void;
   setIsEditMyPage: (data: boolean) => void;
+  setIsSuccessEdit: (data: boolean) => void;
   setBoardSections: (data: BoardSections) => void;
   removeBlock: (blockId: string) => void;
   addBlockToBoardSections: ({ boardId, block }: { boardId: string; block: Block }) => void;
@@ -28,6 +30,12 @@ export const useGlobalStore = create<State & Actions>()(
     setIsEditMyPage: (data) => {
       set((state) => {
         state.isEditMyPage = data;
+      });
+    },
+    isSuccessEdit: false,
+    setIsSuccessEdit: (data) => {
+      set((state) => {
+        state.isSuccessEdit = data;
       });
     },
     boardSections: {},

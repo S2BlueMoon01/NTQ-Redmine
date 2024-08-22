@@ -107,7 +107,7 @@ const Table: React.FC<PropsComponent> = ({ className, columnNames = [], dataTabl
             <tr
               key={rowIndex + 1}
               onClick={() => handleChecked(rowIndex)}
-              className={rowIndex % 2 === 0 ? "bg-gray-100 hover:bg-yellow-100 h-7" : "hover:bg-yellow-100 h-7"}
+              className={`cursor-pointer ${rowIndex % 2 === 0 ? "bg-gray-100 hover:bg-yellow-100 h-7" : "hover:bg-yellow-100 h-7"}`}
             >
               {isCheckbox && (
                 <td className="text-center">
@@ -151,7 +151,7 @@ const Table: React.FC<PropsComponent> = ({ className, columnNames = [], dataTabl
           className="fixed transform -translate-x-1/2 -translate-y-1/2"
           style={{ top: clickedPosition.y, left: clickedPosition.x - 160 }}
         >
-          <ContextMenu id={idCurrentLocation} />
+          <ContextMenu id={idCurrentLocation} setClickedPosition={setClickedPosition} />
         </div>
       )}
     </>

@@ -7,6 +7,8 @@ import IconDelete from "~/assets/images/delete-img.png";
 import Menu from "./_components/Menu";
 import issuesApi from "~/apis/issue.api";
 import Loading from "../Loading";
+import { IssueEdit } from "~/types/issue.type";
+import { useGlobalStore } from "~/store/globalStore";
 
 interface ItemProps {
   icon?: string;
@@ -16,8 +18,16 @@ interface ItemProps {
   isChoose?: boolean;
 }
 
-const ContextMenu: React.FC<{ id: number }> = ({ id }) => {
+interface PropsComponent {
+  id: number;
+  setClickedPosition: React.Dispatch<React.SetStateAction<{ x: number; y: number } | null>>;
+}
+
+const ContextMenu: React.FC<PropsComponent> = ({ id, setClickedPosition }) => {
   const [loading, setLoading] = useState<boolean>(false);
+  const { setIsSuccessEdit } = useGlobalStore((state) => ({
+    setIsSuccessEdit: state.setIsSuccessEdit,
+  }));
 
   const [data, setData] = useState<ItemProps[]>([
     {
@@ -43,34 +53,148 @@ const ContextMenu: React.FC<{ id: number }> = ({ id }) => {
     },
     {
       name: "Tracker",
-      children: [{ name: "Task" }, { name: "Bug" }],
+      children: [
+        {
+          name: "Task",
+          onClick: () => {
+            UpdateIssuesByID({ tracker_id: 4 });
+          },
+        },
+        {
+          name: "Bug",
+          onClick: () => {
+            UpdateIssuesByID({ tracker_id: 1 });
+          },
+        },
+      ],
     },
     {
       name: "Priority",
-      children: [{ name: "Immediate" }, { name: "Urgent" }, { name: "High" }, { name: "Normal" }, { name: "Low" }],
+      children: [
+        {
+          name: "Immediate",
+          onClick: () => {
+            UpdateIssuesByID({ priority_id: 5 });
+          },
+        },
+        {
+          name: "Urgent",
+          onClick: () => {
+            UpdateIssuesByID({ priority_id: 4 });
+          },
+        },
+        {
+          name: "High",
+          onClick: () => {
+            UpdateIssuesByID({ priority_id: 3 });
+          },
+        },
+        {
+          name: "Normal",
+          onClick: () => {
+            UpdateIssuesByID({ priority_id: 2 });
+          },
+        },
+        {
+          name: "Low",
+          onClick: () => {
+            UpdateIssuesByID({ priority_id: 1 });
+          },
+        },
+      ],
     },
     {
       name: "Done",
       children: [
-        { name: "0%" },
-        { name: "10%" },
-        { name: "20%" },
-        { name: "30%" },
-        { name: "40%" },
-        { name: "50%" },
-        { name: "60%" },
-        { name: "70%" },
-        { name: "80%" },
-        { name: "90%" },
-        { name: "100%" },
+        {
+          name: "0%",
+          onClick: () => {
+            UpdateIssuesByID({ done_ratio: 0 });
+          },
+        },
+        {
+          name: "10%",
+          onClick: () => {
+            UpdateIssuesByID({ done_ratio: 10 });
+          },
+        },
+        {
+          name: "20%",
+          onClick: () => {
+            UpdateIssuesByID({ done_ratio: 20 });
+          },
+        },
+        {
+          name: "30%",
+          onClick: () => {
+            UpdateIssuesByID({ done_ratio: 30 });
+          },
+        },
+        {
+          name: "40%",
+          onClick: () => {
+            UpdateIssuesByID({ done_ratio: 40 });
+          },
+        },
+        {
+          name: "50%",
+          onClick: () => {
+            UpdateIssuesByID({ done_ratio: 50 });
+          },
+        },
+        {
+          name: "60%",
+          onClick: () => {
+            UpdateIssuesByID({ done_ratio: 60 });
+          },
+        },
+        {
+          name: "70%",
+          onClick: () => {
+            UpdateIssuesByID({ done_ratio: 70 });
+          },
+        },
+        {
+          name: "80%",
+          onClick: () => {
+            UpdateIssuesByID({ done_ratio: 80 });
+          },
+        },
+        {
+          name: "90%",
+          onClick: () => {
+            UpdateIssuesByID({ done_ratio: 90 });
+          },
+        },
+        {
+          name: "100%",
+          onClick: () => {
+            UpdateIssuesByID({ done_ratio: 100 });
+          },
+        },
       ],
     },
     { icon: IconStar, name: "Unwatch" },
     { icon: IconTimeAdd, name: "Log time" },
     { icon: IconCopy, name: "Copy" },
-    { icon: IconDelete, name: "Delete" },
+    {
+      icon: IconDelete,
+      name: "Delete",
+      onClick: () => {
+        console.log("Delete", id);
+      },
+    },
     { name: "Quick View" },
   ]);
+
+  const UpdateIssuesByID = async (data: IssueEdit) => {
+    const responses = await issuesApi.updateIssue(id, data);
+    console.log(responses);
+    if (responses.status === 200) {
+      setIsSuccessEdit(true);
+      setClickedPosition(null);
+    }
+  };
 
   const updateData = (obj: { [key: string]: string }, dataNew: ItemProps[]) => {
     const updatedData = dataNew.map((item) => {

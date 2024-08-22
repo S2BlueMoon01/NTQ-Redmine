@@ -16,6 +16,7 @@ const COLUMN_NAME = ["#", "project", "tracker", "subject"];
 const fetchIssuesWatcher = async (): Promise<IssueTable[]> => {
   const response = await issuesApi.listIssues({ watcher_id: "me" });
   return response.data?.issues?.map((issue) => ({
+    idProject: issue.project.id,
     "#": issue.id,
     project: issue.project.name,
     tracker: issue.tracker.name,

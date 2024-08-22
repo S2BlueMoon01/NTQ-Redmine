@@ -20,6 +20,18 @@ const timeEntriesApi = {
     const params = data;
     return http.get<ListDataResponse<TimeEntries[], "time_entries">>(`${URL_TIME_ENTRIES}.json`, { params });
   },
+
+  createTimeEntries(data: Partial<TimeEntries>) {
+    return http.post(`${URL_TIME_ENTRIES}.json`, { time_entry: data });
+  },
+
+  updateIssue(id: number, updates: Partial<TimeEntries>) {
+    return http.put(`${URL_TIME_ENTRIES}/${id}.json`, { issue: updates });
+  },
+
+  deleteIssue(id: number) {
+    return http.delete(`${URL_TIME_ENTRIES}/${id}.json`);
+  },
 };
 
 export default timeEntriesApi;
