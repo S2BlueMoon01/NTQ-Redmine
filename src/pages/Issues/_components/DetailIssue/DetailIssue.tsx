@@ -16,6 +16,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CustomFields, Issue } from "~/types/issue.type";
 import { convertDateFormat, getSecondsDifference } from "~/utils/utils";
 import { Helmet } from "react-helmet-async";
+import { useGlobalStore } from "~/store/globalStore";
+import IconSuccess from "~/assets/images/apply-img.png";
 
 interface Options {
   label: string;
@@ -45,6 +47,10 @@ const DetailIssue = () => {
   const projectID = Number(id) ? Number(id) : 323;
   const navigate = useNavigate();
   const formRef = useRef<HTMLFormElement | null>(null);
+  const { isSuccessEdit, setIsSuccessEdit } = useGlobalStore((state) => ({
+    isSuccessEdit: state.isSuccessEdit,
+    setIsSuccessEdit: state.setIsSuccessEdit,
+  }));
 
   const fetchIssuesOfProject = async () => {
     const response = await issuesApi.listIssues({ project_id: projectID, limit: 100 });
@@ -91,6 +97,17 @@ const DetailIssue = () => {
     }
   };
 
+  useEffect(() => {
+    if (isSuccessEdit) {
+      fetchIssuesOfProject();
+      const timer = setTimeout(() => {
+        setIsSuccessEdit(false);
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccessEdit]);
+
   return (
     <div className="flex gap-2">
       <Helmet>
@@ -98,13 +115,19 @@ const DetailIssue = () => {
         <meta name="description" content="Redmine" />
       </Helmet>
       <div className="min-h-84 flex flex-col gap-2 bg-white px-3 mt-3 border pb-6 w-9/12">
+        {isSuccessEdit && (
+          <div className="flex mt-3 items-center text-xs text-lime-900 p-2 bg-green-100 border-2 border-lime-500">
+            <img className="flex w-fit h-fit" src={IconSuccess} alt="Error" />
+            <div className="pl-5">Successful creation.</div>
+          </div>
+        )}
         <div className="flex justify-between mt-2 items-center">
           <h2 className="text-mouse-gray font-bold ">{issue ? `${issue?.tracker?.name} #${issue?.id} ` : ""}</h2>
           <div className="flex gap-2 text-10 text-ocean-blue">
             <button className="flex gap-1 hover:underline" onClick={handleShowEditForm}>
               <img src={EditIcon} className="w-4" alt="Time add" /> Edit
             </button>
-            <button className="flex gap-1 hover:underline" onClick={() => navigate(`/projects/${id}/${name}/time-entries/new`)}>
+            <button className="flex gap-1 hover:underline" onClick={() => navigate(`/projects/${id}/${name}/issues/${issueId}/time_entries/new`)}>
               <img src={TimeAdd} className="w-4" alt="Time add" /> Log time
             </button>
             <button className="flex gap-1 hover:underline" onClick={() => setIsWatchIssue(!isWatchIssue)}>
@@ -304,7 +327,7 @@ const DetailIssue = () => {
           <button className="flex gap-1 hover:underline" onClick={handleShowEditForm}>
             <img src={EditIcon} className="w-4" alt="Time add" /> Edit
           </button>
-          <button className="flex gap-1 hover:underline" onClick={() => navigate(`/projects/${id}/${name}/time-entries/new`)}>
+          <button className="flex gap-1 hover:underline" onClick={() => navigate(`/projects/${id}/${name}/issues/${issueId}/time_entries/new`)}>
             <img src={TimeAdd} className="w-4" alt="Time add" /> Log time
           </button>
           <button className="flex gap-1 hover:underline" onClick={() => setIsWatchIssue(!isWatchIssue)}>

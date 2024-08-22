@@ -22,6 +22,7 @@ import Issues from "~/pages/Issues";
 import DetailIssue from "~/pages/Issues/_components/DetailIssue/DetailIssue";
 
 import MyAccount from "~/pages/MyAccount";
+import EditSpentTime from "~/pages/Issues/_components/EditSpentTime";
 
 const publicRoutes = [
   { path: "/login", component: LoginPage, layout: DefaultLayout },
@@ -45,6 +46,7 @@ const privateRoutes = [
   { path: "/projects/:id/:name/issues", component: Issues, layout: DefaultLayout },
   { path: "/projects/:id/:name/issues/:issueId", component: DetailIssue, layout: DefaultLayout },
   { path: "/projects/:id/:name/issues/new", component: IssuesCreate, layout: DefaultLayout },
+  { path: "/projects/:id/:name/issues/:issueId/time_entries/new", component: EditSpentTime, layout: DefaultLayout },
   { path: "/projects/:id/:name/issues/gantt", component: Gantt, layout: DefaultLayout },
   { path: "/projects/:id/:name/issues/calendar", component: CalendarDetail, layout: DefaultLayout },
   { path: "/projects/:id/:name/documents", component: DocumentsPage, layout: DefaultLayout },

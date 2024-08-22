@@ -1,9 +1,9 @@
 import myAccount from "./myAccount.json";
-import activity from './activity.json'
+import activity from "./activity.json";
 
 const viLocales = {
   myAccount,
-  activity
+  activity,
 };
 
 export default viLocales;

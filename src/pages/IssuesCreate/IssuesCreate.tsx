@@ -256,7 +256,7 @@ const IssuesCreate = () => {
           <div className="bg-[#fcfcfc]  w-full border border-[#e4e4e4] py-2">
             <div className="flex-block">
               <Label htmlFor="tracker" isRequired={true} className="flex gap-1 items-center p-0" name="Tracker">
-                <EnhanceSelect id="tracker" className="text-[13.33px] font-normal text-[black]" arrayOption={trackerOptions} defaultValue={"Bug"} />
+                <EnhanceSelect id="tracker" className="text-[13.33px] font-normal text-black" arrayOption={trackerOptions} defaultValue={"Bug"} />
               </Label>
             </div>
             <div className="flex">
@@ -274,7 +274,7 @@ const IssuesCreate = () => {
                   <Label htmlFor="status" className="flex gap-1 items-center p-0" name="Status" isRequired></Label>
                   <EnhanceSelect
                     id="status"
-                    className="text-[13.33px] font-normal text-[black] w-1/3 ml-2"
+                    className="text-[13.33px] font-normal text-black w-1/3 ml-2"
                     arrayOption={statusOptions}
                     defaultValue={1}
                   />
@@ -283,7 +283,7 @@ const IssuesCreate = () => {
               <div className="w-1/2">
                 <div className="flex relative">
                   <Label htmlFor="ParentTask" className="flex gap-1 items-center p-0 parent-task" name="Parent task"></Label>
-                  <div className={`flex items-center border ml-1 w-32 ${isActiveParentTask ? "border-[black] rounded-sm" : ""}`}>
+                  <div className={`flex items-center border ml-1 w-32 ${isActiveParentTask ? "border-black rounded-sm" : ""}`}>
                     <img src={IconSearch} alt="IconSearch" className="px-1" />
                     <input
                       id="ParentTask"
@@ -317,7 +317,7 @@ const IssuesCreate = () => {
                   <Label htmlFor="priority" className="flex gap-1 items-center p-0" name="Priority" isRequired></Label>
                   <EnhanceSelect
                     id="priority"
-                    className="text-[13.33px] font-normal text-[black] w-1/3 ml-2"
+                    className="text-[13.33px] font-normal text-black w-1/3 ml-2"
                     arrayOption={priorityOptions}
                     defaultValue={2}
                   />
@@ -347,7 +347,7 @@ const IssuesCreate = () => {
                   <Label htmlFor="assignee" className="flex gap-1 items-center p-0" name="Assignee"></Label>
                   <EnhanceSelect
                     id="assignee"
-                    className="text-[13.33px] font-normal text-[black] w-1/3 ml-2"
+                    className="text-[13.33px] font-normal text-black w-1/3 ml-2"
                     arrayOption={assigneeOptions}
                     defaultValue={""}
                   />
@@ -377,7 +377,7 @@ const IssuesCreate = () => {
                   <Label htmlFor="TargetVersion" className="flex gap-1 items-center p-0" name="Target version"></Label>
                   <EnhanceSelect
                     id="TargetVersion"
-                    className="text-[13.33px] font-normal text-[black] w-1/3 ml-2"
+                    className="text-[13.33px] font-normal text-black w-1/3 ml-2"
                     arrayOption={priorityOptions}
                     defaultValue={2}
                   />
@@ -398,7 +398,7 @@ const IssuesCreate = () => {
               <div className="w-1/2">
                 <div className="flex">
                   <Label htmlFor="done" className="flex gap-1 items-center p-0" name="% Done"></Label>
-                  <EnhanceSelect id="done" className="text-[13.33px] font-normal text-[black]" arrayOption={percentDoneOptions} defaultValue={0} />
+                  <EnhanceSelect id="done" className="text-[13.33px] font-normal text-black" arrayOption={percentDoneOptions} defaultValue={0} />
                 </div>
               </div>
             </div>
@@ -409,7 +409,7 @@ const IssuesCreate = () => {
                   <Label htmlFor="bugType" className="flex gap-1 items-center p-0" name="Bug Type" isRequired></Label>
                   <EnhanceSelect
                     id="bugType"
-                    className="text-[13.33px] font-normal text-[black] w-1/3 ml-2"
+                    className="text-[13.33px] font-normal text-black w-1/3 ml-2"
                     arrayOption={bugTypeOptions}
                     defaultValue={"Others"}
                   />
@@ -418,7 +418,7 @@ const IssuesCreate = () => {
                   <Label htmlFor="severity" className="flex gap-1 items-center p-0" name="Severity" isRequired></Label>
                   <EnhanceSelect
                     id="severity"
-                    className="text-[13.33px] font-normal text-[black] w-1/3 ml-2"
+                    className="text-[13.33px] font-normal text-black w-1/3 ml-2"
                     arrayOption={severityOptions}
                     defaultValue={"Cosmetic"}
                   />
@@ -427,7 +427,7 @@ const IssuesCreate = () => {
                   <Label htmlFor="qcActivity" className="flex gap-1 items-center p-0" name="QC Activity" isRequired></Label>
                   <EnhanceSelect
                     id="qcActivity"
-                    className="text-[13.33px] font-normal text-[black] w-1/3 ml-2"
+                    className="text-[13.33px] font-normal text-black w-1/3 ml-2"
                     arrayOption={qcActivityOptions}
                     defaultValue={"Other Test"}
                   />
@@ -438,7 +438,7 @@ const IssuesCreate = () => {
                   <Label htmlFor="causeCategory" className="flex gap-1 items-center p-0" name="Cause Category" isRequired></Label>
                   <EnhanceSelect
                     id="causeCategory"
-                    className="text-[13.33px] font-normal text-[black] h-full"
+                    className="text-[13.33px] font-normal text-black h-full"
                     arrayOption={causeCategoryOptions}
                     defaultValue={"9. Other"}
                     size={4}
@@ -454,7 +454,7 @@ const IssuesCreate = () => {
                   <Label htmlFor="isDegrade" className="flex gap-1 items-center p-0" name="Is Degrade?" isRequired></Label>
                   <EnhanceSelect
                     id="isDegrade"
-                    className="text-[13.33px] font-normal text-[black] h-full ml-1"
+                    className="text-[13.33px] font-normal text-black h-full ml-1"
                     arrayOption={isDegradeOptions}
                     defaultValue={0}
                   />

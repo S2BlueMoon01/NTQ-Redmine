@@ -58,7 +58,7 @@ const MyPage = () => {
         <title>My page - NTQ Redmine</title>
         <meta name="description" content="Redmine" />
       </Helmet>
-      <div className="pt-1 flex items-center justify-between">
+      <div className="pt-1 flex items-center bg-white justify-between">
         <h2 className="text-xl font-bold pt-0.5 pr-3 mb-3 text-mouse-gray ">My page</h2>
         {isEditMyPage ? (
           <div className="text-xs text-mouse-gray flex items-center">

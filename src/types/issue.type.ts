@@ -58,6 +58,23 @@ export interface Issue {
   watchers?: User[];
 }
 
+export interface IssueEdit {
+  id?: number;
+  project_id?: number;
+  tracker_id?: number;
+  status_id?: number;
+  priority_id?: number;
+  subject?: string;
+  category_id?: number;
+  description?: string;
+  start_date?: string;
+  done_ratio?: number;
+  due_date?: string;
+  estimated_hours?: number;
+  spent_hours?: number;
+  fixed_version_id?: number;
+}
+
 interface FixVersion {
   id: number;
   name: string;

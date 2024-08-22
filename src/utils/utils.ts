@@ -414,7 +414,6 @@ export const groupTimeEntriesByDate = (entries: TimeEntriesTable[]): GroupedTime
   return Object.values(groupedEntries);
 };
 
-
 export const handleFormatTime = (time: string): string => {
   const date = new Date(time);
   const options: Intl.DateTimeFormatOptions = {

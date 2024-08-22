@@ -17,6 +17,7 @@ const fetchReportedIssues = async (): Promise<IssueTable[]> => {
   const response = await issuesApi.listIssues({ author_id: "me" });
   return (
     response.data?.issues?.map((issue) => ({
+      idProject: issue.project.id,
       "#": issue.id,
       project: issue.project.name,
       tracker: issue.tracker.name,
