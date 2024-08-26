@@ -3,7 +3,6 @@ import IconSearch from "~/assets/images/magnifier.png";
 import TimeAdd from "~/assets/images/time_add.png";
 import StarIcon from "~/assets/images/star-img.png";
 import StarOffIcon from "~/assets/images/fav_off_start.png";
-
 import CopyIcon from "~/assets/images/copy.png";
 import EditIcon from "~/assets/images/edit-img.png";
 import WifiImg from "~/assets/images/wifi-img.png";
@@ -102,7 +101,7 @@ const DetailIssue = () => {
       fetchIssuesOfProject();
       const timer = setTimeout(() => {
         setIsSuccessEdit(false);
-      }, 5000);
+      }, 3000);
 
       return () => clearTimeout(timer);
     }

@@ -173,7 +173,7 @@ const EditSpentTime = () => {
   }, [isSuccessEdit]);
 
   return (
-    <div className="p-2.5 mb-3 bg-white min-h-84 flex flex-col gap-3">
+    <div className="border p-2.5 mt-3 bg-white min-h-84 flex flex-col gap-3">
       <h2 className="text-xl font-semibold text-mouse-gray">Spent Time</h2>
       {isSuccessEdit && (
         <div className="flex mt-3 items-center text-xs text-lime-900 p-2 bg-green-100 border-2 border-lime-500">
@@ -228,7 +228,7 @@ const EditSpentTime = () => {
                   }}
                 />
               </div>
-              <span className="text-xs ">{searchTerm && currentIssues && currentIssues.name}</span>
+              <span className="text-xs ">{searchTerm && currentIssues && currentIssues.name} </span>
             </div>
             {isActiveParentTask && filteredItems.length > 0 && (
               <div className="absolute top-52 border border-gray-300 bg-white z-10 max-h-48 overflow-y-auto" style={{ width: "calc(100% - 225px)" }}>

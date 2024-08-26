@@ -43,6 +43,7 @@ const privateRoutes = [
   { path: "/projects/:id/:name/activity", component: Activity, layout: DefaultLayout },
   { path: "/projects/:id/:name/roadmap", component: Roadmap, layout: DefaultLayout },
   { path: "/projects/:id/:name/roadmap/newVersion", component: NewVersion, layout: DefaultLayout },
+  { path: "/projects/:id/:name/:versionId/edit", component: NewVersion, layout: DefaultLayout },
   { path: "/projects/:id/:name/issues", component: Issues, layout: DefaultLayout },
   { path: "/projects/:id/:name/issues/:issueId", component: DetailIssue, layout: DefaultLayout },
   { path: "/projects/:id/:name/issues/new", component: IssuesCreate, layout: DefaultLayout },
