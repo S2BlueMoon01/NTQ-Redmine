@@ -17,10 +17,6 @@ td:first-child {
   padding: 4px;
 }
 
-td:first-child {
-  background: #eee;
-}
-
 th:not(:first-child),
 td:not(:first-child) {
   width: calc((100% - 22px) / 2);

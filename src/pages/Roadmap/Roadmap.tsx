@@ -16,6 +16,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Issue } from "~/types/issue.type";
 import Dialog from "../MyPage/_components/Dialog";
 import { Helmet } from "react-helmet-async";
+import { useGlobalStore } from "~/store/globalStore";
 
 const Roadmap = () => {
   const [isCheckedBoxRoadmap, setIsCheckedBoxRoadmap] = useState<CheckBoxRoadMap>({
@@ -23,13 +24,13 @@ const Roadmap = () => {
     bug: false,
     showComplete: false,
   });
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const { id, name } = useParams();
-  const location = useLocation();
-  const isSuccessCreate = location.state?.isSuccess;
-  console.log(isSuccessCreate);
   const currentDate = moment();
   const [activeItem, setActiveItem] = useState<number>(1);
+  const { isSuccessEdit, setIsSuccessEdit } = useGlobalStore((state) => ({
+    isSuccessEdit: state.isSuccessEdit,
+    setIsSuccessEdit: state.setIsSuccessEdit,
+  }));
 
   useScrollToTop();
 
@@ -106,15 +107,14 @@ const Roadmap = () => {
   }, []);
 
   useEffect(() => {
-    if (isSuccessCreate) {
-      setShowSuccessMessage(true);
+    if (isSuccessEdit) {
       const timer = setTimeout(() => {
-        setShowSuccessMessage(false);
-      }, 5000);
+        setIsSuccessEdit(false);
+      }, 3000);
 
       return () => clearTimeout(timer);
     }
-  }, [isSuccessCreate]);
+  }, [isSuccessEdit]);
 
   const handleApply = (data: CheckBoxRoadMap) => {
     setIsCheckedBoxRoadmap(data);
@@ -134,7 +134,7 @@ const Roadmap = () => {
 
       <div className="flex min-h-84">
         <div className="flex flex-col gap-2.5 bg-white w-9/12 px-3 mt-3 pb-8 border border-solid ">
-          {showSuccessMessage && (
+          {isSuccessEdit && (
             <div className="flex mt-3 items-center text-xs text-lime-900 p-2 bg-green-100 border-2 border-lime-500">
               <img className="flex w-fit h-fit" src={IconSuccess} alt="Error" />
               <div className="pl-5">Successful creation.</div>

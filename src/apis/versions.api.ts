@@ -20,6 +20,14 @@ const versionsApi = {
   postNewVersions(id: number, data: NewVersion) {
     return http.post(`/projects/${id}/${URL_VERSIONS}.json`, { version: data });
   },
+
+  updateVersions(id: number, data: NewVersion) {
+    return http.put(`/${URL_VERSIONS}/${id}.json`, { version: data });
+  },
+
+  deleteVersions(id: number) {
+    return http.delete(`/${URL_VERSIONS}/${id}.json`);
+  },
 };
 
 export default versionsApi;
