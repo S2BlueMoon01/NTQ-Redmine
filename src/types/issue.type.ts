@@ -26,7 +26,7 @@ interface User {
 interface CustomField {
   id: number;
   name: string;
-  value: string | string[];
+  value?: string | string[] | number;
   multiple?: boolean;
 }
 
@@ -38,6 +38,9 @@ export interface Issue {
   priority: Priority;
   author: User;
   assigned_to?: User;
+  parent?: {
+    id: number;
+  };
   subject?: string;
   description: string;
   start_date?: string;
@@ -60,6 +63,8 @@ export interface Issue {
 
 export interface IssueEdit {
   id?: number;
+  assigned_to_id?: number;
+  parent_issue_id?: number;
   project_id?: number;
   tracker_id?: number;
   status_id?: number;
@@ -73,6 +78,52 @@ export interface IssueEdit {
   estimated_hours?: number;
   spent_hours?: number;
   fixed_version_id?: number;
+  severity?: string;
+  bugType?: string;
+  qcActivity?: string;
+  causeCategory?: string;
+  isDegrade?: string;
+  reopenCounter?: number;
+  comment?: string;
+  hours?: number;
+  activity_id?: number;
+  productCategory?: string;
+}
+
+export interface dataEditForm {
+  project_id: number;
+  issueEdit: IssuesEditForm;
+  spent_time: SpentTime;
+}
+
+export interface IssuesEditForm {
+  subject?: String | undefined;
+  tracker_id?: number | undefined;
+  priority_id?: number | undefined;
+  assigned_to_id?: number | undefined;
+  due_date?: string | undefined;
+  start_date?: String | undefined;
+  status_id?: number;
+  estimated_hours?: number | undefined;
+  fixed_version_id?: number | undefined;
+  done_ratio?: number | undefined;
+  description?: String | undefined;
+  parent_issue_id?: number | undefined;
+  custom_fields?: CustomField[];
+}
+
+interface SpentTime {
+  issue_id: number;
+  comment: String;
+  hours: number;
+  spent_on: String;
+  activity_id: number;
+  custom_fields: CustomField[];
+}
+
+interface FixVersion {
+  id: number;
+  name: string;
 }
 
 interface FixVersion {

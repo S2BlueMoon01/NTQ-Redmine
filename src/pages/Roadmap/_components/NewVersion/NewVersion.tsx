@@ -101,7 +101,6 @@ const NewVersion = () => {
   const onSubmit: SubmitHandler<IFormInput> = (data, event) => {
     const submitEvent = event?.nativeEvent as SubmitEvent;
     const action = (submitEvent.submitter as HTMLButtonElement)?.value;
-    console.log(errors);
     handleSubmitForm(data, action);
   };
 

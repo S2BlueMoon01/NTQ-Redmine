@@ -15,7 +15,7 @@ export interface TimeEntries {
 interface CustomFields {
   id: number;
   name: string;
-  value: string;
+  value?: string;
 }
 
 interface Activity {

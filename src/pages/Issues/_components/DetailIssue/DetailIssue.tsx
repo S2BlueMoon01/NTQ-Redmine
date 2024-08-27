@@ -18,10 +18,16 @@ import { Helmet } from "react-helmet-async";
 import { useGlobalStore } from "~/store/globalStore";
 import IconSuccess from "~/assets/images/apply-img.png";
 
-interface Options {
-  label: string;
-  value: string | number;
-}
+const relatedIssueOptions = [
+  { label: "Related to", value: "relates" },
+  { label: "Duplicates", value: "duplicates" },
+  { label: "Duplicated by", value: "duplicated" },
+  { label: "Blocks", value: "blocks" },
+  { label: "Precedes", value: "precedes" },
+  { label: "Follows", value: "follows" },
+  { label: "Copied to", value: "copied_to" },
+  { label: "Copied from", value: "copied_from" },
+];
 
 const DetailIssue = () => {
   const { id, name, issueId } = useParams();
@@ -32,17 +38,7 @@ const DetailIssue = () => {
   const [listIssuesOfProject, setListIssuesOfProject] = useState<Issue[]>([]);
   const index = listIssuesOfProject.findIndex((issue) => issue.id === Number(issueId));
   const [indexOfIssue, setIndexOfIssue] = useState<number>(index);
-  const [issue, setIssuesOfId] = useState<Issue>({} as Issue);
-  const [relatedIssueOptions, _setRelatedIssueOptions] = useState<Options[]>([
-    { label: "Related to", value: "relates" },
-    { label: "Duplicates", value: "duplicates" },
-    { label: "Duplicated by", value: "duplicated" },
-    { label: "Blocks", value: "blocks" },
-    { label: "Precedes", value: "precedes" },
-    { label: "Follows", value: "follows" },
-    { label: "Copied to", value: "copied_to" },
-    { label: "Copied from", value: "copied_from" },
-  ]);
+  const [issueOfId, setIssuesOfId] = useState<Issue>({} as Issue);
   const projectID = Number(id) ? Number(id) : 323;
   const navigate = useNavigate();
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -54,19 +50,20 @@ const DetailIssue = () => {
   const fetchIssuesOfProject = async () => {
     const response = await issuesApi.listIssues({ project_id: projectID, limit: 100 });
     const listIssuesProject = response.data.issues;
-    const IssueOfId = await issuesApi.getIssueById({ id: Number(issueId) });
+    const responseIssueOfId = await issuesApi.getIssueById({ id: Number(issueId), include: ["watchers"] });
     const index = listIssuesProject.findIndex((issue) => issue.id === Number(issueId));
-    const customFields = listIssuesProject[index]?.custom_fields?.reduce((acc: CustomFields, item) => {
+    const customFields = responseIssueOfId.data.issue?.custom_fields?.reduce((acc: CustomFields, item) => {
       const formattedName = item.name.replace(/\s+/g, "").replace(/^[a-z]/, (match) => match.toLowerCase());
-      acc[formattedName] = item.value;
+      if (item.value !== undefined) {
+        acc[formattedName] = item.value;
+      }
       return acc;
     }, {} as CustomFields);
     setListIssuesOfProject(listIssuesProject);
     setIndexOfIssue(index);
-    setIssuesOfId(listIssuesProject[index]);
-    setIssuesOfId({ ...IssueOfId?.data?.issue, ...customFields });
+    setIssuesOfId({ ...responseIssueOfId?.data?.issue, ...customFields });
   };
-
+  console.log(issueOfId);
   useEffect(() => {
     fetchIssuesOfProject();
   }, [issueId]);
@@ -86,7 +83,7 @@ const DetailIssue = () => {
   };
 
   const handleShowEditForm = () => {
-    if (issue.id !== undefined) {
+    if (issueOfId.id !== undefined) {
       setIsActiveEdit(true);
       setTimeout(() => {
         if (formRef.current) {
@@ -121,7 +118,7 @@ const DetailIssue = () => {
           </div>
         )}
         <div className="flex justify-between mt-2 items-center">
-          <h2 className="text-mouse-gray font-bold ">{issue ? `${issue?.tracker?.name} #${issue?.id} ` : ""}</h2>
+          <h2 className="text-mouse-gray font-bold ">{issueOfId ? `${issueOfId?.tracker?.name} #${issueOfId?.id} ` : ""}</h2>
           <div className="flex gap-2 text-10 text-ocean-blue">
             <button className="flex gap-1 hover:underline" onClick={handleShowEditForm}>
               <img src={EditIcon} className="w-4" alt="Time add" /> Edit
@@ -137,7 +134,7 @@ const DetailIssue = () => {
             </button>
           </div>
         </div>
-        {issue && (
+        {issueOfId && (
           <div className="bg-light-yellow p-3 border flex flex-col gap-1">
             <div className="flex justify-between">
               <div className="flex gap-2 flex-wrap">
@@ -147,14 +144,14 @@ const DetailIssue = () => {
                   alt="avatar"
                 />
                 <div className="flex flex-col gap-2 text-left">
-                  <h3 className="text-base font-bold text-mouse-gray whitespace-normal">{issue?.subject}</h3>
+                  <h3 className="text-base font-bold text-mouse-gray whitespace-normal">{issueOfId?.subject}</h3>
                   <span className="text-xs font-light whitespace-normal">
                     Added by{" "}
                     <a href="" className="link">
-                      {issue?.author?.name}
+                      {issueOfId?.author?.name}
                     </a>{" "}
                     <a href="" className="link">
-                      {`${getSecondsDifference(issue?.created_on)} `}
+                      {`${getSecondsDifference(issueOfId?.created_on)} `}
                     </a>
                     ago.
                   </span>
@@ -190,21 +187,21 @@ const DetailIssue = () => {
                 <label>Assignee:</label>
                 <label>Category:</label>
                 <label>Target version:</label>
-                <label>Bug Type:</label>
+                {issueOfId?.tracker?.name === "Bug" ? <label>Bug Type:</label> : null}
                 <label>Severity:</label>
-                <label>QC Activity:</label>
+                {issueOfId?.tracker?.name === "Bug" ? <label>QC Activity:</label> : null}
               </div>
               <div className="grid grid-rows-8 grid-flow-col font-normal">
-                <span>{issue?.status?.name ? issue?.status?.name : "-"}</span>
-                <span>{issue?.priority?.name ? issue?.priority?.name : "-"}</span>
+                <span>{issueOfId?.status?.name ? issueOfId?.status?.name : "-"}</span>
+                <span>{issueOfId?.priority?.name ? issueOfId?.priority?.name : "-"}</span>
                 <a href="" className="text-ocean-blue font-normal">
-                  {issue?.assigned_to ? issue?.assigned_to?.name : "-"}
+                  {issueOfId?.assigned_to ? issueOfId?.assigned_to?.name : "-"}
                 </a>
                 <span>-</span>
-                <span>{issue?.fixed_version?.name ? issue?.fixed_version?.name : "-"}</span>
-                <span>{issue?.BugType ? issue?.BugType : "-"}</span>
-                <span>{issue?.Severity ? issue?.Severity : "-"}</span>
-                <span>{issue?.QCActivity ? issue?.QCActivity : "-"}</span>
+                <span>{issueOfId?.fixed_version?.name ? issueOfId?.fixed_version?.name : "-"}</span>
+                {issueOfId?.tracker?.name === "Bug" ? <span>{issueOfId?.BugType ? issueOfId?.BugType : "-"}</span> : null}
+                <span>{issueOfId?.Severity ? issueOfId?.Severity : "-"}</span>
+                {issueOfId?.tracker?.name === "Bug" ? <span>{issueOfId?.QCActivity ? issueOfId?.QCActivity : "-"}</span> : null}
               </div>
               <div className=" grid grid-rows-8 grid-flow-col">
                 <label>Start date:</label>
@@ -212,24 +209,32 @@ const DetailIssue = () => {
                 <label>% Done:</label>
                 <label>Estimated time:</label>
                 <label>Spent time:</label>
-                <label>Cause Category:</label>
-                <label>Is Degrade?:</label>
-                <label>Reopen counter:</label>
+                {issueOfId?.tracker?.name === "Bug" ? (
+                  <>
+                    <label>Cause Category:</label>
+                    <label>Is Degrade?:</label>
+                    <label>Reopen counter:</label>
+                  </>
+                ) : null}
               </div>
               <div className=" grid grid-rows-8 grid-flow-col font-normal">
-                <span> {issue.start_date && convertDateFormat(issue.start_date)}</span>
-                <span> {issue.due_date && convertDateFormat(issue.due_date)}</span>
+                <span> {issueOfId.start_date && convertDateFormat(issueOfId.start_date)}</span>
+                <span> {issueOfId.due_date && convertDateFormat(issueOfId.due_date)}</span>
                 <div className="gap-1 inline-flex align-top w-1/2 min-w-14">
                   <div className="w-[100px] h-5 overflow-hidden bg-slate-200 inline-block align-top">
-                    <div className="loading-progress bg-green-300 h-full " style={{ width: `${issue.done_ratio}px` }}></div>
+                    <div className="loading-progress bg-green-300 h-full " style={{ width: `${issueOfId.done_ratio}px` }}></div>
                   </div>
-                  <span className="text-10 align-top pl-2">{issue.done_ratio ? issue.done_ratio : 0}%</span>
+                  <span className="text-10 align-top pl-2">{issueOfId.done_ratio ? issueOfId.done_ratio : 0}%</span>
                 </div>
-                <span>{issue.estimated_hours ? issue.estimated_hours.toFixed(2) : 0} hours</span>
-                <span>{issue?.spent_hours ? `${issue?.spent_hours.toFixed(2)} hours` : "-"}</span>
-                <span>{issue?.CauseCategory && issue?.CauseCategory.length ? issue?.CauseCategory.map((item) => item) : "-"}</span>
-                <span>{issue["IsDegrade?"] ? issue["IsDegrade?"] : "-"}</span>
-                <span>{issue?.Reopencounter ? issue?.Reopencounter : "-"}</span>
+                <span>{issueOfId.estimated_hours ? issueOfId.estimated_hours.toFixed(2) : 0} hours</span>
+                <span>{issueOfId?.spent_hours ? `${issueOfId?.spent_hours.toFixed(2)} hours` : "-"}</span>
+                {issueOfId?.tracker?.name === "Bug" ? (
+                  <>
+                    <span>{issueOfId?.CauseCategory && issueOfId?.CauseCategory.length ? issueOfId?.CauseCategory.map((item) => item) : "-"}</span>
+                    <span>{issueOfId["IsDegrade?"] ? issueOfId["IsDegrade?"] : "-"}</span>
+                    <span>{issueOfId?.Reopencounter ? issueOfId?.Reopencounter : "-"}</span>
+                  </>
+                ) : null}
               </div>
             </div>
 
@@ -239,7 +244,7 @@ const DetailIssue = () => {
               <label htmlFor="" className="text-xs text-zinc-700 font-bold  inline-block">
                 Description
               </label>
-              <div className="text-xs text-zinc-700"> {issue.description ? issue.description : "description is empty"}</div>
+              <div className="text-xs text-zinc-700"> {issueOfId.description ? issueOfId.description : "description is empty"}</div>
             </div>
             <hr className="my-1" />
             <div className="flex items-center justify-between">
@@ -341,7 +346,7 @@ const DetailIssue = () => {
           <div className="mt-5 flex flex-col gap-2">
             <h2 className="text-mouse-gray text-sm">Edit</h2>
             <div className=" min-h-52 pb-3 border">
-              <EditIssueForm formRef={formRef} dataEdit={issue} setIsActiveEdit={setIsActiveEdit} />
+              <EditIssueForm formRef={formRef} dataEdit={issueOfId} setIsActiveEdit={setIsActiveEdit} />
             </div>
           </div>
         )}
@@ -353,7 +358,7 @@ const DetailIssue = () => {
           </a>
         </p>
       </div>
-      <SideBar idIssue={issue.id} />
+      <SideBar idIssue={issueOfId.id} />
     </div>
   );
 };

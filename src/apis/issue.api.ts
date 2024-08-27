@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Issue } from "~/types/issue.type";
+import { dataEditForm, Issue, IssuesEditForm } from "~/types/issue.type";
 import { ListDataResponse } from "~/types/utils.type";
 import http from "~/utils/http";
 
@@ -41,7 +41,7 @@ const issuesApi = {
     return http.post(`${URL_ISSUES}.json`, { issue });
   },
 
-  updateIssue(id: number, updates: Partial<Issue>) {
+  updateIssue(id: number, updates: IssuesEditForm) {
     return http.put(`${URL_ISSUES}/${id}.json`, { issue: updates });
   },
 
