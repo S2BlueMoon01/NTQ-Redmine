@@ -7,8 +7,8 @@ type PropsComponent = {
   name?: string;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-const Input = forwardRef<HTMLInputElement, PropsComponent>(({ className, name, type = "text", ...rest }, ref) => {
-  return <input type={type} name={name} className={cn("h-6 border m-1 text-sm pl-1", className)} ref={ref} {...rest} />;
+const Input = forwardRef<HTMLInputElement, PropsComponent>(({ className, defaultValue = "", name, type = "text", ...rest }, ref) => {
+  return <input type={type} name={name} defaultValue={defaultValue} className={cn("h-6 border m-1 text-sm pl-1", className)} ref={ref} {...rest} />;
 });
 
 Input.displayName = "Input";

@@ -16,6 +16,7 @@ import Label from "~/components/Label";
 import config from "~/constants/config";
 import { useGlobalStore } from "~/store/globalStore";
 import { Issue } from "~/types/issue.type";
+import { OPTIONS_ACTIVITY, OPTIONS_CATEGORY } from "~/constants/constants";
 
 interface IFormInput {
   issue_id: string;
@@ -30,42 +31,6 @@ interface Task {
   id: number;
   name: string;
 }
-
-const OPTIONS_ACTIVITY = [
-  { value: "", label: "--- Please select ---" },
-  { value: 8, label: "Create" },
-  { value: 9, label: "Review" },
-  { value: 16, label: "Correct" },
-  { value: 15, label: "Study" },
-  { value: 14, label: "Test" },
-  { value: 17, label: "Translate" },
-  { value: 26, label: "Verify" },
-  { value: 27, label: "Re-test" },
-  { value: 28, label: "Regression test" },
-  { value: 29, label: "Meeting" },
-  { value: 31, label: "Selftest" },
-  { value: 32, label: "Report" },
-];
-
-const OPTIONS_CATEGORY = [
-  { value: "", label: "--- Please select ---" },
-  { value: "Requirement / SRS", label: "Requirement / SRS" },
-  { value: "Estimation", label: "Estimation" },
-  { value: "Plan / Schedule", label: "Plan / Schedule" },
-  { value: "Report", label: "Report" },
-  { value: "Basic Design", label: "Basic Design" },
-  { value: "Detail Design", label: "Detail Design" },
-  { value: "Code", label: "Code" },
-  { value: "UT Case", label: "UT Case" },
-  { value: "IT Viewpoint / Case", label: "IT Viewpoint / Case" },
-  { value: "IT Report", label: "IT Report" },
-  { value: "ST Viewpoint/Case", label: "ST Viewpoint/Case" },
-  { value: "ST Report", label: "ST Report" },
-  { value: "Test estimation", label: "Test estimation" },
-  { value: "Test Plan/Schedule", label: "Test Plan/Schedule" },
-  { value: "Bug list", label: "Bug list" },
-  { value: "Other", label: "Other" },
-];
 
 const EditSpentTime = () => {
   const { id, name, issueId } = useParams();

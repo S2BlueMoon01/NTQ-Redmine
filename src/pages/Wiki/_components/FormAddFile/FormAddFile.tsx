@@ -11,11 +11,12 @@ interface IFile {
 
 interface IPropsFormAddFile {
   onCancel?: () => void;
+  isHiddenButton?: boolean;
 }
 
 const MAX_FILE_SIZE_MB = 500;
 
-const FormAddFile: React.FC<IPropsFormAddFile> = ({ onCancel }) => {
+const FormAddFile: React.FC<IPropsFormAddFile> = ({ onCancel, isHiddenButton = false }) => {
   const [files, setFiles] = useState<IFile[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null); // Initialize ref for file input
 
@@ -81,17 +82,19 @@ const FormAddFile: React.FC<IPropsFormAddFile> = ({ onCancel }) => {
           <p className="text-xs text-mouse-gray">(Maximum size: 500 MB)</p>
         </div>
       </div>
-      <div className="flex items-center mt-2.5">
-        <Button
-          onClick={handleCreate}
-          className="border text-xs border-gray-500 py-[1px] px-2 bg-gray-custom-10 !text-gray-700 hover:no-underline hover:bg-gray-custom-40"
-        >
-          Add
-        </Button>
-        <Button className="text-xs" onClick={onCancel}>
-          Cancel
-        </Button>
-      </div>
+      {!isHiddenButton && (
+        <div className="flex items-center mt-2.5">
+          <Button
+            onClick={handleCreate}
+            className="border text-xs border-gray-500 py-[1px] px-2 bg-gray-custom-10 !text-gray-700 hover:no-underline hover:bg-gray-custom-40"
+          >
+            Add
+          </Button>
+          <Button className="text-xs" onClick={onCancel}>
+            Cancel
+          </Button>
+        </div>
+      )}
     </>
   );
 };

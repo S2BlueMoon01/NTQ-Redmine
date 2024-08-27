@@ -15,12 +15,19 @@ type SelectProps = {
 } & SelectHTMLAttributes<HTMLSelectElement>;
 
 const EnhanceSelect = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, defaultValue = "", arrayOption, children, onChange, ...rest }, ref) => {
+  ({ className, defaultValue, arrayOption, children, multiple = false, onChange, ...rest }, ref) => {
     return (
-      <select className={cn("border h-6 m-1 text-sm pl-1", className)} onChange={onChange} defaultValue={defaultValue} ref={ref} {...rest}>
-        {arrayOption.map((item) => {
+      <select
+        className={cn("border h-6 m-1 text-sm pl-1", className)}
+        onChange={onChange}
+        defaultValue={defaultValue}
+        multiple={multiple}
+        ref={ref}
+        {...rest}
+      >
+        {arrayOption.map((item, index) => {
           return (
-            <option key={item.value} value={item.value}>
+            <option key={item.value + index.toString()} value={item.value}>
               {item.label}
             </option>
           );
