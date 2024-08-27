@@ -37,3 +37,9 @@ export type CheckBoxRoadMap = {
   bug: boolean;
   showComplete: boolean;
 };
+
+export type UploadFile = {
+  upload: {
+    token:string;
+  };
+};

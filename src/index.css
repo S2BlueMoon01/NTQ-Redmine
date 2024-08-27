@@ -28,6 +28,10 @@ html {
   text-decoration: underline;
 }
 
+.background_opacity {
+  background: url(./assets/images/ui-bg_modal.png);
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

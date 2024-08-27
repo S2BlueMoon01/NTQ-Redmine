@@ -169,3 +169,31 @@ export const OPTIONS_CATEGORY = [
   { value: "Bug list", label: "Bug list" },
   { value: "Other", label: "Other" },
 ];
+
+
+
+export const statusOptionsNewIssue = [
+  { label: "New", value: 1 },
+  { label: "In Progress", value: 2 },
+  { label: "Resolved", value: 3 },
+  { label: "Feedback", value: 4 },
+  { label: "Closed", value: 5 },
+  { label: "Can't fix", value: 6 },
+  { label: "Next Release", value: 7 },
+  { label: "Watching", value: 8 },
+  { label: "Release OK ", value: 9 },
+  { label: "Task", value: 10 },
+  { label: "Done STG", value: 11 },
+  { label: "Release Honban (Done Honban)", value: 12 },
+];
+
+
+
+
+
+
+
+
+
+
+
