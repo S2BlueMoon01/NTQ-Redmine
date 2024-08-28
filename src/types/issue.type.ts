@@ -127,22 +127,22 @@ interface FixVersion {
 }
 
 export interface IssueCreate {
-    project_id: number;
-    tracker_id?:number;
-    status_id?:number;
-    priority_id?:number;
-    subject?:string;
-    description?:string;
-    done_ratio?:number;
-    fixed_version_id?:number;
-    assigned_to_id?:number;
-    parent_issue_id?:number;
-    estimated_hours?:number;
-    custom_fields?:{value:string | string[],id:number}[];
-    start_date?:string;
-    due_date?:string;
-    watcher_user_ids?:number[];
-    uploads?:{token:string,filename:string,content_type:string}[];
+  project_id: number;
+  tracker_id?: number;
+  status_id?: number;
+  priority_id?: number;
+  subject?: string;
+  description?: string;
+  done_ratio?: number;
+  fixed_version_id?: number;
+  assigned_to_id?: number;
+  parent_issue_id?: number;
+  estimated_hours?: number;
+  custom_fields?: { value: string | string[]; id: number }[];
+  start_date?: string;
+  due_date?: string;
+  watcher_user_ids?: number[];
+  uploads?: { token: string; filename: string; content_type: string }[];
 }
 
 interface FixVersion {

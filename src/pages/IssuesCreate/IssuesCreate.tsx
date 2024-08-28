@@ -38,7 +38,6 @@ import {
 } from "~/constants/constants";
 import uploadFileApi from "~/apis/uploads.api";
 import { IssueCreate } from "~/types/issue.type";
-
 import backgroundDraft from "~/assets/images/draft.png";
 
 interface Member {

@@ -10,7 +10,7 @@ type Props = {
 };
 
 const Editor: React.FC<Props> = ({ description, name, onChangeText, control }) => {
-  const [text, setText] = useState<string>("");
+  const [text, setText] = useState<string>(description || "");
   const [selectionStart, setSelectionStart] = useState<number>(0);
   const [selectionEnd, setSelectionEnd] = useState<number>(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -224,7 +224,7 @@ const Editor: React.FC<Props> = ({ description, name, onChangeText, control }) =
               {...field}
               ref={textareaRef}
               className="border w-full h-36 px-1 text-sm font-mono"
-              value={description || text}
+              value={text}
               onChange={(e) => {
                 field.onChange(e);
                 handleChange(e);

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Issue, IssuesEditForm,IssueCreate } from "~/types/issue.type";
+import { Issue, IssuesEditForm, IssueCreate } from "~/types/issue.type";
 import { ListDataResponse } from "~/types/utils.type";
 import http from "~/utils/http";
 
@@ -38,7 +38,7 @@ const issuesApi = {
   },
 
   createIssue(issue: Partial<IssueCreate>) {
-    return http.post(`${URL_ISSUES}.json`, { issue },{timeout:10000});
+    return http.post(`${URL_ISSUES}.json`, { issue }, { timeout: 10000 });
   },
 
   updateIssue(id: number, updates: IssuesEditForm) {

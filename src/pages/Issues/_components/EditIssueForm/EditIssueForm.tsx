@@ -33,6 +33,8 @@ import timeEntriesApi from "~/apis/timeEntries.api";
 import moment from "moment";
 import { useGlobalStore } from "~/store/globalStore";
 import FormAddFile from "~/pages/Wiki/_components/FormAddFile";
+import { convertMDtoElement } from "~/utils/utils";
+import backgroundDraft from "~/assets/images/draft.png";
 
 interface Task {
   id: number;
@@ -56,6 +58,11 @@ const EditIssueForm: React.FC<PropsEdit> = ({ formRef, dataEdit, setIsActiveEdit
     { label: "", value: 0 },
     { label: "<<me>>", value: 1 },
   ]);
+  const [valueTextEdit, setValueTextEdit] = useState<string>("");
+  const [valuePreview, setValuePreview] = useState<string>("");
+  const [isShowPreview, setIsShowPreview] = useState<boolean>(false);
+  const [valueTextNoteEdit, setValueNoteEdit] = useState<string>("");
+  const [valueNotePreview, setValueNotePreview] = useState<string>("");
   const [versionOptions, setVersionOptions] = useState([{ label: "", value: 0 }]);
   const { setIsSuccessEdit } = useGlobalStore((state) => ({
     setIsSuccessEdit: state.setIsSuccessEdit,
@@ -85,7 +92,7 @@ const EditIssueForm: React.FC<PropsEdit> = ({ formRef, dataEdit, setIsActiveEdit
 
   const fetchProject = async () => {
     try {
-      const memberList = await projectMembershipsApi.getProjectMemberships(dataEdit.project.id);
+      const memberList = await projectMembershipsApi.getProjectMemberships(dataEdit?.project?.id | Number(id));
       const arrayMember = memberList.data.memberships;
 
       const assigneeArray = arrayMember.map((item) => ({
@@ -93,7 +100,7 @@ const EditIssueForm: React.FC<PropsEdit> = ({ formRef, dataEdit, setIsActiveEdit
         value: item.user.id,
       }));
       setAssigneeOptions((assigneeOptions) => [...assigneeOptions, ...assigneeArray]);
-      const responseVersion = await versionsApi.getAllVersionOfProject({ idProject: dataEdit.project.id });
+      const responseVersion = await versionsApi.getAllVersionOfProject({ idProject: dataEdit.project.id | Number(id) });
       const versionOpenArray = responseVersion.data.versions.reduce<{ label: string; value: number }[]>((acc, item) => {
         if (item.status === "open") {
           acc.push({
@@ -114,11 +121,16 @@ const EditIssueForm: React.FC<PropsEdit> = ({ formRef, dataEdit, setIsActiveEdit
   };
 
   useEffect(() => {
+    convertMDtoElement(valueTextEdit);
+  }, [valueTextEdit]);
+
+  useEffect(() => {
     fetchProject();
   }, []);
 
   const UpdateIssuesByID = async (data: IssueEdit, trackerValue: string) => {
     const currentDate = moment().format("YYYY-MM-DD");
+    console.log(data);
     const dataEditForm = {
       project_id: dataEdit.project.id,
       issueEdit: {
@@ -132,7 +144,7 @@ const EditIssueForm: React.FC<PropsEdit> = ({ formRef, dataEdit, setIsActiveEdit
         estimated_hours: data.estimated_hours ?? undefined,
         fixed_version_id: data.fixed_version_id ?? undefined,
         done_ratio: Number(data.done_ratio) ?? undefined,
-        description: dataEdit.description ?? undefined,
+        description: data?.description ?? undefined,
         parent_issue_id: Number(searchTerm) ?? undefined,
         custom_fields:
           trackerValue === "4"
@@ -186,6 +198,7 @@ const EditIssueForm: React.FC<PropsEdit> = ({ formRef, dataEdit, setIsActiveEdit
         ],
       },
     };
+    // return;
     const responses = await issuesApi.updateIssue(dataEdit.id, dataEditForm.issueEdit);
 
     if (dataEditForm?.spent_time?.hours && dataEditForm?.spent_time?.activity_id) {
@@ -210,8 +223,8 @@ const EditIssueForm: React.FC<PropsEdit> = ({ formRef, dataEdit, setIsActiveEdit
 
   return (
     <>
-      {newVersion && <ModalNewVersion handleClick={setNewVersion} />}
       <form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
+        {newVersion && <ModalNewVersion handleClick={setNewVersion} />}
         <div className="relative m-2 pt-1 border bg-white p-3 mt-3 pb-3">
           <span className="text-10 px-1 absolute -top-2 left-3 bg-white cursor-pointer text-gray-rain">Change properties</span>
           {errors?.subject?.message && (
@@ -250,7 +263,7 @@ const EditIssueForm: React.FC<PropsEdit> = ({ formRef, dataEdit, setIsActiveEdit
             </div>
             <div className="flex">
               <Label htmlFor="textareaEdit" className="flex gap-1 items-center p-0 " name="Description"></Label>
-              <Editor description={dataEdit.description} />
+              <Editor onChangeText={setValueTextEdit} description={dataEdit?.description} control={control} name="description" />
             </div>
             {/* Row 1 */}
             <div className="flex">
@@ -585,7 +598,7 @@ const EditIssueForm: React.FC<PropsEdit> = ({ formRef, dataEdit, setIsActiveEdit
         <div className="relative m-2 pt-1 border bg-white p-3 mt-3 pb-3">
           <span className="text-10 px-1 absolute -top-2 left-3 bg-white cursor-pointer text-gray-rain">Notes</span>
           <div className="pt-2 w-full">
-            <Editor description={dataEdit.description} />
+            <Editor onChangeText={setValueNoteEdit} control={control} name="notes" />
             <div className="flex items-center">
               <Input type="checkbox" id="private" className="text-xs" />
               <label htmlFor="private" className="text-10">
@@ -605,8 +618,16 @@ const EditIssueForm: React.FC<PropsEdit> = ({ formRef, dataEdit, setIsActiveEdit
             Submit
           </Button>
           <div className="text-ocean-blue text-xs">
-            <a href="#!" className="text-xs">
-              Preview
+            <a
+              href="#!"
+              className="link"
+              onClick={() => {
+                setValuePreview(convertMDtoElement(valueTextEdit));
+                setValueNotePreview(convertMDtoElement(valueTextNoteEdit));
+                setIsShowPreview(true);
+              }}
+            >
+              preview
             </a>{" "}
             |{" "}
             <span className="text-xs cursor-pointer" onClick={() => setIsActiveEdit(false)}>
@@ -614,6 +635,22 @@ const EditIssueForm: React.FC<PropsEdit> = ({ formRef, dataEdit, setIsActiveEdit
             </span>
           </div>
         </div>
+        {isShowPreview && (
+          <div className="flex gap-1 flex-col mt-2 ">
+            <fieldset className="text-xs mx-2 border bg-light-gray pb-1">
+              <legend className="text-mouse-gray">description</legend>
+              <div className="py-4 text-gray-rain" style={{ backgroundImage: `url('${backgroundDraft}')` }}>
+                <div dangerouslySetInnerHTML={{ __html: valuePreview }} />
+              </div>
+            </fieldset>
+            <fieldset className="text-xs mx-2 border bg-light-gray pb-1">
+              <legend className="text-mouse-gray">Notes</legend>
+              <div className="py-4 text-gray-rain" style={{ backgroundImage: `url('${backgroundDraft}')` }}>
+                <div dangerouslySetInnerHTML={{ __html: valueNotePreview }} />
+              </div>
+            </fieldset>
+          </div>
+        )}
       </form>
     </>
   );

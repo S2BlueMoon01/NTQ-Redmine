@@ -107,7 +107,6 @@ const NewVersion = () => {
   return (
     <div className="min-h-84 bg-white px-3 mt-3 pb-8 p-2.5 mb-3 flex flex-col gap-3">
       <h2 className="text-xl font-semibold text-mouse-gray">NewVersion</h2>
-
       {errors?.name ? (
         <div className="flex items-center text-xs text-red-900 p-5 bg-red-100 border-2 border-red-500">
           <img className="flex w-fit h-fit" src={ErrorImg} alt="Error" />
@@ -116,7 +115,6 @@ const NewVersion = () => {
       ) : (
         " "
       )}
-
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex mb-1 border-solid border-inherit	 border p-3">
           <div className="flex flex-col gap-2 m-1 text-right">

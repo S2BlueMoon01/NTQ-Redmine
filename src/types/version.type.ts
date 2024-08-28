@@ -24,6 +24,6 @@ export interface NewVersion {
   description?: string;
   status: string;
   wiki_page_title: string;
-  effective_date: string;
+  due_date: string;
   sharing: string;
 }
