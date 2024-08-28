@@ -40,6 +40,6 @@ export type CheckBoxRoadMap = {
 
 export type UploadFile = {
   upload: {
-    token:string;
+    token: string;
   };
 };

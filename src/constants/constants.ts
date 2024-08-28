@@ -170,8 +170,6 @@ export const OPTIONS_CATEGORY = [
   { value: "Other", label: "Other" },
 ];
 
-
-
 export const statusOptionsNewIssue = [
   { label: "New", value: 1 },
   { label: "In Progress", value: 2 },
@@ -186,14 +184,3 @@ export const statusOptionsNewIssue = [
   { label: "Done STG", value: 11 },
   { label: "Release Honban (Done Honban)", value: 12 },
 ];
-
-
-
-
-
-
-
-
-
-
-

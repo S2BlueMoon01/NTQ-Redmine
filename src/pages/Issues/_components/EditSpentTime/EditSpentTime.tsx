@@ -17,6 +17,7 @@ import config from "~/constants/config";
 import { useGlobalStore } from "~/store/globalStore";
 import { Issue } from "~/types/issue.type";
 import { OPTIONS_ACTIVITY, OPTIONS_CATEGORY } from "~/constants/constants";
+import ToastSuccess from "~/components/ToastSuccess";
 
 interface IFormInput {
   issue_id: string;
@@ -140,12 +141,7 @@ const EditSpentTime = () => {
   return (
     <div className="border p-2.5 mt-3 bg-white min-h-84 flex flex-col gap-3">
       <h2 className="text-xl font-semibold text-mouse-gray">Spent Time</h2>
-      {isSuccessEdit && (
-        <div className="flex mt-3 items-center text-xs text-lime-900 p-2 bg-green-100 border-2 border-lime-500">
-          <img className="flex w-fit h-fit" src={IconSuccess} alt="Error" />
-          <div className="pl-5">Successful creation.</div>
-        </div>
-      )}
+      {isSuccessEdit && <ToastSuccess />}
       {errors?.issue_id || errors?.spent_on || errors?.hours || errors.activity_id || errors?.productCategory ? (
         <div className="flex items-center text-xs text-red-900 p-5 bg-red-100 border-2 border-red-500">
           <img className="flex w-fit h-fit" src={ErrorImg} alt="Error" />

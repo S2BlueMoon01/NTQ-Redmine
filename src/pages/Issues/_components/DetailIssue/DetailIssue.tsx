@@ -11,12 +11,12 @@ import Select from "~/components/Select";
 import SideBar from "../SideBarDetail";
 import EditIssueForm from "../EditIssueForm";
 import issuesApi from "~/apis/issue.api";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CustomFields, Issue } from "~/types/issue.type";
 import { convertDateFormat, getSecondsDifference } from "~/utils/utils";
 import { Helmet } from "react-helmet-async";
 import { useGlobalStore } from "~/store/globalStore";
-import IconSuccess from "~/assets/images/apply-img.png";
+import ToastSuccess from "~/components/ToastSuccess";
 
 const relatedIssueOptions = [
   { label: "Related to", value: "relates" },
@@ -30,7 +30,9 @@ const relatedIssueOptions = [
 ];
 
 const DetailIssue = () => {
-  const { id, name, issueId } = useParams();
+  const { id } = useParams();
+  const location = useLocation();
+  const { issueId, tracker } = location.state;
   const [isActive, setIsActive] = useState(false);
   const [displayRelatedIssue, setDisplayRelatedIssue] = useState<boolean>(false);
   const [isActiveEdit, setIsActiveEdit] = useState(false);
@@ -111,14 +113,11 @@ const DetailIssue = () => {
         <meta name="description" content="Redmine" />
       </Helmet>
       <div className="min-h-84 flex flex-col gap-2 bg-white px-3 mt-3 border pb-6 w-9/12">
-        {isSuccessEdit && (
-          <div className="flex mt-3 items-center text-xs text-lime-900 p-2 bg-green-100 border-2 border-lime-500">
-            <img className="flex w-fit h-fit" src={IconSuccess} alt="Error" />
-            <div className="pl-5">Successful creation.</div>
-          </div>
-        )}
+        {isSuccessEdit && <ToastSuccess />}
         <div className="flex justify-between mt-2 items-center">
-          <h2 className="text-mouse-gray font-bold ">{issueOfId ? `${issueOfId?.tracker?.name} #${issueOfId?.id} ` : ""}</h2>
+          <h2 className="text-mouse-gray font-bold ">
+            {tracker} #{issueId}
+          </h2>
           <div className="flex gap-2 text-10 text-ocean-blue">
             <button className="flex gap-1 hover:underline" onClick={handleShowEditForm}>
               <img src={EditIcon} className="w-4" alt="Time add" /> Edit

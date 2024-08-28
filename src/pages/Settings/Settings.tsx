@@ -11,6 +11,7 @@ import { BeatLoader } from "react-spinners";
 import { Version } from "~/types/version.type";
 import { useGlobalStore } from "~/store/globalStore";
 import { useEffect } from "react";
+import ToastSuccess from "~/components/ToastSuccess";
 
 const COLUMN_NAME = [
   { name: "version", style: "w-1/5" },
@@ -72,12 +73,7 @@ const Settings = () => {
       </Helmet>
       <div className="border p-2.5 mt-3 bg-white min-h-84 flex flex-col gap-3">
         <h2 className="text-mouse-gray text-xl font-semibold">Settings</h2>
-        {isSuccessEdit && (
-          <div className="flex mt-3 items-center text-xs text-lime-900 p-2 bg-green-100 border-2 border-lime-500">
-            <img className="flex w-fit h-fit" src={IconSuccess} alt="Error" />
-            <div className="pl-5">Successful creation.</div>
-          </div>
-        )}
+        {isSuccessEdit && <ToastSuccess />}
         <ul className="flex items-center gap-2 text-xs font-semibold text-mouse-gray px-2 border-b border-slate-400">
           <li className="relative bottom-[-6px] border-slate-400 bg-white px-3 pt-1 pb-2 rounded-tl-md rounded-tr-md  border z-10 cursor-pointer border-b-white">
             Version

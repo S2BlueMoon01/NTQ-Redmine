@@ -437,46 +437,38 @@ export const handleFormatDate = (dateString: string): string => {
   return date.toLocaleDateString("en-US", options);
 };
 
-export const convertMDtoElement = (text: string):string => {
+export const convertMDtoElement = (text: string): string => {
   const lines = text.split("\n");
-    const array: string[] = [];
-    lines.forEach((line) => {
-      const newLine = handleConvert(line);
-      array.push(newLine);
-    });
- return array.join("\n");
+  const array: string[] = [];
+  lines.forEach((line) => {
+    const newLine = handleConvert(line);
+    array.push(newLine);
+  });
+  return array.join("\n");
 };
 
-export const handleConvert = (text: string):string => {
+export const handleConvert = (text: string): string => {
   if (text.startsWith("h3. ")) {
     return `<h3 class="text-[14px]">${text.replace("h3. ", "")}</h3>\n`;
-  } else if(text.startsWith("h2. ")) {
+  } else if (text.startsWith("h2. ")) {
     return `<h2 class="text-[16px]">${text.replace("h2. ", "")}</h2>\n`;
-  } else if(text.startsWith("h1. ")) {
+  } else if (text.startsWith("h1. ")) {
     return `<h1 class="text-[20px]">${text.replace("h1. ", "")}</h1>\n`;
-  }
-  else if(text.includes("!")) {
+  } else if (text.includes("!")) {
     return text.replace(/!(.*?)!/g, '<div><img src="$1"/></div>');
-  }
-  else if(text.includes("[[") && text.includes("]]")) {
+  } else if (text.includes("[[") && text.includes("]]")) {
     return `<div>${text.replace(/\[\[(.*?)\]\]/g, '<a href="/projects/fresher-_-reactjs-fresher/wiki/$1" class="link">$1</a>')}</div>`;
-  }
-  else if(text.includes("> ")) {
+  } else if (text.includes("> ")) {
     return `<blockquote class="italic border-l-2 border-[#e0e0e0] ml-2 pl-1">${text.replace("> ", "")}</blockquote>\n`;
-  }
-  else if(text.includes("*")) {
+  } else if (text.includes("*")) {
     return `<div>${text.replace(/\*(.*?)\*/g, '<bold class="font-bold">$1</bold>\n')}</div>`;
-  }
-  else if(text.includes("_")) {
+  } else if (text.includes("_")) {
     return `<div>${text.replace(/\_(.*?)\_/g, '<span class="italic">$1</span>\n')}</div>`;
-  }
-  else if(text.includes("+")) {
+  } else if (text.includes("+")) {
     return `<div>${text.replace(/\+(.*?)\+/g, '<span class="underline">$1</span>\n')}</div>`;
-  }
-  else if(text.includes("<pre>") || text.includes("</pre>")) {
+  } else if (text.includes("<pre>") || text.includes("</pre>")) {
     return text;
-  }
-   else {
+  } else {
     return `<div>${text}</div>\n`;
   }
 };

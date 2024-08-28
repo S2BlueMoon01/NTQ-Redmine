@@ -1,4 +1,4 @@
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import IconAdd from "~/assets/images/icon-add.png";
 import IconSuccess from "~/assets/images/apply-img.png";
 import PackageImg from "~/assets/images/package-img.png";
@@ -17,6 +17,7 @@ import { Issue } from "~/types/issue.type";
 import Dialog from "../MyPage/_components/Dialog";
 import { Helmet } from "react-helmet-async";
 import { useGlobalStore } from "~/store/globalStore";
+import ToastSuccess from "~/components/ToastSuccess";
 
 const Roadmap = () => {
   const [isCheckedBoxRoadmap, setIsCheckedBoxRoadmap] = useState<CheckBoxRoadMap>({
@@ -134,12 +135,7 @@ const Roadmap = () => {
 
       <div className="flex min-h-84">
         <div className="flex flex-col gap-2.5 bg-white w-9/12 px-3 mt-3 pb-8 border border-solid ">
-          {isSuccessEdit && (
-            <div className="flex mt-3 items-center text-xs text-lime-900 p-2 bg-green-100 border-2 border-lime-500">
-              <img className="flex w-fit h-fit" src={IconSuccess} alt="Error" />
-              <div className="pl-5">Successful creation.</div>
-            </div>
-          )}
+          {isSuccessEdit && <ToastSuccess />}
 
           <div className="flex justify-between items-center p-1.5">
             <h2 className="text-xl text-mouse-gray font-semibold">Roadmap</h2>

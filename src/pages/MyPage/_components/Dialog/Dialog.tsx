@@ -18,10 +18,16 @@ interface DialogProps {
   handleClick: (index: number) => void;
 }
 
-interface Options {
-  label: string;
-  value: string | number;
-}
+const RELATED_ISSUE_OPTIONS = [
+  { label: "Related to", value: "relates" },
+  { label: "Duplicates", value: "duplicates" },
+  { label: "Duplicated by", value: "duplicated" },
+  { label: "Blocks", value: "blocks" },
+  { label: "Precedes", value: "precedes" },
+  { label: "Follows", value: "follows" },
+  { label: "Copied to", value: "copied_to" },
+  { label: "Copied from", value: "copied_from" },
+];
 
 const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleClick }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -30,16 +36,6 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
   const [loading, setLoading] = useState<boolean>(false);
   const [displayRelatedIssue, setDisplayRelatedIssue] = useState<boolean>(false);
   const [isActive, setIsActive] = useState(false);
-  const [relatedIssueOptions, _setRelatedIssueOptions] = useState<Options[]>([
-    { label: "Related to", value: "relates" },
-    { label: "Duplicates", value: "duplicates" },
-    { label: "Duplicated by", value: "duplicated" },
-    { label: "Blocks", value: "blocks" },
-    { label: "Precedes", value: "precedes" },
-    { label: "Follows", value: "follows" },
-    { label: "Copied to", value: "copied_to" },
-    { label: "Copied from", value: "copied_from" },
-  ]);
   const navigate = useNavigate();
 
   const handleClickOutside = () => {
@@ -64,9 +60,18 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
   };
 
   const handleNavigateDetail = () => {
-    navigate(`/projects/${issue?.project.id}/${issue?.project.name}/issues/${issue?.id}`);
+    navigate(`/projects/${issue?.project.id}/${issue?.project.name}/issues/${issue?.id}`, {
+      state: { issueId: issue?.id, tracker: issue?.tracker.name },
+    });
   };
 
+  const handleNavigateEdit = () => {
+    navigate(`/projects/${issue?.project.id}/${issue?.project.name}/issues/${issue?.id}/edit`, {
+      state: { issue: issue?.id, tracker: issue?.tracker.name },
+    });
+  };
+
+  console.log(issue);
   return (
     <>
       <div
@@ -268,7 +273,7 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
                 {displayRelatedIssue && (
                   <div className="flex gap-1 text-xs font-light items-center">
                     <Select className="text-xs">
-                      {relatedIssueOptions.map((issue) => {
+                      {RELATED_ISSUE_OPTIONS.map((issue) => {
                         return <option value={issue.value}>{issue.label}</option>;
                       })}
                     </Select>
@@ -334,7 +339,10 @@ const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleCl
             >
               details
             </button>
-            <button className="border text-blue-gray a bg-slate-100 font-bold px-3 py-1 border-gray-300 rounded-md hover:bg-sky-50 hover:border-blue-gray">
+            <button
+              onClick={handleNavigateEdit}
+              className="border text-blue-gray a bg-slate-100 font-bold px-3 py-1 border-gray-300 rounded-md hover:bg-sky-50 hover:border-blue-gray"
+            >
               edit
             </button>
             <button

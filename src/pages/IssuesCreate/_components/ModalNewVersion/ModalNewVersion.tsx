@@ -54,7 +54,7 @@ const ModalNewVersion: React.FC<DialogProps> = ({ handleClick }) => {
       description: data.description,
       status: data.status,
       wiki_page_title: data.wiki_page_title,
-      effective_date: data.effective_date,
+      due_date: data.effective_date,
       sharing: data.sharing,
     };
 
