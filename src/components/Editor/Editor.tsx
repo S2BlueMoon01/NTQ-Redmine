@@ -1,11 +1,15 @@
 import React, { useState, useRef } from "react";
+import { Controller, Control } from "react-hook-form";
 import icons from "./icons";
 
-interface Props {
+type Props = {
   description?: string;
-}
+  name?: string;
+  onChangeText?: React.Dispatch<React.SetStateAction<string>>;
+  control: Control<any>;
+};
 
-const Editor: React.FC<Props> = ({ description }) => {
+const Editor: React.FC<Props> = ({ description, name, onChangeText, control }) => {
   const [text, setText] = useState<string>("");
   const [selectionStart, setSelectionStart] = useState<number>(0);
   const [selectionEnd, setSelectionEnd] = useState<number>(0);
@@ -50,15 +54,14 @@ const Editor: React.FC<Props> = ({ description }) => {
           newText = `${beforeLine}${textToInsert}${currentLine.substring(0, lineEnd)}${after}`;
         }
       } else if (textToInsert === "<pre>") {
-        console.log("after", after);
-        newText = `${beforeLine}${textToInsert}${currentLine.substring(0, lineEnd)}${after}</pre>`;
-      } else if (textToInsert === "[[") {
-        newText = `${beforeLine}${textToInsert}${currentLine.substring(0, lineEnd)}${after}]]`;
+        newText = `${textToInsert}\n${beforeLine}${currentLine.substring(0, lineEnd)}${after}\n</pre>`;
       } else {
         newText = `${beforeLine}${textToInsert}${currentLine.substring(0, lineEnd)}${after}`;
       }
 
       setText(newText);
+      onChangeText?.(newText);
+
       setTimeout(() => {
         if (textareaRef.current) {
           textareaRef.current.focus();
@@ -70,21 +73,25 @@ const Editor: React.FC<Props> = ({ description }) => {
     }
   };
 
-  const formatText = (prefix: string) => {
+  const formatText = (prefix: string, suffix?: string) => {
     const start = selectionStart;
     const end = selectionEnd;
     const before = text.substring(0, start);
     const selected = text.substring(start, end);
     const after = text.substring(end);
 
-    const newText = selected ? `${before}${prefix}${selected}${prefix}${after}` : `${before}${prefix}${prefix}${after}`;
+    const newText = selected ? `${before}${prefix}${selected}${suffix ?? prefix}${after}` : `${before}${prefix}${suffix ?? prefix}${after}`;
 
     setText(newText);
+    onChangeText?.(newText);
     setTimeout(() => {
       if (textareaRef.current) {
         textareaRef.current.focus();
-        textareaRef.current.selectionStart = start + 2;
-        textareaRef.current.selectionEnd = start + 2;
+        textareaRef.current.selectionStart = end + (selected.length ? prefix.length * 2 : prefix.length);
+
+        textareaRef.current.selectionEnd = end + (selected.length ? prefix.length * 2 : prefix.length);
+        setSelectionStart(end + (selected.length ? prefix.length * 2 : prefix.length));
+        setSelectionEnd(end + (selected.length ? prefix.length * 2 : prefix.length));
       }
     }, 0);
   };
@@ -158,7 +165,7 @@ const Editor: React.FC<Props> = ({ description }) => {
     {
       label: "Link",
       icon: icons.link,
-      action: () => insertTextAtCurrentLine("[["),
+      action: () => formatText("[[", "]]"),
     },
     {
       label: "Image",
@@ -184,6 +191,7 @@ const Editor: React.FC<Props> = ({ description }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
+    onChangeText?.(e.target.value);
   };
 
   const handleSelect = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -208,15 +216,23 @@ const Editor: React.FC<Props> = ({ description }) => {
           })}
         </div>
 
-        <textarea
-          ref={textareaRef}
-          name=""
-          id="textareaEdit"
-          className="border w-full h-36 px-1 text-xs"
-          value={description || text}
-          onChange={handleChange}
-          onSelect={handleSelect}
-        ></textarea>
+        <Controller
+          name={name ?? "description"}
+          control={control}
+          render={({ field }) => (
+            <textarea
+              {...field}
+              ref={textareaRef}
+              className="border w-full h-36 px-1 text-sm font-mono"
+              value={description || text}
+              onChange={(e) => {
+                field.onChange(e);
+                handleChange(e);
+              }}
+              onSelect={handleSelect}
+            ></textarea>
+          )}
+        />
       </div>
     </>
   );

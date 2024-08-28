@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
 import Label from "~/components/Label";
@@ -18,7 +18,28 @@ import ModalNewVersion from "./_components/ModalNewVersion";
 import projectMembershipsApi from "~/apis/projectMemberships.api";
 import ModalAddWatchers from "./_components/ModalAddWatchers";
 import { Controller, useForm } from "react-hook-form";
+import versionsApi from "~/apis/versions.api";
+import { useTranslation } from "react-i18next";
 import moment from "moment";
+import File from "~/components/File";
+import { convertMDtoElement } from "~/utils/utils";
+import ApplyImg from "~/assets/images/apply-img.png";
+import Loading from "~/components/Loading";
+import {
+  TRACKER_OPTIONS,
+  PRIORITY_OPTIONS,
+  BUG_TYPE_OPTIONS,
+  statusOptionsNewIssue,
+  PERCENT_DONE_OPTIONS,
+  SEVERITY_OPTIONS,
+  QC_ACTIVITY_OPTIONS,
+  CAUSE_CATEGORY_OPTIONS,
+  DEGRADE_OPTIONS,
+} from "~/constants/constants";
+import uploadFileApi from "~/apis/uploads.api";
+import { IssueCreate } from "~/types/issue.type";
+
+import backgroundDraft from "~/assets/images/draft.png";
 
 interface Member {
   id: number;
@@ -33,120 +54,28 @@ interface Task {
 
 const IssuesCreate = () => {
   const { id, name } = useParams();
+  const { t } = useTranslation("createIssue");
   const [isActiveParentTask, setIsActiveParentTask] = useState(false);
-  const [subject, setSubject] = useState<string>("");
-  const [error, setError] = useState(false);
   const [newVersion, setNewVersion] = useState(false);
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredItems, setFilteredItems] = useState<Task[]>([]);
   const [allIssue, setAllIssue] = useState<Task[]>([]);
-
-  const [errorFile, setErrorFile] = useState<string | null>(null);
-  const maxSize = 100 * 1024 * 1024;
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [assigneeOptions, setAssigneeOptions] = useState([
     { label: "", value: "" },
     { label: "<<me>>", value: "1" },
   ]);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [check, setCheck] = useState(true);
   const [isAddWatcher, setIsAddWatcher] = useState<boolean>(false);
-
-  const [trackerOptions, _setTrackerOptions] = useState([
-    { label: "Bug", value: "Bug" },
-    { label: "Task", value: "Task" },
-  ]);
-
-  const [statusOptions, _setStatusOptions] = useState([
-    { label: "New", value: 1 },
-    { label: "In Progress", value: 2 },
-    { label: "Resolved", value: 3 },
-    { label: "Feedback", value: 4 },
-    { label: "Closed", value: 5 },
-    { label: "Can't fix", value: 6 },
-    { label: "Next Release", value: 7 },
-    { label: "Watching", value: 8 },
-    { label: "Release OK ", value: 9 },
-    { label: "Task", value: 10 },
-    { label: "Done STG", value: 11 },
-    { label: "Release Honban (Done Honban)", value: 12 },
-  ]);
-
-  const [percentDoneOptions, _setPercentDoneOptions] = useState([
-    { label: "0%", value: 0 },
-    { label: "10%", value: 10 },
-    { label: "20%", value: 20 },
-    { label: "30%", value: 30 },
-    { label: "40%", value: 40 },
-    { label: "50%", value: 50 },
-    { label: "60%", value: 60 },
-    { label: "70%", value: 70 },
-    { label: "80%", value: 80 },
-    { label: "90%", value: 90 },
-    { label: "100%", value: 100 },
-  ]);
-
-  const [priorityOptions, _setPriorityOptions] = useState([
-    { label: "Low", value: 1 },
-    { label: "Normal", value: 2 },
-    { label: "High", value: 3 },
-    { label: "Urgent", value: 4 },
-    { label: "Immediate", value: 5 },
-  ]);
-
-  const [bugTypeOptions, _setBugTypeOptions] = useState([
-    { label: "GUI", value: "GUI" },
-    { label: "Function", value: "Function" },
-    { label: "Non-function", value: "Non-function" },
-    { label: "Others", value: "Others" },
-  ]);
-
-  const [severityOptions, _setSeverityOptions] = useState([
-    { label: "Critical", value: "Critical" },
-    { label: "Major", value: "Major" },
-    { label: "Moderate", value: "Moderate" },
-    { label: "Minor", value: "Minor" },
-    { label: "Cosmetic", value: "Cosmetic" },
-  ]);
-
-  const [qcActivityOptions, _setQcActivityOptions] = useState([
-    { label: "Code Review", value: "Code Review" },
-    { label: "Unit test", value: "Unit test" },
-    { label: "Integration test", value: "Integration test" },
-    { label: "System test", value: "System test" },
-    { label: "Document Review", value: "Document Review" },
-    { label: "Acceptance Review", value: "Acceptance Review" },
-    { label: "Acceptance Test", value: "Acceptance Test" },
-    { label: "Other Review", value: "Other Review" },
-    { label: "Other Test", value: "Other Test" },
-  ]);
-
-  const [causeCategoryOptions, _setCauseCategoryOptions] = useState([
-    { label: "1.1. REQ_Missing or incomplete", value: "1.1. REQ_Missing or incomplete" },
-    { label: "2.1. DES_Missing or incomplete", value: "2.1. DES_Missing or incomplete" },
-    { label: "3.1. PRO_Missing or Incomplete", value: "3.1. PRO_Missing or Incomplete" },
-    { label: "4.1. IMP_Discipline/Process non-compliance", value: "4.1. IMP_Discipline/Process non-compliance" },
-    { label: "4.2. IMP_Insuffcient analysis before implementation", value: "4.2. IMP_Insuffcient analysis before implementation" },
-    { label: "4.3. IMP_Shortage of time", value: "4.3. IMP_Shortage of time" },
-    { label: "4.5. IMP_Lack of testing", value: "4.5. IMP_Lack of testing" },
-    { label: "5.1. COM_Missing communication", value: "5.1. COM_Missing communication" },
-    { label: "5.2. COM_Missing confirmation", value: "5.2. COM_Missing confirmation" },
-    { label: "6.1. SKI_Inadequate language proficiency", value: "6.1. SKI_Inadequate language proficiency" },
-    { label: "6.2. SKI_Shortage of business domain expertise", value: "6.2. SKI_Shortage of business domain expertise" },
-    { label: "8. Inconsistency in document or design", value: "8. Inconsistency in document or design" },
-    { label: "9. Other", value: "9. Other" },
-  ]);
-
-  const [isDegradeOptions, _setIsDegradeOptions] = useState([
-    { label: "Yes", value: 1 },
-    { label: "No", value: 0 },
-  ]);
+  const [targetVerOptions, setTargetVerOptions] = useState([{ label: "", value: "" }]);
+  const [valueTextEdit, setValueTextEdit] = useState<string>("");
+  const [valuePreview, setValuePreview] = useState<string>("");
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setSearchTerm(value);
-
     const filtered = allIssue.filter((item) => item.name.toLowerCase().includes(value.toLowerCase()));
     setFilteredItems(filtered);
   };
@@ -156,43 +85,27 @@ const IssuesCreate = () => {
     setFilteredItems([]);
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-
-    if (file) {
-      if (file.size > maxSize) {
-        setErrorFile("File size exceeds the 500MB limit.");
-        if (fileInputRef.current) {
-          fileInputRef.current.value = "";
-        }
-      } else {
-        setErrorFile(null);
-        // Handle file upload
-      }
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSubject(e.target.value.trim());
-  };
-
-  const handleSubmit = () => {
-    setError(!subject);
-  };
+  const [isSuccessful, setIsCreateSuccessful] = useState(false);
 
   const convertListIssue = (listItem: Issue[]): Task[] => {
     const newList = listItem.map((item) => ({
       id: item.id,
       name: `${item.tracker.name} #${item.id}: ${item.subject}`,
     }));
-
     return newList;
   };
 
   const fetchProject = async () => {
     try {
       setLoading(true);
-
+      const responseVersion = await versionsApi.getAllVersionOfProject({ idProject: Number(id) });
+      const versions = responseVersion.data.versions
+        .filter((items) => items.status === "open")
+        .map((version) => ({
+          label: version.name,
+          value: String(version.id),
+        }));
+      setTargetVerOptions((targetVerOptions) => [...targetVerOptions, ...versions]);
       const memberList = await projectMembershipsApi.getProjectMemberships(Number(id));
       const arrayMember = memberList.data.memberships;
       arrayMember.forEach((mem) => {
@@ -224,13 +137,71 @@ const IssuesCreate = () => {
     fetchProject();
   }, []);
 
+  useEffect(() => {
+    convertMDtoElement(valueTextEdit);
+  }, [valueTextEdit]);
+
   const {
     register,
     control,
+    handleSubmit,
     formState: { errors },
   } = useForm();
 
-  // const onSubmit: SubmitHandler<IFormInput> = (data) => postNewVersions(data);
+  const [isBug, setIsBug] = useState(true);
+
+  const onSubmit = async (data: any) => {
+    setIsLoading(true);
+    const uploadArray: { token: string; filename: string; content_type: string }[] = [];
+    if (data.file !== null) {
+      const filesArray: File[] = Array.from(data.file);
+      filesArray.map(async (item: File) => {
+        const responseUpload = await uploadFileApi.postFiles(item);
+        const upload = {
+          token: responseUpload.data.upload.token,
+          filename: item.name,
+          content_type: item.type,
+        };
+        uploadArray.push(upload);
+      });
+    }
+
+    const issue: IssueCreate = {
+      project_id: Number(id),
+      tracker_id: data.tracker_id,
+      status_id: +data.status_id,
+      done_ratio: data.done_ratio,
+      priority_id: +data.priority_id,
+      subject: data.subject,
+      description: data.description,
+      fixed_version_id: +data.fixed_version_id,
+      assigned_to_id: +data.assigned_to_id,
+      parent_issue_id: +data.parent_issue_id,
+      estimated_hours: +data.estimated_hours,
+      custom_fields: [
+        { value: data.bug_type, id: 12 },
+        { value: data.severity, id: 13 },
+        { value: data.qc_activity, id: 23 },
+        { value: data.cause_category, id: 25 },
+        { value: data.is_degrade, id: 62 },
+        { value: +data.reopen_counter, id: 63 },
+      ],
+      due_date: data.due_date,
+      start_date: data.start_date,
+      watcher_user_ids: data.watcher_user_ids,
+      uploads: uploadArray,
+    };
+
+    const responseVersion = await issuesApi.createIssue(issue);
+    if (responseVersion.status === 201) {
+      setIsCreateSuccessful(true);
+    }
+    setIsLoading(false);
+  };
+
+  const handleChangeTracker = (value: number) => {
+    setIsBug(!(value === 4));
+  };
 
   return (
     <>
@@ -240,10 +211,12 @@ const IssuesCreate = () => {
         <title>{`New Issue - ${name} - NTQ Redmine`}</title>
         <meta name="description" content="Redmine" />
       </Helmet>
-      <form action="">
+      {isLoading && <Loading />}
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="p-2.5 pt-1 min-h-84 bg-white px-3 mt-3 pb-8">
-          <h2 className="text-xl font-semibold pt-0.5 pr-3 mb-3 text-mouse-gray">New issue</h2>
-          {error && (
+          <h2 className="text-xl font-semibold pt-0.5 pr-3 mb-3 text-mouse-gray">{t("title")}</h2>
+
+          {errors.subject && (
             <div className="pt-2">
               <div className="flex border-[#dd0000] items-center text-[13.2px] border-2 bg-[#ffe3e3] gap-3 p-[2px] mt-2 mb-3">
                 <figure className="ml-2">
@@ -253,46 +226,90 @@ const IssuesCreate = () => {
               </div>
             </div>
           )}
+
+          {isSuccessful && (
+            <div className="flex border-[#0b8800] items-center text-[13.2px] border-2 bg-[#efffe3] gap-3 p-[2px] mt-2 mb-3">
+              <figure className="ml-2">
+                <img src={ApplyImg} alt="successful" />
+              </figure>
+              <span className="text-[#0b8800]">{t("modal_new_version.message.successful")}</span>
+            </div>
+          )}
+
           <div className="bg-[#fcfcfc]  w-full border border-[#e4e4e4] py-2">
             <div className="flex-block">
-              <Label htmlFor="tracker" isRequired={true} className="flex gap-1 items-center p-0" name="Tracker">
-                <EnhanceSelect id="tracker" className="text-[13.33px] font-normal text-black" arrayOption={trackerOptions} defaultValue={"Bug"} />
+              <Label htmlFor="tracker" isRequired={true} className="flex gap-1 items-center p-0" name={t("label.tracker")}>
+                <Controller
+                  name="tracker_id"
+                  control={control}
+                  defaultValue={1}
+                  render={({ field }) => (
+                    <EnhanceSelect
+                      {...field}
+                      id="tracker"
+                      className="text-[13.33px] font-normal text-[black]"
+                      arrayOption={TRACKER_OPTIONS}
+                      onChange={(e) => {
+                        field.onChange(e.target.value);
+                        handleChangeTracker(+e.target.value);
+                      }}
+                    />
+                  )}
+                />
               </Label>
             </div>
             <div className="flex">
-              <Label htmlFor="subject" isRequired={true} className="flex gap-1 items-center p-0" name="Subject"></Label>
-              <Input id="subject" style={{ width: "calc(100% - 225px)" }} className="ml-2" onChange={(e) => handleChange(e)} value={subject} />
+              <Label htmlFor="subject" isRequired={true} className="flex gap-1 items-center p-0" name={t("label.subject")}></Label>
+              <Input
+                id="subject"
+                style={{ width: "calc(100% - 225px)" }}
+                className="ml-2"
+                {...register("subject", {
+                  required: "Subject can't be blank",
+                })}
+              />
             </div>
             <div className="flex">
-              <Label htmlFor="textareaEdit" className="flex gap-1 items-center p-0 pb-[162px]" name="Description"></Label>
-              <Editor />
+              <Label htmlFor="textareaEdit" className="flex gap-1 items-center p-0 pb-[162px]" name={t("label.description")}></Label>
+              <Editor onChangeText={setValueTextEdit} control={control} name="description" />
             </div>
             {/* Row 1 */}
             <div className="flex">
               <div className="w-1/2">
                 <div className="flex">
-                  <Label htmlFor="status" className="flex gap-1 items-center p-0" name="Status" isRequired></Label>
+                  <Label htmlFor="status" className="flex gap-1 items-center p-0" name={t("label.status")} isRequired></Label>
                   <EnhanceSelect
                     id="status"
-                    className="text-[13.33px] font-normal text-black w-1/3 ml-2"
-                    arrayOption={statusOptions}
+                    className="text-[13.33px] font-normal text-[black] w-1/3 ml-2"
+                    arrayOption={statusOptionsNewIssue}
                     defaultValue={1}
+                    {...register("status_id")}
                   />
                 </div>
               </div>
               <div className="w-1/2">
                 <div className="flex relative">
-                  <Label htmlFor="ParentTask" className="flex gap-1 items-center p-0 parent-task" name="Parent task"></Label>
-                  <div className={`flex items-center border ml-1 w-32 ${isActiveParentTask ? "border-black rounded-sm" : ""}`}>
+                  <Label htmlFor="ParentTask" className="flex gap-1 items-center p-0 parent-task" name={t("label.parent_task")}></Label>
+                  <div className={`flex items-center border ml-1 w-32 ${isActiveParentTask ? "border-[black] rounded-sm" : ""}`}>
                     <img src={IconSearch} alt="IconSearch" className="px-1" />
-                    <input
-                      id="ParentTask"
-                      type="text"
-                      className="outline-none w-full text-xs py-1"
-                      value={searchTerm}
-                      onChange={handleSearchChange}
-                      onFocus={() => setIsActiveParentTask(true)}
-                      onBlur={() => setIsActiveParentTask(false)}
+                    <Controller
+                      name={"parent_issue_id"}
+                      control={control}
+                      render={({ field }) => (
+                        <input
+                          id="ParentTask"
+                          {...field}
+                          type="text"
+                          className="outline-none w-full text-xs py-1"
+                          value={searchTerm}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleSearchChange(e);
+                          }}
+                          onFocus={() => setIsActiveParentTask(true)}
+                          onBlur={() => setIsActiveParentTask(false)}
+                        ></input>
+                      )}
                     />
                   </div>
                   {filteredItems.length > 0 && (
@@ -314,18 +331,21 @@ const IssuesCreate = () => {
             <div className="flex items-center">
               <div className="w-1/2">
                 <div className="flex">
-                  <Label htmlFor="priority" className="flex gap-1 items-center p-0" name="Priority" isRequired></Label>
-                  <EnhanceSelect
-                    id="priority"
-                    className="text-[13.33px] font-normal text-black w-1/3 ml-2"
-                    arrayOption={priorityOptions}
-                    defaultValue={2}
-                  />
+                  <Label htmlFor="priority" className="flex gap-1 items-center p-0" name={t("label.priority")} isRequired></Label>
+                  {check && (
+                    <EnhanceSelect
+                      id="priority"
+                      className="text-[13.33px] font-normal text-[black] w-1/3 ml-2"
+                      arrayOption={PRIORITY_OPTIONS}
+                      defaultValue={2}
+                      {...register("priority_id")}
+                    />
+                  )}
                 </div>
               </div>
               <div className="w-1/2">
                 <div className="flex">
-                  <Label htmlFor="StartDate" className="flex gap-1 items-center p-0" name="Start date"></Label>
+                  <Label htmlFor="StartDate" className="flex gap-1 items-center p-0" name={t("label.start_date")}></Label>
                   <Controller
                     control={control}
                     name="start_date"
@@ -333,6 +353,7 @@ const IssuesCreate = () => {
                       <DatePickerCustom
                         id="start_date"
                         selected={field.value ? new Date(field.value) : null}
+                        className="pl-1"
                         onChange={(date) => field.onChange(date ? moment(date).format("YYYY-MM-DD") : "")}
                       />
                     )}
@@ -344,24 +365,27 @@ const IssuesCreate = () => {
             <div className="flex items-center">
               <div className="w-1/2">
                 <div className="flex">
-                  <Label htmlFor="assignee" className="flex gap-1 items-center p-0" name="Assignee"></Label>
+                  <Label htmlFor="assignee" className="flex gap-1 items-center p-0" name={t("label.assignee")}></Label>
                   <EnhanceSelect
                     id="assignee"
                     className="text-[13.33px] font-normal text-black w-1/3 ml-2"
                     arrayOption={assigneeOptions}
                     defaultValue={""}
+                    {...register("assigned_to_id")}
                   />
                 </div>
               </div>
               <div className="w-1/2">
                 <div className="flex">
-                  <Label htmlFor="DueDate" className="flex gap-1 items-center p-0" name="Due date"></Label>
+                  <Label htmlFor="DueDate" className="flex gap-1 items-center p-0" name={t("label.due_date")}></Label>
                   <Controller
                     control={control}
                     name="due_date"
                     render={({ field }) => (
                       <DatePickerCustom
+                        name="issue[due_date]"
                         id="due_date"
+                        className="pl-1"
                         selected={field.value ? new Date(field.value) : null}
                         onChange={(date) => field.onChange(date ? moment(date).format("YYYY-MM-DD") : "")}
                       />
@@ -374,21 +398,22 @@ const IssuesCreate = () => {
             <div className="flex items-center">
               <div className="w-1/2">
                 <div className="flex items-center">
-                  <Label htmlFor="TargetVersion" className="flex gap-1 items-center p-0" name="Target version"></Label>
+                  <Label htmlFor="TargetVersion" className="flex gap-1 items-center p-0" name={t("label.target_version")}></Label>
                   <EnhanceSelect
                     id="TargetVersion"
-                    className="text-[13.33px] font-normal text-black w-1/3 ml-2"
-                    arrayOption={priorityOptions}
+                    className="text-[13.33px] font-normal text-[black] w-1/3 ml-2"
+                    arrayOption={targetVerOptions}
                     defaultValue={2}
+                    {...register("fixed_version_id")}
                   />
                   <img src={IconAdd} alt="IconAdd" className="cursor-pointer" onClick={() => setNewVersion(true)} />
                 </div>
               </div>
               <div className="w-1/2">
                 <div className="flex items-center">
-                  <Label htmlFor="EstimateTime" className="flex gap-1 items-center p-0" name="Estimate time"></Label>
-                  <Input className="ml-1 w-14" id="EstimateTime" />
-                  <span className="text-xs text-[#505050]">Hours</span>
+                  <Label htmlFor="EstimateTime" className="flex gap-1 items-center p-0" name={t("label.estimate_time")}></Label>
+                  <Input className="ml-1 w-14" id="EstimateTime" {...register("estimated_hours")} />
+                  <span className="text-xs text-[#505050]">{t("hours")}</span>
                 </div>
               </div>
             </div>
@@ -397,127 +422,189 @@ const IssuesCreate = () => {
               <div className="w-1/2"></div>
               <div className="w-1/2">
                 <div className="flex">
-                  <Label htmlFor="done" className="flex gap-1 items-center p-0" name="% Done"></Label>
-                  <EnhanceSelect id="done" className="text-[13.33px] font-normal text-black" arrayOption={percentDoneOptions} defaultValue={0} />
+                  <Label htmlFor="done" className="flex gap-1 items-center p-0" name={t("label.done")}></Label>
+                  <EnhanceSelect
+                    id="done"
+                    className="text-[13.33px] font-normal text-[black]"
+                    arrayOption={PERCENT_DONE_OPTIONS}
+                    defaultValue={0}
+                    {...register("done_ratio")}
+                  />
                 </div>
               </div>
             </div>
             {/* Row 6 */}
             <div className="flex items-center">
               <div className="w-1/2">
+                {isBug && (
+                  <div className="flex">
+                    <Label htmlFor="bugType" className="flex gap-1 items-center p-0" name={t("label.bug_type")} isRequired></Label>
+                    <EnhanceSelect
+                      id="bugType"
+                      className="text-[13.33px] font-normal text-[black] w-1/3 ml-2"
+                      arrayOption={BUG_TYPE_OPTIONS}
+                      defaultValue={"Others"}
+                      {...register("bug_type")}
+                    />
+                  </div>
+                )}
+
                 <div className="flex">
-                  <Label htmlFor="bugType" className="flex gap-1 items-center p-0" name="Bug Type" isRequired></Label>
-                  <EnhanceSelect
-                    id="bugType"
-                    className="text-[13.33px] font-normal text-black w-1/3 ml-2"
-                    arrayOption={bugTypeOptions}
-                    defaultValue={"Others"}
-                  />
-                </div>
-                <div className="flex">
-                  <Label htmlFor="severity" className="flex gap-1 items-center p-0" name="Severity" isRequired></Label>
+                  <Label htmlFor="severity" className="flex gap-1 items-center p-0" name={t("label.severity")} isRequired></Label>
                   <EnhanceSelect
                     id="severity"
-                    className="text-[13.33px] font-normal text-black w-1/3 ml-2"
-                    arrayOption={severityOptions}
+                    className="text-[13.33px] font-normal text-[black] w-1/3 ml-2"
+                    arrayOption={SEVERITY_OPTIONS}
                     defaultValue={"Cosmetic"}
+                    {...register("severity")}
                   />
                 </div>
-                <div className="flex">
-                  <Label htmlFor="qcActivity" className="flex gap-1 items-center p-0" name="QC Activity" isRequired></Label>
-                  <EnhanceSelect
-                    id="qcActivity"
-                    className="text-[13.33px] font-normal text-black w-1/3 ml-2"
-                    arrayOption={qcActivityOptions}
-                    defaultValue={"Other Test"}
-                  />
-                </div>
+                {isBug && (
+                  <div className="flex">
+                    <Label htmlFor="qcActivity" className="flex gap-1 items-center p-0" name={t("label.qc_activity")} isRequired></Label>
+                    <EnhanceSelect
+                      id="qcActivity"
+                      className="text-[13.33px] font-normal text-[black] w-1/3 ml-2"
+                      arrayOption={QC_ACTIVITY_OPTIONS}
+                      defaultValue={"Other Test"}
+                      {...register("qc_activity")}
+                    />
+                  </div>
+                )}
               </div>
-              <div className="w-1/2 h-full">
-                <div className="flex h-full">
-                  <Label htmlFor="causeCategory" className="flex gap-1 items-center p-0" name="Cause Category" isRequired></Label>
-                  <EnhanceSelect
-                    id="causeCategory"
-                    className="text-[13.33px] font-normal text-black h-full"
-                    arrayOption={causeCategoryOptions}
-                    defaultValue={"9. Other"}
-                    size={4}
-                  />
+              {isBug && (
+                <div className="w-1/2 h-full">
+                  <div className="flex h-full">
+                    <Label htmlFor="causeCategory" className="flex gap-1 items-center p-0" name={t("label.cause_category")} isRequired></Label>
+                    <EnhanceSelect
+                      id="causeCategory"
+                      className="text-[13.33px] font-normal text-[black] h-full"
+                      arrayOption={CAUSE_CATEGORY_OPTIONS}
+                      defaultValue={["9. Other"]}
+                      multiple
+                      size={4}
+                      {...register("cause_category")}
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
             {/* Row 7 */}
-            <div className="flex items-center">
-              <div className="w-1/2"></div>
-              <div className="w-1/2">
-                <div className="flex">
-                  <Label htmlFor="isDegrade" className="flex gap-1 items-center p-0" name="Is Degrade?" isRequired></Label>
-                  <EnhanceSelect
-                    id="isDegrade"
-                    className="text-[13.33px] font-normal text-black h-full ml-1"
-                    arrayOption={isDegradeOptions}
-                    defaultValue={0}
-                  />
+            {isBug && (
+              <div className="flex items-center">
+                <div className="w-1/2"></div>
+                <div className="w-1/2">
+                  <div className="flex">
+                    <Label htmlFor="isDegrade" className="flex gap-1 items-center p-0" name={t("label.is_degrade")} isRequired></Label>
+                    <EnhanceSelect
+                      id="isDegrade"
+                      className="text-[13.33px] font-normal text-[black] h-full ml-1"
+                      arrayOption={DEGRADE_OPTIONS}
+                      defaultValue={0}
+                      {...register("is_degrade")}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
+
             {/* Row 8 */}
-            <div className="flex items-center">
-              <div className="w-1/2"></div>
-              <div className="w-1/2">
-                <div className="flex">
-                  <Label htmlFor="reopenCounter" className="flex gap-1 items-center p-0" name="Reopen counter" isRequired></Label>
-                  <Input id="reopenCounter" style={{ width: "calc(100% - 225px)" }} className="ml-1" defaultValue={0} />
+            {isBug && (
+              <div className="flex items-center">
+                <div className="w-1/2"></div>
+                <div className="w-1/2">
+                  <div className="flex">
+                    <Label htmlFor="reopenCounter" className="flex gap-1 items-center p-0" name={t("label.reopen_counter")} isRequired></Label>
+                    <Input
+                      id="reopenCounter"
+                      style={{ width: "calc(100% - 225px)" }}
+                      className="ml-1"
+                      defaultValue={0}
+                      {...register("reopen_counter")}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
+
             <div className="flex gap-2">
-              <Label htmlFor="files" className="flex gap-1 items-center p-0" name="Files"></Label>
+              <Label htmlFor="files" className="flex gap-1 items-center p-0" name={t("label.files")}></Label>
               <div className="text-[9.6px] text-[#505050] ">
-                <input id="files" type="file" className="text-xs" onChange={handleFileChange} ref={fileInputRef} />
-                <span>{`(Maximum size: 500MB)`}</span>
-                {errorFile && <div style={{ color: "red" }}>{errorFile}</div>}
+                <File control={control} name="file" />
               </div>
             </div>
             <div className="flex pt-2 w-full">
-              <Label htmlFor="watcher" className="inline-flex gap-1 items-center p-0 " name="Watcher"></Label>
+              <Label htmlFor="watcher" className="inline-flex gap-1 items-center p-0 " name={t("label.watcher")}></Label>
               <div className="flex flex-col h-full">
                 {loading ? (
                   <SyncLoader className="ml-4" color="#169" size={5} />
                 ) : (
                   <div className="flex items-center text-xs text-[#505050] pl-3 h-full flex-wrap">
-                    {members
-                      .filter((item) => item.role === "Developer")
-                      .map((item) => {
-                        return (
-                          <div className="flex items-center gap-1 min-w-72 pr-4" key={item.id}>
-                            <input type="checkbox" />
-                            <span className="">{item.name}</span>
-                          </div>
-                        );
-                      })}
+                    <Controller
+                      name="watcher_user_ids"
+                      control={control}
+                      defaultValue={[]}
+                      render={({ field }) => (
+                        <>
+                          {members
+                            .filter((item) => item.role === "Developer")
+                            .map((item) => {
+                              return (
+                                <div className="flex items-center gap-1 min-w-72 pr-4" key={item.id}>
+                                  <input
+                                    type="checkbox"
+                                    value={item.id}
+                                    onChange={(e) => {
+                                      const value = e.target.value;
+                                      const isChecked = e.target.checked;
+                                      if (isChecked) {
+                                        field.onChange([...field.value, +value]);
+                                      } else {
+                                        field.onChange(field.value.filter((item: number) => item !== +value));
+                                      }
+                                    }}
+                                    checked={field.value.includes(item.id)}
+                                  />
+                                  <span className="">{item.name}</span>
+                                </div>
+                              );
+                            })}
+                        </>
+                      )}
+                    />
                   </div>
                 )}
 
                 <div className="flex items-center pl-2 text-[9.6px]" onClick={() => setIsAddWatcher(true)}>
                   <img src={IconBulletAdd} alt="" />
                   <a href="#!" className="link">
-                    Search for watchers to add
+                    {t("button.search_user")}
                   </a>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center pt-3 gap-1">
-            <Button type="button" onClick={handleSubmit}>
-              Create
-            </Button>
-            <Button>Create and continue</Button>
-            <a href="#!" className="link">
-              Preview
+          <div className="flex items-center py-3 gap-1">
+            <Button type="submit">{t("button.create")}</Button>
+            <Button onClick={() => setCheck(!check)}>{t("button.create_continue")}</Button>
+            <a
+              href="#!"
+              className="link"
+              onClick={() => {
+                setValuePreview(convertMDtoElement(valueTextEdit));
+              }}
+            >
+              {t("button.preview")}
             </a>
           </div>
+
+          <fieldset className="text-xs pl-2.5 border bg-light-gray pb-1">
+            <legend className="text-mouse-gray">{t("label.description")}</legend>
+            <div className="py-4 text-gray-rain" style={{ backgroundImage: `url('${backgroundDraft}')` }}>
+              <div dangerouslySetInnerHTML={{ __html: valuePreview }} />
+            </div>
+          </fieldset>
         </div>
       </form>
     </>

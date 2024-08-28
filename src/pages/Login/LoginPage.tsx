@@ -51,7 +51,7 @@ const LoginPage = () => {
                 },
                 maxLength: {
                   value: 50,
-                  message: "Email must be at least 50 characters long.",
+                  message: "Email cannot exceed 50 characters long.",
                 },
               })}
             />

@@ -24,7 +24,7 @@ const ModalAddWatchers: React.FC<DialogProps> = ({ data, handleClick }) => {
 
   return (
     <>
-      <div className="w-screen h-screen bg-[#b5b5b5] opacity-30 absolute z-50"></div>
+      <div className="w-screen h-screen top-0 bg-[#b5b5b5] background_opacity opacity-40 fixed z-50"></div>
       <div className="w-[410px]  border  absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#fff] z-50">
         <div className="border py-1.5 px-2 flex justify-between rounded-md title_dialog items-center">
           <span className="font-bold text-[#fff] text-[13.2px] overflow-hidden whitespace-nowrap text-ellipsis">Add watchers</span>

@@ -8,12 +8,13 @@ import "./DatePicker.css";
 type DatePickerCustomProps = {
   classNameDatePicker?: string;
   className?: string;
+  name?: string;
   id?: string;
   selected?: Date | null;
   onChange?: (date: Date | null) => void;
 };
 
-const DatePickerCustom: React.FC<DatePickerCustomProps> = ({ classNameDatePicker, id, className, selected, onChange }) => {
+const DatePickerCustom: React.FC<DatePickerCustomProps> = ({ classNameDatePicker, id, className, name, selected, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleCalendar = () => {
@@ -34,6 +35,7 @@ const DatePickerCustom: React.FC<DatePickerCustomProps> = ({ classNameDatePicker
         showWeekNumbers
         className={cn("border pl-1 w-24 text-xs py-0.5", classNameDatePicker)}
         open={isOpen}
+        name={name}
         onClickOutside={() => setIsOpen(false)}
       >
         <div>
