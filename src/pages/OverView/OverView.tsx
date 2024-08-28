@@ -5,7 +5,7 @@ import projectsApi from "~/apis/projects.api";
 import issuesApi from "~/apis/issue.api";
 import projectMembershipsApi from "~/apis/projectMemberships.api";
 import { SyncLoader } from "react-spinners";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 
 interface Member {
@@ -134,9 +134,13 @@ const Overview = () => {
                   <div key={key}>
                     <span>{key} :</span>
                     {value.map((item, index) => (
-                      <a href="#" className="text-ocean-blue hover:text-red-600 hover:underline" key={item.id}>
+                      <Link
+                        to={`/projects/${id}/${name}/users/${item.id}`}
+                        className="text-ocean-blue hover:text-red-600 hover:underline"
+                        key={item.id}
+                      >
                         {`${item.name}${index !== value.length - 1 ? "," : ""}`}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 ))}

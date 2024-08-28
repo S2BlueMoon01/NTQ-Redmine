@@ -5,10 +5,8 @@ import { useGlobalStore } from "~/store/globalStore";
 import Select from "~/components/Select";
 import IconSearch from "~/assets/images/magnifier.png";
 import Button from "~/components/Button";
-
 import { Rnd } from "react-rnd";
 import "./Dialog.css";
-
 import Loading from "~/components/Loading";
 import { convertDateFormat, getSecondsDifference } from "~/utils/utils";
 import { useNavigate } from "react-router-dom";
@@ -28,7 +26,6 @@ interface Options {
 const Dialog: React.FC<DialogProps> = ({ issueId, content = "", ZIndex, handleClick }) => {
   const [isVisible, setIsVisible] = useState(false);
   const { activeItemId, setActiveItemId } = useGlobalStore((state) => state);
-
   const [issue, setIssue] = useState<Issue | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
   const [displayRelatedIssue, setDisplayRelatedIssue] = useState<boolean>(false);

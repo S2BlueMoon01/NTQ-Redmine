@@ -11,8 +11,18 @@ interface User {
   mail_notification?: string;
   must_change_passwd?: boolean;
   generate_password?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   custom_fields?: Record<string, any>;
+}
+
+interface IUserResponse {
+  user: {
+    id: number;
+    firstname: string;
+    lastname: string;
+    mail: string;
+    created_on: string;
+    last_login_on: string;
+  };
 }
 
 export const URL_USERS = "users";
@@ -29,7 +39,7 @@ const usersApi = {
 
   getUserById(id: number, include?: string) {
     const params = include ? { include } : {};
-    return http.get<User>(`${URL_USERS}/${id}.json`, { params });
+    return http.get<IUserResponse>(`${URL_USERS}/${id}.json`, { params });
   },
 
   updateUser(id: number, user: User) {

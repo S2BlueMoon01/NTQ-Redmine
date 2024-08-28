@@ -23,6 +23,7 @@ import DetailIssue from "~/pages/Issues/_components/DetailIssue/DetailIssue";
 
 import MyAccount from "~/pages/MyAccount";
 import EditSpentTime from "~/pages/Issues/_components/EditSpentTime";
+import MemberProject from "~/pages/MemberProject";
 
 const publicRoutes = [
   { path: "/login", component: LoginPage, layout: DefaultLayout },
@@ -40,6 +41,7 @@ const privateRoutes = [
   { path: "/my/account", component: MyAccount, layout: DefaultLayout },
 
   { path: "/projects/:id/:name/overview", component: OverView, layout: DefaultLayout },
+  { path: "/projects/:id/:name/users/:userId", component: MemberProject, layout: DefaultLayout },
   { path: "/projects/:id/:name/activity", component: Activity, layout: DefaultLayout },
   { path: "/projects/:id/:name/roadmap", component: Roadmap, layout: DefaultLayout },
   { path: "/projects/:id/:name/roadmap/newVersion", component: NewVersion, layout: DefaultLayout },
