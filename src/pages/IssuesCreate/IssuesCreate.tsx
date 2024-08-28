@@ -152,20 +152,6 @@ const IssuesCreate = () => {
 
   const onSubmit = async (data: any) => {
     setIsLoading(true);
-    const uploadArray: { token: string; filename: string; content_type: string }[] = [];
-    if (data.file !== null) {
-      const filesArray: File[] = Array.from(data.file);
-      filesArray.map(async (item: File) => {
-        const responseUpload = await uploadFileApi.postFiles(item);
-        const upload = {
-          token: responseUpload.data.upload.token,
-          filename: item.name,
-          content_type: item.type,
-        };
-        uploadArray.push(upload);
-      });
-    }
-
     const issue: IssueCreate = {
       project_id: Number(id),
       tracker_id: data.tracker_id,
@@ -189,10 +175,24 @@ const IssuesCreate = () => {
       due_date: data.due_date,
       start_date: data.start_date,
       watcher_user_ids: data.watcher_user_ids,
-      uploads: uploadArray,
+      uploads: [],
     };
 
+    if (data.file !== null) {
+      const filesArray: File[] = Array.from(data.file);
+      const uploadData = filesArray.map(async (item: File) => {
+        const responseUpload = await uploadFileApi.postFiles(item);
+        return {
+          token: responseUpload.data.upload.token,
+          filename: item.name,
+          content_type: item.type,
+        };
+      });
+      issue.uploads = await Promise.all(uploadData);
+    }
+
     const responseVersion = await issuesApi.createIssue(issue);
+
     if (responseVersion.status === 201) {
       setIsCreateSuccessful(true);
     }
