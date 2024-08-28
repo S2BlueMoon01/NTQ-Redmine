@@ -186,8 +186,6 @@ const EditIssueForm: React.FC<PropsEdit> = ({ formRef, dataEdit, setIsActiveEdit
         ],
       },
     };
-    console.log(dataEditForm);
-    return;
     const responses = await issuesApi.updateIssue(dataEdit.id, dataEditForm.issueEdit);
 
     if (dataEditForm?.spent_time?.hours && dataEditForm?.spent_time?.activity_id) {

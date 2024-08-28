@@ -40,3 +40,27 @@ export interface ProjectResponse {
   projects: DataProject[];
   total_count: number;
 }
+
+export interface IProject {
+  id: string;
+  name: string;
+  identifier: string;
+  description: string;
+  status: number;
+  custom_fields: { id: number; name: string; value: string }[];
+  created_on: string;
+  updated_on: string;
+  trackers?: Tracker[];
+}
+export interface IUserResponse {
+  user: User;
+}
+
+export interface User {
+  id: number;
+  firstname: string;
+  lastname: string;
+  mail: string;
+  created_on: string;
+  last_login_on: string;
+}
